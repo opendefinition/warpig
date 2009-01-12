@@ -38,7 +38,4 @@ class wpConfigLoader:
             #@todo: implement an error handler for WarPig
             print "Loading configurationfiles failed."
         
-t = wpConfigLoader()
-t.load()
-        
         

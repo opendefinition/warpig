@@ -16,14 +16,17 @@
 #=======================================================================================================================
 import sys
 
+from gui.wpWarPig import wpWarPig
+
 def main(argv):
-    for arg in sys.argv:
-        if arg == '--update':
+    if len( argv ) > 1:
+        if argv[1] == '--update':
             # Run update engine
-            print 'Running update engine.'
-        else:
-            # Disregard anything else and continue normal operation
-            continue
-    
+            print 'Running update engine'
+    else:
+        # Disregard anything else and continue normal operation
+        app = wpWarPig( 0 )
+        app.MainLoop()
+        
 if __name__ == "__main__":
     sys.exit( main( sys.argv ) )
