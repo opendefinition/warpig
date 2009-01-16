@@ -12,41 +12,37 @@ class wpFrame( wx.Frame ):
         """Called when the controls on Window are to be created"""
 
         #Horizontal sizer
-        self.h_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.h_sizer = wx.BoxSizer( wx.HORIZONTAL )
         #Vertical sizer
-        self.v_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.v_sizer = wx.BoxSizer( wx.VERTICAL )
         
-        self.textEditor = stc.StyledTextCtrl ( self, -1, style=wx.TE_MULTILINE )
-        self.textEditor.SetMarginLeft( 10 )
-        self.textEditor.SetLexerLanguage( 'python' )
+        #===============================================================================================================
+        # Toolbar
+        #===============================================================================================================
+        toolBar = self.CreateToolBar()
+        toolBar.AddLabelTool( -1, '', wx.Bitmap( './system/icons/document-new.png' ) )
+        toolBar.AddLabelTool( -1, '', wx.Bitmap( './system/icons/media-floppy.png' ) )
+        toolBar.AddLabelTool( -1, '', wx.Bitmap( './system/icons/folder.png' ) )
+        toolBar.Realize()   
+        #===============================================================================================================
+        # Text Editor
+        #===============================================================================================================
+        textEditor = stc.StyledTextCtrl ( self, -1, style=wx.TE_MULTILINE )
         
+        ### @note: Experimental lexer support
+        # textEditor.SetLexer(stc.STC_LEX_PYTHON)
+        # textEditor.SetKeyWords(0, " ".join(keyword.kwlist))
+        ### 
         
-        self.h_sizer.Add( self.textEditor, 0)
-        
+        textEditor.SetMarginType( 0, stc.STC_MARGIN_NUMBER )  # Line numbering!
+        textEditor.SetMarginWidth( 0, 35 )
+        #===============================================================================================================
+        # Statusbar
+        #===============================================================================================================
+        statusBar = self.CreateStatusBar()
+
+        self.h_sizer.Add( toolBar, 0 ) 
+        self.h_sizer.Add( textEditor, 1 )  
+        self.h_sizer.Add( statusBar, 2 )    
+                   
         self.v_sizer.Add(self.h_sizer, 0, wx.EXPAND)
-        
-        '''
-        #Widget Creation
-        #Create the static text widget and set the text
-        self.text = wx.StaticText(self, label="Enter some text:")
-        #Create the Edit Field (or TextCtrl)
-        self.edit = wx.TextCtrl(self, size=wx.Size(250, -1))
-        #Create the button
-        self.button = wx.Button(self, label="Press me!")
-    
-        #Add to horizontal sizer
-        #add the static text to the sizer, tell it not to resize
-        self.h_sizer.Add(self.text, 0,)
-        #Add 5 pixels between the static text and the edit
-        self.h_sizer.AddSpacer((5,0))
-        #Add Edit
-        self.h_sizer.Add(self.edit, 1)
-    
-        #Add to the vertical sizer to create two rows
-        self.v_sizer.Add(self.h_sizer, 0, wx.EXPAND)
-        #Add button underneath
-        self.v_sizer.Add(self.button, 0)
-    
-        #Set the sizer
-        self.SetSizer(self.v_sizer)
-        '''
