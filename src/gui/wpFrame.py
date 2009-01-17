@@ -73,9 +73,8 @@ class wpFrame( wx.Frame ):
         textEditor.SetMarginWidth( 0, 35 )
         textEditor.StyleSetBackground( 0, 'blue' )
         textEditor.StyleSetForeground( 0, 'yellow' )
-        # textEditor.StyleSetForeGround( 0, 'yellow' )
-        # textEditor.StyleSetSpec( 0, 'back: red' )
-    
+        font = wx.Font( 12, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.BOLD )
+        textEditor.StyleSetFont( 0, font ) 
         
         return textEditor
     
