@@ -7,46 +7,56 @@ class wpFrame( wx.Frame ):
     def __init__( self, *args, **kwargs ):
         wx.Frame.__init__( self, *args, **kwargs )
         self.setup_widgets()
-        
-        self.Maximize()
-        
+                
     def setup_widgets( self ):
-        """Called when the controls on Window are to be created"""
-        
-        # Sizers
-        self.createHorizontalSizer()
-        self.createVerticalSizer()
-        
-        # Toolbar
-        toolBar = self.createToolBar()
+        """
+        Called when the controls on Window are to be created
+        """    
+       
+        mainSizer = self.createVerticalSizer()
+        gridSizer = self.createFlexGridSizer( 3, 1, 0, 0 )
         
         # Menubar
-        menuBar = self.createMenuBar()
-        self.SetMenuBar( menuBar )
+        self.SetMenuBar( self.createMenuBar() )
         
-        # Text Editor
-        textEditor = self.createTextEditor()
+        # Adding widgets to gridsizer
+        gridSizer.AddMany( [
+                            ( self.createToolBar(), 0, wx.EXPAND ),
+                            ( self.createTextEditor() , 0, wx.EXPAND ),
+                            ( self.createStatusBar(), 0, wx.EXPAND )
+                          ] )
 
-        # Statusbar
-        statusBar = self.createStatusBar()
+        # Setting main row growable
+        gridSizer.AddGrowableRow(1, 1)
 
-        self.h_sizer.Add( toolBar, 0 ) 
-        self.h_sizer.Add( textEditor, 1 )  
-        self.h_sizer.Add( statusBar, 2 )    
-                   
-        self.v_sizer.Add(self.h_sizer, 0, wx.EXPAND)
+
+        mainSizer.Add( gridSizer, 1, wx.EXPAND )
+        self.SetSizer( mainSizer )
         
+        self.Centre()
+        self.Maximize()
+        self.Show(True)
+        
+    def createFlexGridSizer( self, rows, cols, vgap, hgap ):
+        '''
+        Create Flexgridsizer
+        @return: object FlexGridSizer
+        '''
+        return wx.FlexGridSizer( rows, cols, vgap, hgap ) 
+    
     def createHorizontalSizer( self ):
         '''
         Create Horsizontal Sizer
+        @return:  object BoxSizer( wx.HORIZONTAL )
         '''
-        self.h_sizer = wx.BoxSizer( wx.HORIZONTAL )
+        return  wx.BoxSizer( wx.HORIZONTAL )
         
     def createVerticalSizer( self ):
         '''
         Create Vertical Sizer
+        @return:  object  wx.BoxSizer( wx.VERTICAL ) 
         '''
-        self.v_sizer = wx.BoxSizer( wx.VERTICAL ) 
+        return wx.BoxSizer( wx.VERTICAL ) 
 
     def createToolBar( self ):
         '''
@@ -66,7 +76,7 @@ class wpFrame( wx.Frame ):
         Create Menubar
         @return: object menubarr
         '''
-        menuBar = wx.MenuBar(wx.MB_DOCKABLE)
+        menuBar = wx.MenuBar( wx.MB_DOCKABLE )
         file = wx.Menu()
         edit = wx.Menu()
         view = wx.Menu()
@@ -88,15 +98,10 @@ class wpFrame( wx.Frame ):
         '''
         textEditor = stc.StyledTextCtrl ( self, -1, style=wx.TE_MULTILINE )
         
-        ### @note: Experimental lexer support
-        # textEditor.SetLexer(stc.STC_LEX_PYTHON)
-        # textEditor.SetKeyWords(0, " ".join(keyword.kwlist))
-        ### 
-        
         textEditor.SetMarginType( 0, stc.STC_MARGIN_NUMBER )  # Line numbering!
-        textEditor.SetMarginWidth( 0, 35 )
-        textEditor.StyleSetBackground( 0, 'blue' )
-        textEditor.StyleSetForeground( 0, 'yellow' )
+        textEditor.SetMarginWidth( 0, 35 ) # Margin for line numbering
+        # textEditor.StyleSetBackground( 0, 'blue' )
+        # textEditor.StyleSetForeground( 0, 'yellow' )
         font = wx.Font( 12, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.BOLD )
         textEditor.StyleSetFont( 0, font ) 
         
@@ -104,10 +109,10 @@ class wpFrame( wx.Frame ):
     
     def createStatusBar( self ):
         '''
-        Create Statusbar
-        
+        Create Statusbar    
         @return: object statusbar
         '''
         statusBar = self.CreateStatusBar()
         
         return statusBar
+    
