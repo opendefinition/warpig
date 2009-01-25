@@ -20,6 +20,10 @@ class wpFrame( wx.Frame ):
         # Toolbar
         toolBar = self.createToolBar()
         
+        # Menubar
+        menuBar = self.createMenuBar()
+        self.SetMenuBar( menuBar )
+        
         # Text Editor
         textEditor = self.createTextEditor()
 
@@ -56,6 +60,26 @@ class wpFrame( wx.Frame ):
         toolBar.Realize()  
         
         return toolBar
+    
+    def createMenuBar( self ):
+        '''
+        Create Menubar
+        @return: object menubarr
+        '''
+        menuBar = wx.MenuBar(wx.MB_DOCKABLE)
+        file = wx.Menu()
+        edit = wx.Menu()
+        view = wx.Menu()
+        tool = wx.Menu()
+        help = wx.Menu()
+
+        menuBar.Append(file, '&File')
+        menuBar.Append(edit, '&Edit')
+        menuBar.Append(view, '&View')
+        menuBar.Append(tool, '&Tools')
+        menuBar.Append(help, '&Help')
+               
+        return menuBar
         
     def createTextEditor( self ):
         '''
