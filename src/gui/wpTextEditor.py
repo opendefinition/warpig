@@ -4,6 +4,25 @@
 # EXPERIMENTAL: DO NOT USE!
 #
 
+import wx
+import wx.stc as stc
+
+class wpTextEditor( wx.Frame ):
+    def __init__( self ):
+        None
+        
+    def createTextEditor( self, parent ):
+        textEditor = stc.StyledTextCtrl ( parent, -1, style=wx.TE_MULTILINE )
+        
+        textEditor.SetMarginType( 0, stc.STC_MARGIN_NUMBER )  # Line numbering!
+        textEditor.SetMarginWidth( 0, 35 ) # Margin for line numbering
+        # textEditor.StyleSetBackground( 0, 'blue' )
+        # textEditor.StyleSetForeground( 0, 'yellow' )
+        font = wx.Font( 12, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.BOLD )
+        textEditor.StyleSetFont( 0, font ) 
+        
+        return textEditor
+
 
 '''
 import  keyword

@@ -2,6 +2,7 @@
 
 import wx
 import wx.stc as stc
+from gui.wpNotebook import wpNoteBook
 
 class wpFrame( wx.Frame ):
     def __init__( self, *args, **kwargs ):
@@ -22,7 +23,8 @@ class wpFrame( wx.Frame ):
         # Adding widgets to gridsizer
         gridSizer.AddMany( [
                             ( self.createToolBar(), 0, wx.EXPAND ),
-                            ( self.createTextEditor() , 0, wx.EXPAND ),
+                            ( wpNoteBook().createNoteBook( self ), 0, wx.EXPAND ),
+                            #( self.createTextEditor() , 0, wx.EXPAND ),
                             ( self.createStatusBar(), 0, wx.EXPAND )
                           ] )
 
