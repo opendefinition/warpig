@@ -14,7 +14,7 @@ class  wpNoteBook( wx.Frame ):
         
         # Testing
         for index in range( 1, 5 ):
-            title = 'Page'  + str( index )
+            title = 'script'  + str( index ) + ".py"
             noteBook.AddPage( wpTextEditor().createTextEditor( noteBook ),  title )
         
         return noteBook

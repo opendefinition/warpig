@@ -20,10 +20,33 @@ class wpFrame( wx.Frame ):
         # Menubar
         self.SetMenuBar( self.createMenuBar() )
         
+        ### TESTING : START ###
+        splitWindow = wx.SplitterWindow(self, -1, style=wx.BORDER_SUNKEN )
+        splitWindow.SetMinimumPaneSize(20)
+        
+        leftPanel = wx.Panel( splitWindow, -1, size=(100,100) )
+        leftPanel.SetBackgroundColour( wx.WHITE )
+            
+        tree = wx.TreeCtrl( leftPanel, size=(200,100))
+        root = tree.AddRoot("Python Example")
+        items = [
+                 "script1.py",
+                 "script2.py",
+                 "script3.py",
+                 "script4.py"
+                 ]
+
+        tree.AppendItem( root, items[0]  )
+        tree.AppendItem( root, items[1]  )
+        tree.AppendItem( root, items[2]  )
+        splitWindow.SplitVertically( leftPanel, wpNoteBook().createNoteBook( splitWindow ), 200 )
+        ### TESTING : END ###
+        
         # Adding widgets to gridsizer
         gridSizer.AddMany( [
                             ( self.createToolBar(), 0, wx.EXPAND ),
-                            ( wpNoteBook().createNoteBook( self ), 0, wx.EXPAND ),
+                            ( splitWindow, 0, wx.EXPAND ),
+                            #( wpNoteBook().createNoteBook( self ), 0, wx.EXPAND ),
                             #( self.createTextEditor() , 0, wx.EXPAND ),
                             ( self.createStatusBar(), 0, wx.EXPAND )
                           ] )
