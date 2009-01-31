@@ -101,7 +101,7 @@ class wpFrame( wx.Frame ):
         Create Menubar
         @return: object menubarr
         '''
-        menuBar = wx.MenuBar( wx.MB_DOCKABLE )
+        menuBar = wx.MenuBar()
         file = wx.Menu()
         edit = wx.Menu()
         view = wx.Menu()
