@@ -6,26 +6,97 @@
 
 import wx
 import wx.stc as stc
+import keyword
 
 class wpTextEditor( wx.Frame ):
     def __init__( self ):
         None
         
     def createTextEditor( self, parent ):
-        textEditor = stc.StyledTextCtrl ( parent, -1, style=wx.TE_MULTILINE )
+        self.textEditor = stc.StyledTextCtrl ( parent, -1, style=wx.TE_MULTILINE )
         
-        textEditor.SetMarginType( 0, stc.STC_MARGIN_NUMBER )  # Line numbering!
-        textEditor.SetMarginWidth( 0, 35 ) # Margin for line numbering
+        self.textEditor.SetMarginType( 0, stc.STC_MARGIN_NUMBER )  # Line numbering!
+        self.textEditor.SetMarginWidth( 0, 35 ) # Margin for line numbering
         # textEditor.StyleSetBackground( 0, 'blue' )
         # textEditor.StyleSetForeground( 0, 'yellow' )
         font = wx.Font( 12, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.BOLD )
-        textEditor.StyleSetFont( 0, font ) 
+        self.textEditor.StyleSetFont( 0, font ) 
         
-        return textEditor
+        # Experimental Lexer support
+        self.setLexer()
+        
+        return self.textEditor
+    
+    def setLexer( self ):
+        self.textEditor.SetLexer( stc.STC_LEX_PYTHON )
+        
+        keys = keyword.kwlist[ : ]
+        keys.append("zzzzzz?2")
+        keys.append("aaaaa?2")
+        keys.append("__init__?3")
+        keys.append("zzaaaaa?2")
+        keys.append("zzbaaaa?2")
+        keys.append("this_is_a_longer_value")
 
+        # Setup lexer styles
+        '''
+        faces = { 'times': '',
+              'mono' : '',
+              'helv' : '',
+              'other': '',
+              'size' : '',
+              'size2': '',
+             }
+        '''
+        # Global default styles for all languages
+        # self.textEditor.StyleSetSpec(stc.STC_STYLE_DEFAULT,     "face:%(helv)s,size:%(size)d" % faces)
+        self.textEditor.StyleClearAll()  # Reset all to be like the default
+        
+        # Global default styles for all languages
+        # self.textEditor.StyleSetSpec(stc.STC_STYLE_DEFAULT,     "face:%(helv)s,size:%(size)d" % faces)
+        # self.textEditor.StyleSetSpec(stc.STC_STYLE_LINENUMBER,  "back:#C0C0C0,face:%(helv)s,size:%(size2)d" % faces)
+        # self.textEditor.StyleSetSpec(stc.STC_STYLE_CONTROLCHAR, "face:%(other)s" % faces)
+        self.textEditor.StyleSetSpec(stc.STC_STYLE_BRACELIGHT,  "fore:#FFFFFF,back:#0000FF,bold")
+        self.textEditor.StyleSetSpec(stc.STC_STYLE_BRACEBAD,    "fore:#000000,back:#FF0000,bold")
 
+        # Python styles
+        # Default 
+        self.textEditor.StyleSetSpec(stc.STC_P_DEFAULT, "fore:#000000")
+        # Comments
+        self.textEditor.StyleSetSpec(stc.STC_P_COMMENTLINE, "fore: #99cc00, bold" )
+        # Number
+        self.textEditor.StyleSetSpec(stc.STC_P_NUMBER, "fore:#007F7F")
+        # String
+        self.textEditor.StyleSetSpec(stc.STC_P_STRING, "fore:#7F007F")
+        # Single quoted string
+        self.textEditor.StyleSetSpec(stc.STC_P_CHARACTER, "fore:#7F007F")
+        # Keyword
+        self.textEditor.StyleSetSpec(stc.STC_P_WORD, "fore:#00007F,bold")
+        # Triple quotes
+        self.textEditor.StyleSetSpec(stc.STC_P_TRIPLE, "fore:#7F0000")
+        # Triple double quotes
+        self.textEditor.StyleSetSpec(stc.STC_P_TRIPLEDOUBLE, "fore:#7F0000")
+        # Class name definition
+        self.textEditor.StyleSetSpec(stc.STC_P_CLASSNAME, "fore:#336699,bold")
+        # Function or method name definition
+        self.textEditor.StyleSetSpec(stc.STC_P_DEFNAME, "fore:#007F7F,bold")
+        # Operators
+        self.textEditor.StyleSetSpec(stc.STC_P_OPERATOR, "bold")
+        # Identifiers
+        self.textEditor.StyleSetSpec(stc.STC_P_IDENTIFIER, "fore:#000000")
+        # Comment-blocks
+        self.textEditor.StyleSetSpec(stc.STC_P_COMMENTBLOCK, "fore: #C0C0C0, bold")
+        # End of line where string is not closed
+        self.textEditor.StyleSetSpec(stc.STC_P_STRINGEOL, "fore:#000000")
+
+        self.textEditor.SetCaretForeground( 'BLACK' )
+        
+        #####
+        self.textEditor.SetKeyWords( 0, " ".join( keyword.kwlist ) )
+
+        
 '''
-import  keyword
+        import  keyword
         ### @note: Experimental lexer support
         # textEditor.SetLexer(stc.STC_LEX_PYTHON)
         # textEditor.SetKeyWords(0, " ".join(keyword.kwlist))
