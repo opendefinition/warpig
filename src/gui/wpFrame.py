@@ -113,6 +113,25 @@ class wpFrame( wx.Frame ):
         menuBar.Append(view, '&View')
         menuBar.Append(tool, '&Tools')
         menuBar.Append(help, '&Help')
+        
+        # File menu setup
+        fileNew = wx.MenuItem( file , 101, '&New', 'Create new file' )
+        fileOpen = wx.MenuItem( file, 102, '&Open', 'Open file' )
+        fileSave = wx.MenuItem( file, 103, '&Save', 'Save file' )
+        fileSaveAs = wx.MenuItem( file, 104, '&Save as', 'Save file as'  )
+        appQuit = wx.MenuItem( file, 105, '&Quit', 'Quit WarPig' )
+        
+        file.AppendItem( fileNew )
+        file.AppendItem( fileOpen )
+        file.AppendSeparator()
+        file.AppendItem( fileSave )
+        file.AppendItem( fileSaveAs )
+        file.AppendSeparator()
+        file.AppendItem( appQuit )
+        
+        # Help menu setup
+        helpAbout = wx.MenuItem( help, 501, '&About', 'About WarPig'  )
+        help.AppendItem( helpAbout )
                
         return menuBar
         
