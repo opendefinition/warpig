@@ -6,19 +6,17 @@ import wx.stc as stc
 from gui.wpTextEditor import wpTextEditor
 
 class  wpNoteBook( wx.Frame ):
-    def __init__( self ):
+    _notebook = None
+    
+    def __init__( self, ):
         None
         
     def createNoteBook( self, parent  ):
-        noteBook = fnb.FlatNotebook( parent, wx.ID_ANY )
+        self._notebook = fnb.FlatNotebook( parent, wx.ID_ANY )
+        return self
         
-        # Testing
-        for index in range( 1, 5 ):
-            title = 'script'  + str( index ) + ".py"
-            noteBook.AddPage( wpTextEditor().createTextEditor( noteBook ),  title )
-        
-        return noteBook
-        
+    def addPage( self ):
+        self._notebook.AddPage( wpTextEditor().createTextEditor( self._notebook ),  'testing' )
         
         
         

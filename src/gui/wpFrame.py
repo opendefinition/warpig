@@ -5,49 +5,31 @@ import wx.stc as stc
 from gui.wpNotebook import wpNoteBook
 
 class wpFrame( wx.Frame ):
+    _notebook = None
+    
     def __init__( self, *args, **kwargs ):
         wx.Frame.__init__( self, *args, **kwargs )
         self.setup_widgets()
+        
+        # Bindings 
+        self.Bind( wx.EVT_MENU, self.onNew, id=101 );  
+        self.Bind( wx.EVT_MENU, self.onExit, id=105 );      
                 
     def setup_widgets( self ):
         """
         Called when the controls on Window are to be created
         """    
-       
+        self._notebook = wpNoteBook().createNoteBook( self )
         mainSizer = self.createVerticalSizer()
         gridSizer = self.createFlexGridSizer( 3, 1, 0, 0 )
         
         # Menubar
         self.SetMenuBar( self.createMenuBar() )
-        
-        ### TESTING : START ###
-        splitWindow = wx.SplitterWindow(self, -1, style=wx.BORDER_SUNKEN )
-        splitWindow.SetMinimumPaneSize(20)
-        
-        leftPanel = wx.Panel( splitWindow, -1, size=(100,100) )
-        leftPanel.SetBackgroundColour( wx.WHITE )
-            
-        tree = wx.TreeCtrl( leftPanel, size=(200,100))
-        root = tree.AddRoot("Python Example")
-        items = [
-                 "script1.py",
-                 "script2.py",
-                 "script3.py",
-                 "script4.py"
-                 ]
-
-        tree.AppendItem( root, items[0]  )
-        tree.AppendItem( root, items[1]  )
-        tree.AppendItem( root, items[2]  )
-        splitWindow.SplitVertically( leftPanel, wpNoteBook().createNoteBook( splitWindow ), 200 )
-        ### TESTING : END ###
-        
+    
         # Adding widgets to gridsizer
         gridSizer.AddMany( [
                             ( self.createToolBar(), 0, wx.EXPAND ),
-                            ( splitWindow, 0, wx.EXPAND ),
-                            #( wpNoteBook().createNoteBook( self ), 0, wx.EXPAND ),
-                            #( self.createTextEditor() , 0, wx.EXPAND ),
+                            ( self._notebook._notebook , 0, wx.EXPAND ),
                             ( self.createStatusBar(), 0, wx.EXPAND )
                           ] )
 
@@ -89,9 +71,9 @@ class wpFrame( wx.Frame ):
         @return: object toolbar
         '''
         toolBar = self.CreateToolBar()
-        toolBar.AddLabelTool( -1, '', wx.Bitmap( './system/icons/document-new.png' ) )
-        toolBar.AddLabelTool( -1, '', wx.Bitmap( './system/icons/media-floppy.png' ) )
-        toolBar.AddLabelTool( -1, '', wx.Bitmap( './system/icons/folder.png' ) )
+        toolBar.AddLabelTool( 101, '', wx.Bitmap( './system/icons/document-new.png' ) )
+        toolBar.AddLabelTool( 1201, '', wx.Bitmap( './system/icons/media-floppy.png' ) )
+        toolBar.AddLabelTool( 1202, '', wx.Bitmap( './system/icons/folder.png' ) )
         toolBar.Realize()  
         
         return toolBar
@@ -132,8 +114,15 @@ class wpFrame( wx.Frame ):
         # Help menu setup
         helpAbout = wx.MenuItem( help, 501, '&About', 'About WarPig'  )
         help.AppendItem( helpAbout )
-               
+                
+        
         return menuBar
+    
+    def onExit( self, event ):
+        self.Close()
+        
+    def onNew( self, event ):
+        self._notebook.addPage()
         
     def createTextEditor( self ):
         '''
