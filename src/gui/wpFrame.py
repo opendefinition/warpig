@@ -13,6 +13,7 @@ class wpFrame( wx.Frame ):
         
         # Bindings 
         self.Bind( wx.EVT_MENU, self.onNew, id=101 );  
+        self.Bind( wx.EVT_MENU, self.onOpen, id=102 )
         self.Bind( wx.EVT_MENU, self.onExit, id=105 );      
                 
     def setup_widgets( self ):
@@ -123,6 +124,16 @@ class wpFrame( wx.Frame ):
         
     def onNew( self, event ):
         self._notebook.addPage()
+        
+    def onOpen( self, event ):
+        # Create an open file dialog
+        dialog = wx.FileDialog ( None, style = wx.OPEN )
+
+        # Show the dialog and get user input
+        if dialog.ShowModal() == wx.ID_OK:
+            self._notebook.addPage( dialog.GetPath() )
+
+        dialog.Destroy()
         
     def createTextEditor( self ):
         '''

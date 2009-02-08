@@ -12,8 +12,8 @@ class wpTextEditor( wx.Frame ):
     def __init__( self ):
         None
         
-    def createTextEditor( self, parent ):
-        self.textEditor = stc.StyledTextCtrl ( parent, -1, style=wx.TE_MULTILINE )
+    def createTextEditor( self, parent, filePath=None ):
+        self.textEditor = stc.StyledTextCtrl ( parent, 1337, style=wx.TE_MULTILINE )
         
         self.textEditor.SetMarginType( 0, stc.STC_MARGIN_NUMBER )  # Line numbering!
         self.textEditor.SetMarginWidth( 0, 35 ) # Margin for line numbering
@@ -22,6 +22,10 @@ class wpTextEditor( wx.Frame ):
         font = wx.Font( 12, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.BOLD )
         self.textEditor.StyleSetFont( 0, font ) 
         
+        # Adding content
+        if filePath is not None:
+            self.textEditor.LoadFile( filePath )
+
         # Experimental Lexer support
         self.setLexer()
         

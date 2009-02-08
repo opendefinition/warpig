@@ -15,8 +15,15 @@ class  wpNoteBook( wx.Frame ):
         self._notebook = fnb.FlatNotebook( parent, wx.ID_ANY )
         return self
         
-    def addPage( self ):
-        self._notebook.AddPage( wpTextEditor().createTextEditor( self._notebook ),  'testing' )
+    def addPage( self, filePath=None ):
+        if filePath is None:
+            title = '<empty>'
+        else:
+            length = len( filePath )
+            start = filePath.rfind( '/' )+1
+            title = filePath[start:length]
+            
+        self._notebook.AddPage( wpTextEditor().createTextEditor( self._notebook, filePath ),  title )
         
         
         
