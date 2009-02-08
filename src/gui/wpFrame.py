@@ -15,7 +15,8 @@ class wpFrame( wx.Frame ):
         self.Bind( wx.EVT_MENU, self.onNew, id=101 )  
         self.Bind( wx.EVT_MENU, self.onOpen, id=102 )
         self.Bind( wx.EVT_MENU, self.onExit, id=105 )
-        self.Bind( wx.EVT_MENU, self.onAbout, id=501 )    
+        self.Bind( wx.EVT_MENU, self.onAbout, id=501 )
+        self.Bind( wx.EVT_MENU, self.onSave, id=103)    
                 
     def setup_widgets( self ):
         """
@@ -74,8 +75,8 @@ class wpFrame( wx.Frame ):
         '''
         toolBar = self.CreateToolBar()
         toolBar.AddLabelTool( 101, '', wx.Bitmap( './system/icons/document-new.png' ) )
-        toolBar.AddLabelTool( 1201, '', wx.Bitmap( './system/icons/media-floppy.png' ) )
-        toolBar.AddLabelTool( 1202, '', wx.Bitmap( './system/icons/folder.png' ) )
+        toolBar.AddLabelTool( 103, '', wx.Bitmap( './system/icons/media-floppy.png' ) )
+        toolBar.AddLabelTool( 102, '', wx.Bitmap( './system/icons/folder.png' ) )
         toolBar.Realize()  
         
         return toolBar
@@ -133,24 +134,9 @@ class wpFrame( wx.Frame ):
         # Show the dialog and get user input
         if dialog.ShowModal() == wx.ID_OK:
             self._notebook.addPage( dialog.GetPath() )
-
+        
         dialog.Destroy()
-        
-    def createTextEditor( self ):
-        '''
-        Create TextEditor
-        @return: object styledtextctrl
-        '''
-        textEditor = stc.StyledTextCtrl ( self, -1, style=wx.TE_MULTILINE )
-        
-        textEditor.SetMarginType( 0, stc.STC_MARGIN_NUMBER )  # Line numbering!
-        textEditor.SetMarginWidth( 0, 35 ) # Margin for line numbering
-        # textEditor.StyleSetBackground( 0, 'blue' )
-        # textEditor.StyleSetForeground( 0, 'yellow' )
-        font = wx.Font( 12, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.BOLD )
-        textEditor.StyleSetFont( 0, font ) 
-        
-        return textEditor
+    
     
     def createStatusBar( self ):
         '''
@@ -177,6 +163,9 @@ class wpFrame( wx.Frame ):
         information.AddDeveloper( 'Roger Johnsen' )
 
         wx.AboutBox( information )
+        
+    def onSave( self, event ):
+        print "Hello"
 
         
     
