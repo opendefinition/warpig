@@ -8,7 +8,7 @@ class wpWarPig( wx.App ):
 
     def OnInit(self):
         """Override OnInit to create our Frame"""
-        frame = wpFrame( None, title='Something' )
+        frame = wpFrame( None, title='WarPig' )
         frame.Center()
         frame.Show()
         self.SetTopWindow(frame)

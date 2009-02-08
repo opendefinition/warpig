@@ -12,9 +12,10 @@ class wpFrame( wx.Frame ):
         self.setup_widgets()
         
         # Bindings 
-        self.Bind( wx.EVT_MENU, self.onNew, id=101 );  
+        self.Bind( wx.EVT_MENU, self.onNew, id=101 )  
         self.Bind( wx.EVT_MENU, self.onOpen, id=102 )
-        self.Bind( wx.EVT_MENU, self.onExit, id=105 );      
+        self.Bind( wx.EVT_MENU, self.onExit, id=105 )
+        self.Bind( wx.EVT_MENU, self.onAbout, id=501 )    
                 
     def setup_widgets( self ):
         """
@@ -159,4 +160,23 @@ class wpFrame( wx.Frame ):
         statusBar = self.CreateStatusBar()
         
         return statusBar
+    
+    def onAbout( self, event ):
+        description = """
+            WarPig is a simple but yet useful code editor written in Python.
+        """
+
+
+        information = wx.AboutDialogInfo()
+        # information.SetIcon(wx.Icon('something', wx.BITMAP_TYPE_PNG))
+        information.SetName( 'WarPig Code Editor' )
+        information.SetVersion( '0.01' )
+        information.SetDescription( description )
+        information.SetCopyright('(C) 2009 Open Definition' )
+        information.SetWebSite( 'http://www.opendefinition.com' )
+        information.AddDeveloper( 'Roger Johnsen' )
+
+        wx.AboutBox( information )
+
+        
     
