@@ -48,8 +48,8 @@ class WpSplitLeftPanel( wx.Panel ):
 	def _SetupToolbar( self ):
 		self.toolbar = wx.ToolBar( self, -1, style=wx.TB_VERTICAL )
 		self.toolbar.AddLabelTool( wx.ID_NEW, '', wx.Bitmap( './gui/icons/document-new.png' ) )
-		self.toolbar.AddLabelTool( wx.ID_SAVE, '', wx.Bitmap( './gui/icons/media-floppy.png' ) )
 		self.toolbar.AddLabelTool( wx.ID_OPEN, '', wx.Bitmap( './gui/icons/folder.png' ) )
+		self.toolbar.AddLabelTool( wx.ID_SAVE, '', wx.Bitmap( './gui/icons/media-floppy.png' ) )
 		self.toolbar.Realize()
 		
 		self.Bind( wx.EVT_MENU, self._OnToolBarNewPage, id=wx.ID_NEW )
@@ -65,7 +65,7 @@ class WpSplitLeftPanel( wx.Panel ):
 		self.rightpanel.AddDefaultPage()
 		
 	def _OnToolBarSavePage( self, event ):
-		print "Hello"
+		self.rightpanel.SaveFile()
 		
 	def _OnToolBarOpenPage( self, event ):
 		dialog = wx.FileDialog ( None, style = wx.OPEN )
@@ -85,6 +85,7 @@ class WpSplitRightPanel( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
 		wx.Panel.__init__(self, parent, *args, **kwargs)
 		self.parent = parent
+		self.files = {}
 		
 		self._Setup()
 
@@ -145,7 +146,18 @@ class WpSplitRightPanel( wx.Panel ):
 			title = filepath[startindex:length]
             
 		self.notebook.AddPage( self._AddTextEditor( filepath ), title )
+		
+		# Adding file into buffer
+		self.files[ title ] = filepath
 
+	def SaveFile( self ):
+		focus = self.FindFocus()
+
+		if type( focus ).__name__=='StyledTextCtrl':
+			filename = self.notebook.GetPageText( self.notebook.GetSelection() )
+			path = self.files[ filename ]
+			focus.SaveFile( path )
+		
 
 #==================================================================================================
 # WpMainPanel
