@@ -141,9 +141,7 @@ class WpSplitRightPanel( wx.Panel ):
 		if filepath is None:
 			filepath = None
 		else:
-			length = len( filepath )
-			startindex = filepath.rfind( '/' )+1
-			title = filepath[startindex:length]
+			title = self.FindFileName( filepath )
             
 		self.notebook.AddPage( self._AddTextEditor( filepath ), title )
 		
@@ -156,7 +154,26 @@ class WpSplitRightPanel( wx.Panel ):
 		if type( focus ).__name__=='StyledTextCtrl':
 			filename = self.notebook.GetPageText( self.notebook.GetSelection() )
 			path = self.files[ filename ]
+			
+			if path is None:
+				dialog = wx.FileDialog ( None, style = wx.SAVE )
+		
+				if dialog.ShowModal() == wx.ID_OK:
+					path = dialog.GetPath()
+					title = self.FindFileName( path )
+					
+					self.notebook.SetPageText( self.notebook.GetSelection(), title )
+					self.files[title] = path
+					
+				dialog.Destroy()		
+		
 			focus.SaveFile( path )
+			
+	def FindFileName( self, filepath ):
+		length = len( filepath )
+		startindex = filepath.rfind( '/' )+1
+		
+		return filepath[startindex:length]
 		
 
 #==================================================================================================
