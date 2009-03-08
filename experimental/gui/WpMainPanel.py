@@ -1,11 +1,22 @@
+# -*- coding: utf-8 -*-
+#==================================================================================================
+# Open Definition WpMainFrame
+# Author: Roger C.B. Johnsen
+#==================================================================================================
+
 import wx
 import wx.lib.flatnotebook as fnb
 import wx.stc as stc
 
+#==================================================================================================
+# WpSplitLeftPanel
+#==================================================================================================
+
 class WpSplitLeftPanel( wx.Panel ):
-	def __init__( self, parent, *args, **kwargs ):
+	def __init__( self, parent, rightpanel , *args, **kwargs ):
 		wx.Panel.__init__(self, parent, *args, **kwargs)
 		self.parent = parent
+		self.rightpanel = rightpanel
 		
 		self._Setup()
 
@@ -41,16 +52,34 @@ class WpSplitLeftPanel( wx.Panel ):
 		self.toolbar.AddLabelTool( wx.ID_OPEN, '', wx.Bitmap( './gui/icons/folder.png' ) )
 		self.toolbar.Realize()
 		
-		self.Bind( wx.EVT_MENU, self._OnNew, id=wx.ID_NEW )
-		
+		self.Bind( wx.EVT_MENU, self._OnToolBarNewPage, id=wx.ID_NEW )
+		self.Bind( wx.EVT_MENU, self._OnToolBarSavePage, id=wx.ID_SAVE )
+		self.Bind( wx.EVT_MENU, self._OnToolBarOpenPage, id=wx.ID_OPEN )
 		return self.toolbar
 
 	#==============================================================================================
 	# Bindings
 	#==============================================================================================
    	
-   	def _OnNew( self, event ):
-		self.notebook.AddPage( self._AddTextEditor(), '<empty>' )
+   	def _OnToolBarNewPage( self, event ):
+		self.rightpanel.AddDefaultPage()
+		
+	def _OnToolBarSavePage( self, event ):
+		print "Hello"
+		
+	def _OnToolBarOpenPage( self, event ):
+		dialog = wx.FileDialog ( None, style = wx.OPEN )
+		
+		if dialog.ShowModal() == wx.ID_OK:
+			self.rightpanel.AddDefaultPage( dialog.GetPath() )
+			
+		dialog.Destroy()
+		
+		
+
+#==================================================================================================
+# WpSplitRightPanel
+#==================================================================================================
 
 class WpSplitRightPanel( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
@@ -80,7 +109,7 @@ class WpSplitRightPanel( wx.Panel ):
 	
 	def _SetupNotebook( self ):
 		self.notebook = fnb.FlatNotebook( self, wx.ID_ANY, style=wx.EXPAND )
-		self.notebook.AddPage( self._AddTextEditor(), '<empty>' )
+		self.AddDefaultPage()
 		
 		return self.notebook
 		
@@ -98,10 +127,29 @@ class WpSplitRightPanel( wx.Panel ):
 		
 		# Adding content
 		if filepath is not None:
-			texteditor.LoadFile( filePath )
+			texteditor.LoadFile( filepath )
 			
 		return texteditor
+	
+	#===============================================================================================
+	# Helper functions
+	#===============================================================================================
+	def AddDefaultPage( self, filepath=None ):
+		title = '< empty >'
+		
+		if filepath is None:
+			filepath = None
+		else:
+			length = len( filepath )
+			startindex = filepath.rfind( '/' )+1
+			title = filepath[startindex:length]
+            
+		self.notebook.AddPage( self._AddTextEditor( filepath ), title )
 
+
+#==================================================================================================
+# WpMainPanel
+#==================================================================================================
 
 class WpMainPanel( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
@@ -117,8 +165,8 @@ class WpMainPanel( wx.Panel ):
 		self.flexgrid = wx.FlexGridSizer( 1, 1, 0, 0 )
 	
 		self.splitter = wx.SplitterWindow( self, -1 )
-		self.leftsplit = WpSplitLeftPanel( self.splitter )
 		self.rightsplit = WpSplitRightPanel( self.splitter )
+		self.leftsplit = WpSplitLeftPanel( self.splitter, self.rightsplit )
 		self.splitter.SplitVertically( self.leftsplit, self.rightsplit )
 		self.splitter.SetSashPosition( 300, True )
 		self.splitter.SetBorderSize( 0 )
