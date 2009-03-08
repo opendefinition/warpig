@@ -33,7 +33,7 @@ class WpMainFrame( wx.Frame ):
 			]
 		)
 		
-		self.flexgrid.AddGrowableRow( 1, 1 )
+		self.flexgrid.AddGrowableRow( 0, 0 )
 		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer )
 		
