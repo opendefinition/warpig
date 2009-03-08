@@ -57,10 +57,29 @@ class WpMainFrame( wx.Frame ):
 		self.menubar.Append( plugins, '&Plugins' )
 		self.menubar.Append( help, '&Help' )
 		
+	 	helpabout = wx.MenuItem( help, 10501, '&About', 'About WarPig'  )
+		help.AppendItem( helpabout )
+		
+		self.Bind( wx.EVT_MENU, self._OnAbout, id=10501 )
+		
 		return self.menubar
 		
 	def _SetupStatusBar( self ):
 		self.statusbar = wx.StatusBar( self, -1 )
-		self.statusbar.SetStatusText( '123' )
 		
 		return self.statusbar
+		
+	#===============================================================================================
+	# Bindings
+	#===============================================================================================
+	
+	def _OnAbout( self, event ):
+		information = wx.AboutDialogInfo()
+ 		information.SetName( 'WarPig Code Editor' )
+ 		information.SetVersion( '0.01' )
+  		information.SetDescription( 'WarPig is a simple but yet useful code editor written in Python.' )
+  		information.SetCopyright('(C) 2009 Open Definition' )
+  		information.SetWebSite( 'http://www.opendefinition.com' )
+  		information.AddDeveloper( 'Roger Johnsen' )
+  		
+  		wx.AboutBox( information )
