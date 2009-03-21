@@ -7,6 +7,7 @@
 import wx
 import wx.stc as stc
 from gui.WpMainPanel import WpMainPanel
+from system.WpFileSystem import WpFileSystem
 
 class WpMainFrame( wx.Frame ):
 	def __init__( self, *args, **kwargs ):
@@ -81,6 +82,7 @@ class WpMainFrame( wx.Frame ):
 		
 		self.Bind( wx.EVT_MENU, self._OnAbout, id=10501 )
 		self.Bind( wx.EVT_MENU, self._OnExit, id=10107 )
+		self.Bind( wx.EVT_MENU, self._OnNewProject, id=10101 )
 		
 		return self.menubar
 		
@@ -106,3 +108,16 @@ class WpMainFrame( wx.Frame ):
   		
   	def _OnExit( self, event ):
   		self.Close()
+  		
+  	def _OnNewProject( self, event ):
+  		dialog = wx.FileDialog ( None, style = wx.SAVE )
+  		
+  		if dialog.ShowModal() == wx.ID_OK:
+			path = dialog.GetPath()
+			info = WpFileSystem.SplitFilepath( path )
+		
+			dirlist = WpFileSystem.ListDirectory( info[ 'fpath' ] )
+			yamllist = WpFileSystem.YamlConvert( dirlist )
+			WpFileSystem.SaveToFile( yamllist, path )
+			
+			dialog.Destroy()		
