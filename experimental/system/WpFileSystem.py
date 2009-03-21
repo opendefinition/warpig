@@ -2,6 +2,8 @@
 #==================================================================================================
 # Open Definition WpFileSystem
 # Author: Roger C.B. Johnsen
+# 
+# Various filesystem helper functions wrapped in a class (static)
 #==================================================================================================
 
 import os
