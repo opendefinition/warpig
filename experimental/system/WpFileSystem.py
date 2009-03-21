@@ -58,7 +58,7 @@ class WpFileSystem:
 		"""
 		return yaml.dump( structure )
 
-	YamlConvert = WpCallable( YamlConvert )
+	StructureToYaml = WpCallable( StructureToYaml )
 	
 	def YamlToStructure( yml ):
 		"""
