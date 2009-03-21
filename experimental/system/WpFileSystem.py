@@ -51,7 +51,7 @@ class WpFileSystem:
 			
 	ListDirectory = WpCallable( ListDirectory )
 		
-	def YamlConvert( structure ):
+	def StructureToYaml( structure ):
 		"""
 		Convert any structure into Yaml format
 		@param mixed structure
@@ -59,6 +59,15 @@ class WpFileSystem:
 		return yaml.dump( structure )
 
 	YamlConvert = WpCallable( YamlConvert )
+	
+	def YamlToStructure( yml ):
+		"""
+		Convert Yaml to stucture
+		@param string yml
+		"""
+		return yaml.load( yml )
+		
+	YamlToStructure = WpCallable( YamlToStructure )
 	
 	def SaveToFile( content, filename, mode='w' ):
 		"""
@@ -74,3 +83,14 @@ class WpFileSystem:
 		return True
 		
 	SaveToFile = WpCallable( SaveToFile )
+	
+	def ReadFromFile( path ):
+		"""
+		Read content from file
+		@param string path
+		"""
+		file = open( path, 'r' )
+		retval = file.read()
+		file.close()
+		
+		return retval
