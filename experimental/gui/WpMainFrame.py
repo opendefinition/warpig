@@ -57,10 +57,30 @@ class WpMainFrame( wx.Frame ):
 		self.menubar.Append( plugins, '&Plugins' )
 		self.menubar.Append( help, '&Help' )
 		
+		# File menu entries
+		newproject = wx.MenuItem( file, 10101, '&New Project', 'Create new project' )
+		openproject = wx.MenuItem( file, 10102, '&Open Project', 'Open project' )
+		openfile = wx.MenuItem( file, 10103, '&Open File', 'Open file' )
+		newfile = wx.MenuItem( file, 10104, '&New File', 'Create empty document' )
+		savefile = wx.MenuItem( file, 10105, '&Save File', 'Save current file' )
+		savefileas = wx.MenuItem( file, 10106, '&Save File As', 'Save current file as...' )
+		exit = wx.MenuItem( file, 10107, '&Exit', 'Exit' )
+		
+		file.AppendItem( newproject )
+		file.AppendItem( openproject )
+		file.AppendSeparator()
+		file.AppendItem( newfile )
+		file.AppendItem( openfile )
+		file.AppendItem( savefile )
+		file.AppendItem( savefileas )
+		file.AppendSeparator()
+		file.AppendItem( exit )
+		
 	 	helpabout = wx.MenuItem( help, 10501, '&About', 'About WarPig'  )
 		help.AppendItem( helpabout )
 		
 		self.Bind( wx.EVT_MENU, self._OnAbout, id=10501 )
+		self.Bind( wx.EVT_MENU, self._OnExit, id=10107 )
 		
 		return self.menubar
 		
@@ -83,3 +103,6 @@ class WpMainFrame( wx.Frame ):
   		information.AddDeveloper( 'Roger Johnsen' )
   		
   		wx.AboutBox( information )
+  		
+  	def _OnExit( self, event ):
+  		self.Close()
