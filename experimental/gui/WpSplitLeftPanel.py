@@ -84,10 +84,18 @@ class WpSplitLeftPanel( wx.Panel ):
 		treeroot = self.treectrl.AddRoot( str( projectname ), 1, 0, wx.TreeItemData( projectname ) )
 		self.treectrl.SetItemHasChildren( treeroot, True )
 		for item in structure[ 'files' ]:
-			self.treectrl.AppendItem( treeroot, item, 2, 2, wx.TreeItemData( structure[ 'path' ] + item ) )
+			# split = WpFileSystem.SplitFilepath( item )
+			data = {
+				'path': structure[ 'path' ],
+				'fname': item,
+				'fullpath': structure[ 'path' ]+item
+			}
+			self.treectrl.AppendItem( treeroot, item, 2, 2, wx.TreeItemData( data ) )
 			
 		self.treectrl.Expand( treeroot )
 		
 	def _OnSelChanged( self, event ):
-		file = self.treectrl.GetPyData( event.GetItem() )
-		self.rightpanel.AddDefaultPage( file )
+		filedata = self.treectrl.GetPyData( event.GetItem() )
+		 
+		if filedata[ 'fname' ] not in self.rightpanel.files:
+			self.rightpanel.AddDefaultPage( filedata[ 'fullpath' ] )
