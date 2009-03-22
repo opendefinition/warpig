@@ -8,6 +8,8 @@ import wx
 import wx.lib.flatnotebook as fnb
 import wx.stc as stc
 
+from system.WpFileSystem import WpFileSystem
+
 class WpSplitRightPanel( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
 		wx.Panel.__init__(self, parent, *args, **kwargs)
@@ -56,7 +58,7 @@ class WpSplitRightPanel( wx.Panel ):
 		
 		# Adding content
 		if filepath is not None:
-			texteditor.LoadFile( filepath )
+			texteditor.SetTextUTF8( WpFileSystem.ReadFromFile( filepath ) )
 			
 		return texteditor
 	
@@ -94,8 +96,8 @@ class WpSplitRightPanel( wx.Panel ):
 					self.files[title] = path
 					
 				dialog.Destroy()		
-		
-			focus.SaveFile( path )
+			
+			WpFileSystem.SaveToFile( focus.GetTextUTF8(), path )
 			
 	def FindFileName( self, filepath ):
 		length = len( filepath )

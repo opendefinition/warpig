@@ -98,3 +98,5 @@ class WpFileSystem:
 		file.close()
 		
 		return retval
+		
+	ReadFromFile = WpCallable( ReadFromFile )
