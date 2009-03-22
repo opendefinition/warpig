@@ -38,15 +38,19 @@ class WpFileSystem:
 		List Directory
 		@param string path
 		"""
-		
-		retval = []
+		files = []
 		
 		tmpfilefilter = re.compile( '~' )
 
 		for file in os.listdir( path ):
 			if tmpfilefilter.search( file ) is None:
-				retval.append( file )
-
+				files.append( file )
+	
+		retval = {
+				'path': path,
+				'files': files
+			}
+	
 		return retval
 			
 	ListDirectory = WpCallable( ListDirectory )
