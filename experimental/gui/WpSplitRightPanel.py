@@ -50,7 +50,8 @@ class WpSplitRightPanel( wx.Panel ):
 		# Margin for line numbering
 		texteditor.SetMarginWidth( 0, 35 )
 		
-		font = wx.Font( 12, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.BOLD )
+		font = wx.Font( 11, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.NORMAL, 0, 'verdana', wx.FONTENCODING_UTF8 )
+		#self, pointSize, family, style, weight, underline, face, encoding) 
 		texteditor.StyleSetFont( 0, font )
 		
 		# Adding content
