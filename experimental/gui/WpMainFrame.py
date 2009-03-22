@@ -117,7 +117,9 @@ class WpMainFrame( wx.Frame ):
 			info = WpFileSystem.SplitFilepath( path )
 		
 			dirlist = WpFileSystem.ListDirectory( info[ 'fpath' ] )
-			yamllist = WpFileSystem.YamlConvert( dirlist )
+			yamllist = WpFileSystem.StructureToYaml( dirlist )
 			WpFileSystem.SaveToFile( yamllist, path )
+			
+			self.mainpanel.leftsplit.PopulateTreeCtrl( dirlist, info[ 'fname' ] )
 			
 			dialog.Destroy()		

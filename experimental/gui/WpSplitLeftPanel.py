@@ -35,8 +35,7 @@ class WpSplitLeftPanel( wx.Panel ):
 		self.SetSizer( self.mainsizer )
 
 	def _SetupTreeCtrl( self ):
-		self.treectrl = wx.TreeCtrl( self, -1, style=wx.ALL|wx.EXPAND )
-		
+		self.treectrl = wx.TreeCtrl( self, -1, style=wx.ALL|wx.EXPAND )		
 		return self.treectrl
 		
 	def _SetupToolbar( self ):
@@ -68,3 +67,11 @@ class WpSplitLeftPanel( wx.Panel ):
 			self.rightpanel.AddDefaultPage( dialog.GetPath() )
 			
 		dialog.Destroy()
+		
+	def PopulateTreeCtrl( self, structure, projectname):
+		treeroot = self.treectrl.AddRoot( str( projectname ), -1, -1, wx.TreeItemData( projectname ) )
+		self.treectrl.SetItemHasChildren( treeroot, True )
+		for item in structure:
+			self.treectrl.AppendItem( treeroot, item, -1, -1 )
+			
+		self.treectrl.Expand( treeroot )
