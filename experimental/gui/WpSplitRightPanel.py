@@ -8,6 +8,8 @@ import wx
 import wx.lib.flatnotebook as fnb
 import wx.stc as stc
 
+from gui.WpTextEditor import WpTextEditor 
+
 from system.WpFileSystem import WpFileSystem
 
 class WpSplitRightPanel( wx.Panel ):
@@ -44,21 +46,10 @@ class WpSplitRightPanel( wx.Panel ):
 		return self.notebook
 		
 	def _AddTextEditor( self, filepath=None):
-		texteditor = stc.StyledTextCtrl ( self.notebook, 1337, style=wx.TE_MULTILINE )
-
-		# Line numbering!
-		texteditor.SetMarginType( 0, stc.STC_MARGIN_NUMBER )
-
-		# Margin for line numbering
-		texteditor.SetMarginWidth( 0, 35 )
-		
-		font = wx.Font( 11, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.NORMAL, 0, 'verdana', wx.FONTENCODING_UTF8 )
-		#self, pointSize, family, style, weight, underline, face, encoding) 
-		texteditor.StyleSetFont( 0, font )
-		
+		texteditor = WpTextEditor( self.notebook )
 		# Adding content
 		if filepath is not None:
-			texteditor.SetTextUTF8( WpFileSystem.ReadFromFile( filepath ) )
+			texteditor.SetFilePath( filepath )
 			
 		return texteditor
 	
