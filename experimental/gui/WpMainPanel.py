@@ -22,7 +22,8 @@ class WpMainPanel( wx.Panel ):
 		# Rows, Cols
 		self.flexgrid = wx.FlexGridSizer( 1, 1, 0, 0 )
 	
-		self.splitter = wx.SplitterWindow( self, -1 )
+		self.splitter = wx.SplitterWindow( self, 1333 )
+		self.splitter.SetMinimumPaneSize( 20 )
 		self.rightsplit = WpSplitRightPanel( self.splitter )
 		self.leftsplit = WpSplitLeftPanel( self.splitter, self.rightsplit )
 		self.splitter.SplitVertically( self.leftsplit, self.rightsplit )
@@ -34,6 +35,9 @@ class WpMainPanel( wx.Panel ):
 				( self.splitter, 1, wx.EXPAND )
 			]
 		) 
+	
+		# Binding the splitter
+		self.Bind( wx.EVT_SPLITTER_DCLICK, self._OnSplitterDblClk, id=1333 ) 
 	
 		self.flexgrid.AddGrowableCol( 0 )
 		self.flexgrid.AddGrowableRow( 0 )
@@ -51,3 +55,9 @@ class WpMainPanel( wx.Panel ):
 		self.Bind( wx.EVT_MENU, self._OnNew, id=wx.ID_NEW )
 		
 		return self.toolbar
+		
+	def _OnSplitterDblClk( self, event ):
+		if( self.splitter.GetSashPosition() == 300 ):
+			self.splitter.SetSashPosition( 20, True )
+		else:
+			self.splitter.SetSashPosition( 300, True )

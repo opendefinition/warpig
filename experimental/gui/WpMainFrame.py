@@ -110,7 +110,8 @@ class WpMainFrame( wx.Frame ):
   		self.Close()
   		
   	def _OnNewProject( self, event ):
-  		dialog = wx.FileDialog ( None, style = wx.SAVE )
+  		filters = 'WarPig Project File (*.wpf)|*.wpf'
+  		dialog = wx.FileDialog ( None, 'New Project', wildcard=filters, style = wx.SAVE )
   		
   		if dialog.ShowModal() == wx.ID_OK:
 			path = dialog.GetPath()
