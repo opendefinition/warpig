@@ -15,6 +15,30 @@ class WpCallable:
         self.__call__ = call
 
 class WpFileSystem:
+	def SaveProjectFile( fullpath ):
+		# Splitting fullpath into easier manageable parts
+		fileinfo = os.path.split( fullpath )
+		filepath = fileinfo[ 0 ]
+		filename = fileinfo[ 1 ]
+		
+		# Get directory list
+		directory = WpFileSystem.ListDirectory( filepath )
+		
+		# Convert directory to YAML
+		yamllist = WpFileSystem.StructureToYaml( directory )
+		
+		# Store YAML list inside project definition file
+		WpFileSystem.SaveToFile( yamllist, fullpath)
+		
+		return {
+				'fpath' 	: filepath,
+				'fname'	 	: filename,
+				'orig'		: fullpath,
+				'dirlist' 	: directory
+ 			}
+ 			
+ 	SaveProjectFile = WpCallable( SaveProjectFile )
+
 	def SplitFilepath( path ):
 		"""
 		Split path into path and filename

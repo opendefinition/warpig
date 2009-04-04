@@ -115,12 +115,8 @@ class WpMainFrame( wx.Frame ):
   		
   		if dialog.ShowModal() == wx.ID_OK:
 			path = dialog.GetPath()
-			info = WpFileSystem.SplitFilepath( path )
-		
-			dirlist = WpFileSystem.ListDirectory( info[ 'fpath' ] )
-			yamllist = WpFileSystem.StructureToYaml( dirlist )
-			WpFileSystem.SaveToFile( yamllist, path )
 			
-			self.mainpanel.leftsplit.PopulateTreeCtrl( dirlist, info[ 'fname' ] )
+			info = WpFileSystem.SaveProjectFile( path )
+			self.mainpanel.leftsplit.PopulateTreeCtrl( info[ 'dirlist' ], info[ 'fname' ] )
 			
 			dialog.Destroy()		
