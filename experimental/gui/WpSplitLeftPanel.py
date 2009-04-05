@@ -81,7 +81,8 @@ class WpSplitLeftPanel( wx.Panel ):
 		
 		self.treectrl.AssignImageList( il )
 	
-		treeroot = self.treectrl.AddRoot( str( projectname ), 1, 0, wx.TreeItemData( projectname ) )
+		prjname = projectname[0:-4]
+		treeroot = self.treectrl.AddRoot( str( prjname ), 1, 0, wx.TreeItemData( projectname ) )
 		self.treectrl.SetItemHasChildren( treeroot, True )
 		for item in structure[ 'files' ]:
 			# split = WpFileSystem.SplitFilepath( item )

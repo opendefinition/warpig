@@ -50,6 +50,7 @@ class WpSplitRightPanel( wx.Panel ):
 		# Adding content
 		if filepath is not None:
 			texteditor.SetFilePath( filepath )
+			texteditor.SetDefaultLexer()
 			
 		return texteditor
 	

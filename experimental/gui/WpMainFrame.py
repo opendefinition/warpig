@@ -7,6 +7,8 @@
 import wx
 import wx.stc as stc
 from gui.WpMainPanel import WpMainPanel
+from gui.WpNewProject import WpNewProject
+
 from system.WpFileSystem import WpFileSystem
 
 class WpMainFrame( wx.Frame ):
@@ -83,6 +85,7 @@ class WpMainFrame( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self._OnAbout, id=10501 )
 		self.Bind( wx.EVT_MENU, self._OnExit, id=10107 )
 		self.Bind( wx.EVT_MENU, self._OnNewProject, id=10101 )
+		self.Bind( wx.EVT_MENU, self._OnOpenProject, id=10102 )
 		
 		return self.menubar
 		
@@ -104,12 +107,17 @@ class WpMainFrame( wx.Frame ):
   		information.SetWebSite( 'http://www.opendefinition.com' )
   		information.AddDeveloper( 'Roger Johnsen' )
   		
-  		wx.AboutBox( information )
+  		# wx.AboutBox( information )
   		
   	def _OnExit( self, event ):
   		self.Close()
   		
   	def _OnNewProject( self, event ):
+  		window = WpNewProject( self.mainpanel.leftsplit )
+		window.ShowModal()
+		window.Destroy()
+        
+        """
   		filters = 'WarPig Project File (*.wpf)|*.wpf'
   		dialog = wx.FileDialog ( None, 'New Project', wildcard=filters, style = wx.SAVE )
   		
@@ -120,3 +128,12 @@ class WpMainFrame( wx.Frame ):
 			self.mainpanel.leftsplit.PopulateTreeCtrl( info[ 'dirlist' ], info[ 'fname' ] )
 			
 			dialog.Destroy()		
+		"""
+	
+	def _OnOpenProject( self, event ):
+		filter = 'WarPig Project File (*.wpf)|*.wpf'
+		dialog = wx.FileDialog( None, 'Open Project', wildcard=filter, style=wx.OPEN )
+		
+		if( dialog.ShowModal() == wx.ID_OK ):
+			dialog.Destroy()
+		

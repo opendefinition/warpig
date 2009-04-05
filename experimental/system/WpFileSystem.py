@@ -15,25 +15,28 @@ class WpCallable:
         self.__call__ = call
 
 class WpFileSystem:
-	def SaveProjectFile( fullpath ):
+	def SaveProjectFile( projectpath, projectfilespath ):
 		# Splitting fullpath into easier manageable parts
-		fileinfo = os.path.split( fullpath )
+		fileinfo = os.path.split( projectpath )
 		filepath = fileinfo[ 0 ]
 		filename = fileinfo[ 1 ]
 		
 		# Get directory list
-		directory = WpFileSystem.ListDirectory( filepath )
+		directory = WpFileSystem.ListDirectory( projectfilespath )
 		
 		# Convert directory to YAML
 		yamllist = WpFileSystem.StructureToYaml( directory )
 		
 		# Store YAML list inside project definition file
-		WpFileSystem.SaveToFile( yamllist, fullpath)
+		WpFileSystem.SaveToFile( yamllist, projectpath )
+		
+		print "prpath: " + projectpath
+		print "prfiles: " + projectfilespath
 		
 		return {
 				'fpath' 	: filepath,
 				'fname'	 	: filename,
-				'orig'		: fullpath,
+				'orig'		: projectfilespath,
 				'dirlist' 	: directory
  			}
  			
@@ -50,7 +53,7 @@ class WpFileSystem:
 		retval = { 
 			'fpath' : path[0:startindex],
 			'fname' : path[startindex:length],
-			'orig' : path
+			'orig'  : path
 		}
 		
 		return retval
