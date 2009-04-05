@@ -31,12 +31,13 @@ class WpMainFrame( wx.Frame ):
 		#-- Adding it all to the mix
 		self.flexgrid.AddMany( 
 			[
-				( self.mainpanel, 0, wx.EXPAND ),
-				( self._SetupStatusBar(), 0, wx.EXPAND )
+				( self.mainpanel, 1, wx.EXPAND ),
+				( self._SetupStatusBar(), 1, wx.EXPAND )
 			]
 		)
+		self.flexgrid.AddGrowableCol( 0 )
+		self.flexgrid.AddGrowableRow( 0 )
 		
-		self.flexgrid.AddGrowableRow( 0, 0 )
 		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer )
 		
