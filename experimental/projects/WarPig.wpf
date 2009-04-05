@@ -1,0 +1,7 @@
+files: [!!python/unicode '.DS_Store', !!python/unicode '__init__.py', !!python/unicode '__init__.pyc',
+  !!python/unicode 'icons', !!python/unicode 'WpMainFrame.py', !!python/unicode 'WpMainFrame.pyc',
+  !!python/unicode 'WpMainPanel.py', !!python/unicode 'WpMainPanel.pyc', !!python/unicode 'WpNewProject.py',
+  !!python/unicode 'WpNewProject.pyc', !!python/unicode 'WpSplitLeftPanel.py', !!python/unicode 'WpSplitLeftPanel.pyc',
+  !!python/unicode 'WpSplitRightPanel.py', !!python/unicode 'WpSplitRightPanel.pyc',
+  !!python/unicode 'WpTextEditor.py', !!python/unicode 'WpTextEditor.pyc']
+path: !!python/unicode '/Users/rogerjohnsen/Devel/WarPig/experimental/gui/'
