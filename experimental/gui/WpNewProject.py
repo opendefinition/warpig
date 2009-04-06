@@ -17,8 +17,10 @@ class WpNewProject( wx.Dialog ):
 		wx.Dialog.__init__( self, None, 6666, 'New Project', size=(500, 300) )
 		
 		# Main Panel
-		mainpanel = wx.Panel(self, -1)
+		mainpanel = wx.Panel(self, -1, size=(500,500), style=wx.EXPAND )
+		mainsizer = wx.BoxSizer( wx.VERTICAL )
 		panelsizer = wx.BoxSizer( wx.VERTICAL )
+		panelsizer = wx.FlexGridSizer( 3, 1, 0, 0 )
 		
 		# Projectname
 		namesizer = wx.BoxSizer( wx.HORIZONTAL )
@@ -53,14 +55,23 @@ class WpNewProject( wx.Dialog ):
 		
 		buttonsizer.Add( cancelbutton, 0, wx.EXPAND | wx.ALL, 5 )
 		buttonsizer.Add( savebutton, 1, wx.EXPAND | wx.ALL, 5 )
-		
+	
 		# Sewing things together
-		panelsizer.Add( namesizer, 0, wx.EXPAND )
-		panelsizer.Add( filesizer, 1, wx.EXPAND )
-		panelsizer.Add( buttonsizer, 0, wx.EXPAND )
+		panelsizer.AddMany(
+			[
+				( namesizer, 1, wx.EXPAND ),
+				( filesizer, 1, wx.EXPAND ),
+				( buttonsizer, 1, wx.EXPAND )
+			]
+		)
 		
+		panelsizer.AddGrowableRow( 1 )
+		panelsizer.AddGrowableCol( 0 )
+	
 		# Set the main sizer to panel
-		mainpanel.SetSizer( panelsizer )
+		mainsizer.Add( panelsizer, 1, wx.EXPAND )
+		
+		self.SetSizer( mainsizer )
 		
 		# Bindings
 		self.Bind( wx.EVT_BUTTON, self._onAssociateFiles, id=12)

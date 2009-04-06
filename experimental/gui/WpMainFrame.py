@@ -100,15 +100,18 @@ class WpMainFrame( wx.Frame ):
 	#===============================================================================================
 	
 	def _OnAbout( self, event ):
+		"""
+		Display about box
+		"""
 		information = wx.AboutDialogInfo()
- 		information.SetName( 'WarPig Code Editor' )
- 		information.SetVersion( '0.01' )
-  		information.SetDescription( 'WarPig is a simple but yet useful code editor written in Python.' )
-  		information.SetCopyright('(C) 2009 Open Definition' )
+ 		information.SetName( 'WarPig Code Environment' )
+ 		information.SetVersion( '0.01 - Alpha Public' )
+  		information.SetDescription( 'A simple but yet powerfull code evironment written in Python.' )
+  		information.SetCopyright('Open Definition©2009' )
   		information.SetWebSite( 'http://www.opendefinition.com' )
-  		information.AddDeveloper( 'Roger Johnsen' )
+  		information.AddDeveloper( 'Roger C.B. Johnsen' )
   		
-  		# wx.AboutBox( information )
+  		wx.AboutBox( information )
   		
   	def _OnExit( self, event ):
   		self.Close()
