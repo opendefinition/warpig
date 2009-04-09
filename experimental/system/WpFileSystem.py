@@ -30,9 +30,6 @@ class WpFileSystem:
 		# Store YAML list inside project definition file
 		WpFileSystem.SaveToFile( yamllist, projectpath )
 		
-		print "prpath: " + projectpath
-		print "prfiles: " + projectfilespath
-		
 		return {
 				'fpath' 	: filepath,
 				'fname'	 	: filename,
@@ -40,8 +37,30 @@ class WpFileSystem:
 				'dirlist' 	: directory
  			}
  			
+ 			
  	SaveProjectFile = WpCallable( SaveProjectFile )
+ 	
+ 	def LoadProjectFile( path ):
+ 		# read from file
+ 		content = WpFileSystem.ReadFromFile( path )
+ 		
+ 		# convert to native format
+ 		structure = WpFileSystem.YamlToStructure( content )
+ 		
+ 		# Creating response packet
+ 		fileinfo = os.path.split( path )
+ 		filepath = fileinfo[ 0 ]
+ 		filename = fileinfo[ 1 ]
+ 		
+ 		return { 
+ 				'fpath'		: filepath,
+ 				'fname'		: filename,
+ 				'orig'		: path,
+ 				'dirlist'	: structure
+ 			}
 
+	LoadProjectFile = WpCallable( LoadProjectFile )
+	
 	def SplitFilepath( path ):
 		"""
 		Split path into path and filename

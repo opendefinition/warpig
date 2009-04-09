@@ -107,7 +107,7 @@ class WpMainFrame( wx.Frame ):
  		information.SetName( 'WarPig Code Environment' )
  		information.SetVersion( '0.01 - Alpha Public' )
   		information.SetDescription( 'A simple but yet powerfull code evironment written in Python.' )
-  		information.SetCopyright('Open Definition©2009' )
+  		information.SetCopyright('Open Definition(C)2009' )
   		information.SetWebSite( 'http://www.opendefinition.com' )
   		information.AddDeveloper( 'Roger C.B. Johnsen' )
   		
@@ -120,24 +120,15 @@ class WpMainFrame( wx.Frame ):
   		window = WpNewProject( self.mainpanel.leftsplit )
 		window.ShowModal()
 		window.Destroy()
-        
-        """
-  		filters = 'WarPig Project File (*.wpf)|*.wpf'
-  		dialog = wx.FileDialog ( None, 'New Project', wildcard=filters, style = wx.SAVE )
-  		
-  		if dialog.ShowModal() == wx.ID_OK:
-			path = dialog.GetPath()
-			
-			info = WpFileSystem.SaveProjectFile( path )
-			self.mainpanel.leftsplit.PopulateTreeCtrl( info[ 'dirlist' ], info[ 'fname' ] )
-			
-			dialog.Destroy()		
-		"""
 	
 	def _OnOpenProject( self, event ):
 		filter = 'WarPig Project File (*.wpf)|*.wpf'
 		dialog = wx.FileDialog( None, 'Open Project', wildcard=filter, style=wx.OPEN )
 		
 		if( dialog.ShowModal() == wx.ID_OK ):
+			path = dialog.GetPath()
+			structure = WpFileSystem.LoadProjectFile( path )
+			self.mainpanel.leftsplit.PopulateTreeCtrl(  structure[ 'dirlist' ], structure[ 'fname' ] )
+			
 			dialog.Destroy()
 		

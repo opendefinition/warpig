@@ -72,6 +72,10 @@ class WpSplitLeftPanel( wx.Panel ):
 		dialog.Destroy()
 		
 	def PopulateTreeCtrl( self, structure, projectname):
+		# Destroying all content is content is present
+		if( self.treectrl.IsEmpty() == False ):
+			self.treectrl.DeleteAllItems()
+		
 		ArtIDs = [ 'wx.ART_FOLDER', 'wx.ART_FOLDER_OPEN', 'wx.ART_NORMAL_FILE' ]
 		
 		il = wx.ImageList( 16, 16 )
@@ -84,6 +88,7 @@ class WpSplitLeftPanel( wx.Panel ):
 		prjname = projectname[0:-4]
 		treeroot = self.treectrl.AddRoot( str( prjname ), 1, 0, wx.TreeItemData( projectname ) )
 		self.treectrl.SetItemHasChildren( treeroot, True )
+	
 		for item in structure[ 'files' ]:
 			# split = WpFileSystem.SplitFilepath( item )
 			data = {
@@ -94,6 +99,8 @@ class WpSplitLeftPanel( wx.Panel ):
 			self.treectrl.AppendItem( treeroot, item, 2, 2, wx.TreeItemData( data ) )
 			
 		self.treectrl.Expand( treeroot )
+		
+		
 		
 	def _OnSelChanged( self, event ):
 		filedata = self.treectrl.GetPyData( event.GetItem() )
