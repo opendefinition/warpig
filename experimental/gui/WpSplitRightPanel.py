@@ -4,6 +4,7 @@
 # Author: Roger C.B. Johnsen
 #==================================================================================================
 
+import os
 import wx
 import wx.lib.flatnotebook as fnb
 import wx.stc as stc
@@ -62,26 +63,30 @@ class WpSplitRightPanel( wx.Panel ):
 		if filepath is None:
 			filepath = None
 		else:
-			title = self.FindFileName( filepath )
+			split = os.path.split( filepath )
+			filepath = filepath
+			title = split[ 1 ]
             
 		self.notebook.AddPage( self._AddTextEditor( filepath ), title )
 
 	def SaveFile( self ):
 		focus = self.FindFocus()
-
-		if type( focus ).__name__=='StyledTextCtrl':
-			filename = self.notebook.GetPageText( self.notebook.GetSelection() )
+		
+		if( type( focus ).__name__ == 'WpTextEditor' ):
+			# filename = self.notebook.GetPageText( self.notebook.GetSelection() )
 		
 			dialog = wx.FileDialog ( None, style = wx.SAVE )
-		
-			if dialog.ShowModal() == wx.ID_OK:
-				path = dialog.GetPath()
-				title = self.FindFileName( path )
+			
+			if( focus.GetFilePath != None ):
+				path = focus.GetFilePath()
+			else: 
+				if dialog.ShowModal() == wx.ID_OK:
+					path = dialog.GetPath()
+					split = os.path.split( path )
 				
-				self.notebook.SetPageText( self.notebook.GetSelection(), title )
-				self.files[title] = path
-				
-			dialog.Destroy()		
+					self.notebook.SetPageText( self.notebook.GetSelection(), split[ 1 ] )
+			
+					dialog.Destroy()		
 		
 			WpFileSystem.SaveToFile( focus.GetTextUTF8(), path )
 			
