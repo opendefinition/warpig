@@ -27,7 +27,7 @@ class WpMainPanel( wx.Panel ):
 		self.rightsplit = WpSplitRightPanel( self.splitter )
 		self.leftsplit = WpSplitLeftPanel( self.splitter, self.rightsplit )
 		self.splitter.SplitVertically( self.leftsplit, self.rightsplit )
-		self.splitter.SetSashPosition( 20, True )
+		self.splitter.SetSashPosition( 21, True )
 		self.splitter.SetBorderSize( 0 )
 		#-- Main widget
 		self.flexgrid.AddMany(
