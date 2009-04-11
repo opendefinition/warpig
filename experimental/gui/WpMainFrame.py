@@ -128,7 +128,7 @@ class WpMainFrame( wx.Frame ):
 		if( dialog.ShowModal() == wx.ID_OK ):
 			path = dialog.GetPath()
 			structure = WpFileSystem.LoadProjectFile( path )
-			self.mainpanel.leftsplit.PopulateTreeCtrl(  structure[ 'dirlist' ], structure[ 'fname' ] )
+			self.mainpanel.leftsplit.treectrl.PopulateTree(  structure[ 'dirlist' ], structure[ 'fname' ] )
 			
 			dialog.Destroy()
 		

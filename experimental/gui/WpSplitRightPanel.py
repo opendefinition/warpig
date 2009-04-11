@@ -41,7 +41,7 @@ class WpSplitRightPanel( wx.Panel ):
 	
 	def _SetupNotebook( self ):
 		self.notebook = fnb.FlatNotebook( self, wx.ID_ANY, style=wx.EXPAND )
-		self.AddDefaultPage()
+		# self.AddDefaultPage()
 		
 		return self.notebook
 		

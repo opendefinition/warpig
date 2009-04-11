@@ -108,7 +108,7 @@ class WpNewProject( wx.Dialog ):
 		"""
 		path = './projects/' + "/" + self.projectnamefield.GetValue() + ".wpf"
 		information = WpFileSystem.SaveProjectFile( path, (self._projectpath+"/")  )
-		self._treectrl.PopulateTreeCtrl( information[ 'dirlist' ], information[ 'fname' ] )
+		self._treectrl.treectrl.PopulateTree( information[ 'dirlist' ], information[ 'fname' ] )
 		
 		self.Close()
 		

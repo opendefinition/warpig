@@ -6,6 +6,8 @@
 
 import wx
 
+from gui.WpTreeCtrl import WpTreeCtrl
+
 class WpSplitLeftPanel( wx.Panel ):
 	def __init__( self, parent, rightpanel , *args, **kwargs ):
 		wx.Panel.__init__(self, parent, *args, **kwargs)
@@ -35,7 +37,7 @@ class WpSplitLeftPanel( wx.Panel ):
 		self.SetSizer( self.mainsizer )
 
 	def _SetupTreeCtrl( self ):
-		self.treectrl = wx.TreeCtrl( self, 9999, style=wx.ALL|wx.EXPAND )	
+		self.treectrl = WpTreeCtrl( self ) # wx.TreeCtrl( self, 9999, style=wx.ALL|wx.EXPAND )	
 		
 		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=9999 )
 
@@ -69,37 +71,7 @@ class WpSplitLeftPanel( wx.Panel ):
 		if dialog.ShowModal() == wx.ID_OK:
 			self.rightpanel.AddDefaultPage( dialog.GetPath() )
 			
-		dialog.Destroy()
-		
-	def PopulateTreeCtrl( self, structure, projectname):
-		# Destroying all content is content is present
-		if( self.treectrl.IsEmpty() == False ):
-			self.treectrl.DeleteAllItems()
-		
-		ArtIDs = [ 'wx.ART_FOLDER', 'wx.ART_FOLDER_OPEN', 'wx.ART_NORMAL_FILE' ]
-		
-		il = wx.ImageList( 16, 16 )
-		for items in ArtIDs:
-			pic = wx.ArtProvider_GetBitmap(eval(items), wx.ART_TOOLBAR, ( 16, 16 ) )
-			il.Add( pic )
-		
-		self.treectrl.AssignImageList( il )
-	
-		prjname = projectname[0:-4]
-		treeroot = self.treectrl.AddRoot( str( prjname ), 1, 0, wx.TreeItemData( projectname ) )
-		self.treectrl.SetItemHasChildren( treeroot, True )
-	
-		for item in structure[ 'files' ]:
-			# split = WpFileSystem.SplitFilepath( item )
-			data = {
-				'path': structure[ 'path' ],
-				'fname': item,
-				'fullpath': structure[ 'path' ]+item
-			}
-			self.treectrl.AppendItem( treeroot, item, 2, 2, wx.TreeItemData( data ) )
-			
-		self.treectrl.Expand( treeroot )
-		
+		dialog.Destroy()		
 		
 		
 	def _OnSelChanged( self, event ):
