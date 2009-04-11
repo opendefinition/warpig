@@ -22,12 +22,12 @@ class WpMainPanel( wx.Panel ):
 		# Rows, Cols
 		self.flexgrid = wx.FlexGridSizer( 1, 1, 0, 0 )
 	
-		self.splitter = wx.SplitterWindow( self, 1333 )
+		self.splitter = wx.SplitterWindow( self, 1333, style=wx.SP_NO_XP_THEME | wx.SP_3DSASH )
 		self.splitter.SetMinimumPaneSize( 20 )
 		self.rightsplit = WpSplitRightPanel( self.splitter )
 		self.leftsplit = WpSplitLeftPanel( self.splitter, self.rightsplit )
 		self.splitter.SplitVertically( self.leftsplit, self.rightsplit )
-		self.splitter.SetSashPosition( 300, True )
+		self.splitter.SetSashPosition( 20, True )
 		self.splitter.SetBorderSize( 0 )
 		#-- Main widget
 		self.flexgrid.AddMany(
@@ -57,7 +57,7 @@ class WpMainPanel( wx.Panel ):
 		return self.toolbar
 		
 	def _OnSplitterDblClk( self, event ):
-		if( self.splitter.GetSashPosition() == 300 ):
-			self.splitter.SetSashPosition( 20, True )
-		else:
+		if( self.splitter.GetSashPosition() == 20 ):
 			self.splitter.SetSashPosition( 300, True )
+		else:
+			self.splitter.SetSashPosition( 20, True )
