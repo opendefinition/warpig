@@ -4,6 +4,7 @@
 # Author: Roger C.B. Johnsen
 #==================================================================================================
 
+import os
 import wx
 
 class WpTreeCtrl( wx.TreeCtrl ):
@@ -28,13 +29,20 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		treeroot = self.AddRoot( str( prjname ), 1, 0, wx.TreeItemData( projectname ) )
 		self.SetItemHasChildren( treeroot, True )
 	
-		for item in structure[ 'files' ]:
-			# split = WpFileSystem.SplitFilepath( item )
-			data = {
-				'path': structure[ 'path' ],
-				'fname': item,
-				'fullpath': structure[ 'path' ]+item
-			}
-			self.AppendItem( treeroot, item, 2, 2, wx.TreeItemData( data ) )
-			
+		root = structure[ 'files' ][ 0 ][ 0 ]
+		ids = {root: treeroot}
+		
+		for ( dirpath, dirnames, filenames ) in structure[ 'files' ]:
+			for dirname in dirnames:
+				fullpath = os.path.join( dirpath, dirname )
+				ids[ fullpath ] =  self.AppendItem( ids[ dirpath ], dirname, 1, 0 )
+				
+			for filename in sorted( filenames ):
+				data = {
+					'path': dirpath,
+					'fname': filename,
+					'fullpath': os.path.join( dirpath, filename )
+				}
+				self.AppendItem( ids[ dirpath ], filename, 2, 2, wx.TreeItemData( data ) )
+	
 		self.Expand( treeroot )

@@ -23,7 +23,7 @@ class WpFileSystem:
 		
 		# Get directory list
 		directory = WpFileSystem.ListDirectory( projectfilespath )
-		
+
 		# Convert directory to YAML
 		yamllist = WpFileSystem.StructureToYaml( directory )
 		
@@ -36,7 +36,6 @@ class WpFileSystem:
 				'orig'		: projectfilespath,
 				'dirlist' 	: directory
  			}
- 			
  			
  	SaveProjectFile = WpCallable( SaveProjectFile )
  	
@@ -84,13 +83,16 @@ class WpFileSystem:
 		List Directory
 		@param string path
 		"""
+
+		# Traversing current directory
+		dirlist = os.walk( path, topdown=True )
+		
 		files = []
 		
 		tmpfilefilter = re.compile( '~' )
 
-		for file in os.listdir( path ):
-			if tmpfilefilter.search( file ) is None:
-				files.append( file )
+		for entity in dirlist:
+			files.append( entity )
 	
 		retval = {
 				'path': path,

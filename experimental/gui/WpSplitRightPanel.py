@@ -16,7 +16,6 @@ class WpSplitRightPanel( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
 		wx.Panel.__init__(self, parent, *args, **kwargs)
 		self.parent = parent
-		self.files = {}
 		
 		self._Setup()
 
@@ -66,29 +65,24 @@ class WpSplitRightPanel( wx.Panel ):
 			title = self.FindFileName( filepath )
             
 		self.notebook.AddPage( self._AddTextEditor( filepath ), title )
-		
-		# Adding file into buffer
-		self.files[ title ] = filepath
 
 	def SaveFile( self ):
 		focus = self.FindFocus()
 
 		if type( focus ).__name__=='StyledTextCtrl':
 			filename = self.notebook.GetPageText( self.notebook.GetSelection() )
-			path = self.files[ filename ]
-			
-			if path is None:
-				dialog = wx.FileDialog ( None, style = wx.SAVE )
 		
-				if dialog.ShowModal() == wx.ID_OK:
-					path = dialog.GetPath()
-					title = self.FindFileName( path )
-					
-					self.notebook.SetPageText( self.notebook.GetSelection(), title )
-					self.files[title] = path
-					
-				dialog.Destroy()		
-			
+			dialog = wx.FileDialog ( None, style = wx.SAVE )
+		
+			if dialog.ShowModal() == wx.ID_OK:
+				path = dialog.GetPath()
+				title = self.FindFileName( path )
+				
+				self.notebook.SetPageText( self.notebook.GetSelection(), title )
+				self.files[title] = path
+				
+			dialog.Destroy()		
+		
 			WpFileSystem.SaveToFile( focus.GetTextUTF8(), path )
 			
 	def FindFileName( self, filepath ):
