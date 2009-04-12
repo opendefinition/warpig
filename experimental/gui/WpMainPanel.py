@@ -29,6 +29,7 @@ class WpMainPanel( wx.Panel ):
 		self.splitter.SplitVertically( self.leftsplit, self.rightsplit )
 		self.splitter.SetSashPosition( 21, True )
 		self.splitter.SetBorderSize( 0 )
+
 		#-- Main widget
 		self.flexgrid.AddMany(
 			[
@@ -44,18 +45,7 @@ class WpMainPanel( wx.Panel ):
 		
 		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer )
-		
-	def _SetupToolbar( self ):
-		self.toolbar = wx.ToolBar( self, -1, style=wx.TB_VERTICAL )
-		self.toolbar.AddLabelTool( wx.ID_NEW, '', wx.Bitmap( './gui/icons/document-new.png' ) )
-		self.toolbar.AddLabelTool( wx.ID_SAVE, '', wx.Bitmap( './gui/icons/media-floppy.png' ) )
-		self.toolbar.AddLabelTool( wx.ID_OPEN, '', wx.Bitmap( './gui/icons/folder.png' ) )
-		self.toolbar.Realize()
-		
-		self.Bind( wx.EVT_MENU, self._OnNew, id=wx.ID_NEW )
-		
-		return self.toolbar
-		
+	
 	def _OnSplitterDblClk( self, event ):
 		self.ResizeSash()
 	

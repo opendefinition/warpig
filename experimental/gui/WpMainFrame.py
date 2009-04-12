@@ -23,11 +23,11 @@ class WpMainFrame( wx.Frame ):
 		# Rows, Cols
 		self.flexgrid = wx.FlexGridSizer( 2, 1, 0, 0 )
 		
-		#-- Menubar
-		self.SetMenuBar( self._SetupMenuBar() )
-		
 		#-- Main widgets
 		self.mainpanel = WpMainPanel( self )
+		
+		#-- Menubar
+		self.SetMenuBar( self._SetupMenuBar() )
 		
 		#-- Adding it all to the mix
 		self.flexgrid.AddMany( 
@@ -88,6 +88,9 @@ class WpMainFrame( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self._OnExit, id=10107 )
 		self.Bind( wx.EVT_MENU, self._OnNewProject, id=10101 )
 		self.Bind( wx.EVT_MENU, self._OnOpenProject, id=10102 )
+		self.Bind( wx.EVT_MENU, self.mainpanel.leftsplit._OnToolBarOpenPage, id=10103 )
+		self.Bind( wx.EVT_MENU, self.mainpanel.leftsplit._OnToolBarNewPage, id=10104 )
+		self.Bind( wx.EVT_MENU, self.mainpanel.leftsplit._OnToolBarSavePage, id=10105 )
 		
 		return self.menubar
 		

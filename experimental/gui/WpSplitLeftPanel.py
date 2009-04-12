@@ -73,7 +73,6 @@ class WpSplitLeftPanel( wx.Panel ):
 			
 		dialog.Destroy()		
 		
-		
 	def _OnSelChanged( self, event ):
 		filedata = self.treectrl.GetPyData( event.GetItem() )
 		
