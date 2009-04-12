@@ -73,12 +73,11 @@ class WpSplitRightPanel( wx.Panel ):
 		focus = self.FindFocus()
 		
 		if( type( focus ).__name__ == 'WpTextEditor' ):
-			# filename = self.notebook.GetPageText( self.notebook.GetSelection() )
 			path = None
-	
-			
+			dosave = False
 			if( focus.GetFilePath() != None ):
 				path = focus.GetFilePath()
+				dosave = True
 			else: 
 				dialog = wx.FileDialog ( self, style = wx.SAVE )
 				response = dialog.ShowModal()
@@ -86,11 +85,13 @@ class WpSplitRightPanel( wx.Panel ):
 					path = dialog.GetPath()
 					split = os.path.split( path )
 					self.notebook.SetPageText( self.notebook.GetSelection(), split[ 1 ] )
-					dialog.Destroy()		
+					dialog.Destroy()
+					dosave = True
 		
-			WpFileSystem.SaveToFile( focus.GetTextUTF8(), path )
-			# Make sure the editor got the filepath set
-			focus.SetFilePath( path )
+			if( dosave == True ):
+				WpFileSystem.SaveToFile( focus.GetTextUTF8(), path )
+				# Make sure the editor got the filepath set
+				focus.SetFilePath( path )
 			
 	def FindFileName( self, filepath ):
 		length = len( filepath )

@@ -137,5 +137,7 @@ class WpMainFrame( wx.Frame ):
 			structure = WpFileSystem.LoadProjectFile( path )
 			self.mainpanel.leftsplit.treectrl.PopulateTree(  structure[ 'dirlist' ], structure[ 'fname' ] )
 			self.mainpanel.ResizeSash()
-			dialog.Destroy()
+			
+		dialog.Destroy()
+			
 		
