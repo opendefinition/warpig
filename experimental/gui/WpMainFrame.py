@@ -123,6 +123,9 @@ class WpMainFrame( wx.Frame ):
 		window.Destroy()
 	
 	def _OnOpenProject( self, event ):
+		"""
+		Open project
+		"""
 		filter = 'WarPig Project File (*.wpf)|*.wpf'
 		dialog = wx.FileDialog( None, 'Open Project', wildcard=filter, style=wx.OPEN )
 		
@@ -130,6 +133,6 @@ class WpMainFrame( wx.Frame ):
 			path = dialog.GetPath()
 			structure = WpFileSystem.LoadProjectFile( path )
 			self.mainpanel.leftsplit.treectrl.PopulateTree(  structure[ 'dirlist' ], structure[ 'fname' ] )
-			
+			self.mainpanel.ResizeSash()
 			dialog.Destroy()
 		

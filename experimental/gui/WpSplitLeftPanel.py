@@ -76,4 +76,8 @@ class WpSplitLeftPanel( wx.Panel ):
 		
 	def _OnSelChanged( self, event ):
 		filedata = self.treectrl.GetPyData( event.GetItem() )
-		self.rightpanel.AddDefaultPage( filedata[ 'fullpath' ] )
+		
+		try:
+			self.rightpanel.AddDefaultPage( filedata[ 'fullpath' ] )
+		except:
+			None

@@ -57,7 +57,11 @@ class WpMainPanel( wx.Panel ):
 		return self.toolbar
 		
 	def _OnSplitterDblClk( self, event ):
-		if( self.splitter.GetSashPosition() == 20 ):
+		self.ResizeSash()
+	
+	def ResizeSash( self ):
+		if( self.splitter.GetSashPosition() == 21 ):
 			self.splitter.SetSashPosition( 300, True )
 		else:
-			self.splitter.SetSashPosition( 20, True )
+			self.splitter.SetSashPosition( 21, True )
+	

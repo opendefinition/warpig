@@ -9,7 +9,7 @@ import wx
 
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
-		wx.TreeCtrl.__init__( self, parent, 9999, style=wx.ALL|wx.EXPAND )
+		wx.TreeCtrl.__init__( self, parent, 9999, style=wx.ALL | wx.EXPAND )
 		
 	def PopulateTree( self, structure, projectname):
 		# Destroying all content is content is present
@@ -25,8 +25,9 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		
 		self.AssignImageList( il )
 	
+		# Removing trailing file extension
 		prjname = projectname[0:-4]
-		treeroot = self.AddRoot( str( prjname ), 1, 0, wx.TreeItemData( projectname ) )
+		treeroot = self.AddRoot( str( prjname ), 0, 1, wx.TreeItemData( projectname ) )
 		self.SetItemHasChildren( treeroot, True )
 	
 		root = structure[ 'files' ][ 0 ][ 0 ]
@@ -35,7 +36,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		for ( dirpath, dirnames, filenames ) in structure[ 'files' ]:
 			for dirname in dirnames:
 				fullpath = os.path.join( dirpath, dirname )
-				ids[ fullpath ] =  self.AppendItem( ids[ dirpath ], dirname, 1, 0 )
+				ids[ fullpath ] =  self.AppendItem( ids[ dirpath ], dirname, 0, 1 )
 				
 			for filename in sorted( filenames ):
 				data = {
@@ -44,5 +45,3 @@ class WpTreeCtrl( wx.TreeCtrl ):
 					'fullpath': os.path.join( dirpath, filename )
 				}
 				self.AppendItem( ids[ dirpath ], filename, 2, 2, wx.TreeItemData( data ) )
-	
-		self.Expand( treeroot )
