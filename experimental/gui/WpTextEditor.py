@@ -56,7 +56,9 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		return self
 		
 	def SetDefaultLexer( self ):
-		self.SetLexer( wx.stc.STC_LEX_PYTHON )
+		# self.SetLexer( wx.stc.STC_LEX_PYTHON )
+		# self.SetLexerLanguage( 'php' )
+		self.SetLexerLanguage( 'python' )
 	
 		keys = keyword.kwlist[ : ]
 		
@@ -66,10 +68,10 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		self.StyleClearAll()  # Reset all to be like the default
 		
 		# Global default styles for all languages
-		self.StyleSetSpec( 0, "back:slategrey,fore:#FFFFFF")
-		self.StyleSetSpec( wx.stc.STC_STYLE_DEFAULT, "back:slategrey,fore:#00FF00")	
-		self.StyleSetSpec( wx.stc.STC_STYLE_BRACELIGHT, "fore:#00FF00,back:slategrey,bold" )
-		self.StyleSetSpec( wx.stc.STC_STYLE_BRACEBAD, "fore:#00FF00,back:slategrey,bold" )
+		self.StyleSetSpec( 0, "back:#00008B,fore:#FFFFFF")
+		self.StyleSetSpec( wx.stc.STC_STYLE_DEFAULT, "back:#00008B,fore:#00FF00")	
+		self.StyleSetSpec( wx.stc.STC_STYLE_BRACELIGHT, "fore:#00FF00,back:#00008B,bold" )
+		self.StyleSetSpec( wx.stc.STC_STYLE_BRACEBAD, "fore:#00FF00,back:#00008B,bold" )
 		
 		#== Python styles ==#
 		
@@ -86,47 +88,47 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		"""
 		
 		# Default
-		self.StyleSetSpec( wx.stc.STC_P_DEFAULT, "fore:#00FF00,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_DEFAULT, "fore:#00FF00,back:#00008B" )
 	
 		# Comments
-		self.StyleSetSpec( wx.stc.STC_P_COMMENTLINE, "fore:#00FF00,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_COMMENTLINE, "fore:#00FF00,back:#00008B" )
 		
 		# Number
-		self.StyleSetSpec( wx.stc.STC_P_NUMBER, "fore:#FFFF00,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_NUMBER, "fore:#FFFF00,back:#00008B" )
 		
 		# String
-		self.StyleSetSpec( wx.stc.STC_P_STRING, "fore:orange,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_STRING, "fore:orange,back:#00008B" )
 		
 		# Single quoted string
-		self.StyleSetSpec( wx.stc.STC_P_CHARACTER, "fore:orange,back:slategrey" )  
+		self.StyleSetSpec( wx.stc.STC_P_CHARACTER, "fore:orange,back:#00008B" )  
 		
 		# Keyword
-		self.StyleSetSpec( wx.stc.STC_P_WORD, "fore:magenta,bold,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_WORD, "fore:magenta,bold,back:#00008B" )
 		
 		# Triple quotes
-		self.StyleSetSpec( wx.stc.STC_P_TRIPLE, "fore:#00FF00,back:slategrey" ) 
+		self.StyleSetSpec( wx.stc.STC_P_TRIPLE, "fore:#00FF00,back:#00008B" ) 
 		
 		# Triple double quotes
-		self.StyleSetSpec( wx.stc.STC_P_TRIPLEDOUBLE, "fore:#00FF00,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_TRIPLEDOUBLE, "fore:#00FF00,back:#00008B" )
 		
 		# Class name definition
-		self.StyleSetSpec( wx.stc.STC_P_CLASSNAME, "fore:cyan,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_CLASSNAME, "fore:cyan,back:#00008B" )
 		
 		# Function or method name definition
-		self.StyleSetSpec( wx.stc.STC_P_DEFNAME, "fore:cyan,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_DEFNAME, "fore:cyan,back:#00008B" )
 		
 		# Operators
-		self.StyleSetSpec( wx.stc.STC_P_OPERATOR, "fore:#00FF00,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_OPERATOR, "fore:#00FF00,back:#00008B" )
 		
 		# Identifiers
-		self.StyleSetSpec( wx.stc.STC_P_IDENTIFIER, "fore:#FFFF00,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_IDENTIFIER, "fore:#FFFF00,back:#00008B" )
 		
 		# Comment-blocks
-		self.StyleSetSpec( wx.stc.STC_P_COMMENTBLOCK, "fore:#336699,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_COMMENTBLOCK, "fore:#336699,back:#00008B" )
 		
 		# End of line where string is not closed
-		self.StyleSetSpec( wx.stc.STC_P_STRINGEOL, "fore:#FFFF00,back:slategrey" )
+		self.StyleSetSpec( wx.stc.STC_P_STRINGEOL, "fore:#FFFF00,back:#00008B" )
 		
-		self.SetCaretForeground( '#99CC00' )
-		self.SetCaretWidth( 5 )
+		self.SetCaretForeground( '#00FF00' )
+		self.SetCaretWidth( 2 )
 		self.SetKeyWords( 0, " ".join( keyword.kwlist ) )
