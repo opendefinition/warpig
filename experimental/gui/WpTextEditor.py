@@ -19,7 +19,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# Setup default styles
 		self.SetMarginType( 0, wx.stc.STC_MARGIN_NUMBER ) 	# Line numbering
 		self.SetMarginWidth( 0, 35 ) 						# Margin for line numbering
-		
+	
 		# Fonts
 		font = wx.Font(
 				11,						# Pointsize
@@ -31,6 +31,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				wx.FONTENCODING_UTF8	# ENCODING
 			)
 		self.StyleSetFont( 0, font )
+		self.SetDefaultLexer()
 		
 	def GetFilePath( self ):
 		"""
@@ -69,7 +70,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		
 		# Global default styles for all languages
 		self.StyleSetSpec( 0, "back:#00008B,fore:#FFFFFF")
-		self.StyleSetSpec( wx.stc.STC_STYLE_DEFAULT, "back:#00008B,fore:#00FF00")	
+		self.StyleSetSpec( wx.stc.STC_STYLE_DEFAULT, "back:#00008B,fore:#505151")	
 		self.StyleSetSpec( wx.stc.STC_STYLE_BRACELIGHT, "fore:#00FF00,back:#00008B,bold" )
 		self.StyleSetSpec( wx.stc.STC_STYLE_BRACEBAD, "fore:#00FF00,back:#00008B,bold" )
 		

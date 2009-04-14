@@ -88,9 +88,9 @@ class WpMainFrame( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self._OnExit, id=10107 )
 		self.Bind( wx.EVT_MENU, self._OnNewProject, id=10101 )
 		self.Bind( wx.EVT_MENU, self._OnOpenProject, id=10102 )
-		self.Bind( wx.EVT_MENU, self.mainpanel.leftsplit._OnToolBarOpenPage, id=10103 )
-		self.Bind( wx.EVT_MENU, self.mainpanel.leftsplit._OnToolBarNewPage, id=10104 )
-		self.Bind( wx.EVT_MENU, self.mainpanel.leftsplit._OnToolBarSavePage, id=10105 )
+		self.Bind( wx.EVT_MENU, self.mainpanel._OnToolBarOpenPage, id=10103 )
+		self.Bind( wx.EVT_MENU, self.mainpanel._OnToolBarNewPage, id=10104 )
+		self.Bind( wx.EVT_MENU, self.mainpanel._OnToolBarSavePage, id=10105 )
 		
 		return self.menubar
 		
