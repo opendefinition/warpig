@@ -19,7 +19,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# Setup default styles
 		self.SetMarginType( 0, wx.stc.STC_MARGIN_NUMBER ) 	# Line numbering
 		self.SetMarginWidth( 0, 35 ) 						# Margin for line numbering
-	
+		
 		# Fonts
 		font = wx.Font(
 				11,						# Pointsize
@@ -30,6 +30,33 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				'verdana',				# Face
 				wx.FONTENCODING_UTF8	# ENCODING
 			)
+		
+		##
+		# Code folding
+		# see: http://www.python-forum.org/pythonforum/viewtopic.php?f=2&t=10065
+		##
+		"""
+		self.SetProperty("fold", "1")
+		self.SetMargins(0, 0)
+		self.SetViewWhiteSpace(False)
+		self.SetEdgeMode(wx.stc.STC_EDGE_BACKGROUND)
+		self.SetEdgeColumn(78)
+		
+		# setup a margin to hold the fold markers
+		self.SetMarginType(2, wx.stc.STC_MARGIN_SYMBOL)
+		self.SetMarginMask(2, wx.stc.STC_MASK_FOLDERS)
+		self.SetMarginSensitive(2, True)
+		self.SetMarginWidth(2, 12)
+		
+		self.MarkerDefine( wx.stc.STC_MARKNUM_FOLDEROPEN, wx.stc.STC_MARK_BOXMINUS, "white", "#808080")
+		self.MarkerDefine( wx.stc.STC_MARKNUM_FOLDER, wx.stc.STC_MARK_BOXPLUS, "white", "#808080")
+		self.MarkerDefine( wx.stc.STC_MARKNUM_FOLDERSUB, wx.stc.STC_MARK_VLINE, "white", "#808080")
+		self.MarkerDefine( wx.stc.STC_MARKNUM_FOLDERTAIL, wx.stc.STC_MARK_LCORNER, "white", "#808080")
+		self.MarkerDefine( wx.stc.STC_MARKNUM_FOLDEREND, wx.stc.STC_MARK_BOXPLUSCONNECTED, "white", "#808080")
+		self.MarkerDefine( wx.stc.STC_MARKNUM_FOLDEROPENMID, wx.stc.STC_MARK_BOXMINUSCONNECTED, "white", "#808080")
+		self.MarkerDefine( wx.stc.STC_MARKNUM_FOLDERMIDTAIL, wx.stc.STC_MARK_TCORNER, "white", "#808080")	
+		"""
+		
 		self.StyleSetFont( 0, font )
 		self.SetDefaultLexer()
 		
@@ -87,6 +114,9 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		underline               turns on underlining
 
 		"""
+		
+		self.StyleSetSpec( wx.stc.STC_STYLE_LINENUMBER, "fore:yellow,back:#00008B" )
+		
 		
 		# Default
 		self.StyleSetSpec( wx.stc.STC_P_DEFAULT, "fore:#00FF00,back:#00008B" )
