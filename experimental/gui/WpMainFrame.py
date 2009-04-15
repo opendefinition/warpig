@@ -23,6 +23,7 @@ class WpMainFrame( wx.Frame ):
 	def __init__( self, *args, **kwargs ):
 		wx.Frame.__init__( self, *args, **kwargs )
 		self.SetTitle( 'WarPig code Environment' )
+		
 		self._Setup()
 	
 	#---------------------------------------------------------------

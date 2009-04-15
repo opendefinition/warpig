@@ -19,6 +19,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	_curr_file_path = None
 	
 	def __init__( self, parent ):
+		self.parent = parent
 		##
 		# We always construct parent with wx.TE_MULTILINE
 		##
@@ -75,6 +76,9 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		self.StyleSetFont( 0, font )
 		self.SetDefaultLexer()
 	
+		self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+		
+		
 	#---------------------------------------------------------------
 	# Get filepath defined for this instance of WpTextEditor
 	# @return self
@@ -218,3 +222,35 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# Keywords
 		##
 		self.SetKeyWords( 0, " ".join( keyword.kwlist ) )
+		
+	def OnKeyDown( self, event ):
+		print event.GetUniChar()
+		
+		if( event.CmdDown() == True ):
+			if( event.GetUniChar() == 83 ):
+				print "We are trying to save"
+				
+			if( event.GetUniChar() == 65 ):
+				print "We are trying to select all"
+				
+			if( event.GetUniChar() == 79 ):
+				print "We are trying to open a file"
+				
+			if( event.GetUniChar() == 87 ):
+				print "We are trying to close current tab"
+				page = self.parent.GetSelection()
+				self.parent.DeletePage( page )
+				
+				if self.Parent.GetPageCount():
+					select = self.Parent.GetSelection()
+					self.Parent.SetSelection( 0 )
+					self.Parent.SetSelection( selelect )
+					
+				self.Destroy()
+				
+			if( event.GetUniChar() == 81 ):
+				print "We are trying to close this application"
+				self.Close()
+				
+			
+		event.Skip()
