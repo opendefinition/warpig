@@ -23,11 +23,16 @@ class WpMainPanel( wx.Panel ):
 		self.parent = parent
 		
 		self._Setup()
-		
+	
+	#---------------------------------------------------------------
+	# Set up this panel
+	#---------------------------------------------------------------
 	def _Setup( self ):
 		self.mainsizer = wx.BoxSizer( wx.VERTICAL )
 		
+		##
 		# Rows, Cols
+		##
 		self.flexgrid = wx.FlexGridSizer( 1, 2, 0, 0 )
 	
 		self.splitter = wx.SplitterWindow( self, 1333, style=wx.SP_NO_XP_THEME | wx.SP_3DSASH )
@@ -38,7 +43,9 @@ class WpMainPanel( wx.Panel ):
 		self.splitter.SetSashPosition( 1, True )
 		self.splitter.SetBorderSize( 0 )
 
-		#-- Main widget
+		##
+		# Main widget
+		##
 		self.flexgrid.AddMany(
 			[
 				( self._SetupToolbar(), 0 ),
@@ -46,7 +53,9 @@ class WpMainPanel( wx.Panel ):
 			]
 		) 
 	
+		##
 		# Binding the splitter
+		##
 		self.Bind( wx.EVT_SPLITTER_DCLICK, self._OnSplitterDblClk, id=1333 ) 
 	
 		self.flexgrid.AddGrowableCol( 1 )
@@ -55,15 +64,24 @@ class WpMainPanel( wx.Panel ):
 		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer )
 	
+	#---------------------------------------------------------------
+	# Handle 'on doubleclick' on sash
+	#---------------------------------------------------------------
 	def _OnSplitterDblClk( self, event ):
 		self.ResizeSash()
 	
+	#---------------------------------------------------------------
+	# Handling resizing of sash
+	#---------------------------------------------------------------
 	def ResizeSash( self ):
 		if( self.splitter.GetSashPosition() == 1 ):
 			self.splitter.SetSashPosition( 200, True )
 		else:
 			self.splitter.SetSashPosition( 1, True )
 	
+	#---------------------------------------------------------------
+	# Set up toolbar
+	#---------------------------------------------------------------
 	def _SetupToolbar( self ):
 		self.toolbar = wx.ToolBar( self, -1, style=wx.TB_VERTICAL )
 		self.toolbar.AddLabelTool( wx.ID_NEW, '', wx.Bitmap( './gui/icons/document-new.png' ) )
@@ -76,16 +94,25 @@ class WpMainPanel( wx.Panel ):
 		self.Bind( wx.EVT_MENU, self._OnToolBarOpenPage, id=wx.ID_OPEN )
 		return self.toolbar
 		
-	#==============================================================================================
+	#---------------------------------------------------------------
 	# Bindings
-	#==============================================================================================
+	#---------------------------------------------------------------
    	
+	#---------------------------------------------------------------
+	# On new page 
+	#---------------------------------------------------------------
    	def _OnToolBarNewPage( self, event ):
 		self.rightsplit.AddDefaultPage()
-		
+	
+	#---------------------------------------------------------------
+	# On save page 
+	#---------------------------------------------------------------	
 	def _OnToolBarSavePage( self, event ):
 		self.rightsplit.SaveFile()
-		
+	
+	#---------------------------------------------------------------
+	# On open page 
+	#---------------------------------------------------------------
 	def _OnToolBarOpenPage( self, event ):
 		dialog = wx.FileDialog ( None, style = wx.OPEN )
 		

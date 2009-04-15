@@ -174,8 +174,19 @@ class WpMainFrame( wx.Frame ):
 	# Handle 'on exit' event
 	#---------------------------------------------------------------
   	def _OnExit( self, event ):
-		# TODO: Add confirmation box and handle any unsaved files too
-  		self.Close()
+		dialog = wx.MessageDialog( None, 
+									'Are you sure to want to quit?', 
+									'Question',
+									wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION 
+								)
+		
+		status = dialog.ShowModal()
+	
+		if( status == wx.ID_YES ):
+			dialog.Destroy()
+			self.Close()
+		else:
+			dialog.Destroy()
   		
 	#---------------------------------------------------------------
 	# Handle 'on new project' event

@@ -22,13 +22,20 @@ class WpSplitLeftPanel( wx.Panel ):
 		
 		self._Setup()
 
+	#---------------------------------------------------------------
+	# Setup this splitted panel
+	#---------------------------------------------------------------
 	def _Setup( self ):
 		self.mainsizer = wx.BoxSizer( wx.VERTICAL )
 		
+		##
 		# Rows, Cols
+		##
 		self.flexgrid = wx.FlexGridSizer( 1, 1, 0, 0 )
 		
-		#-- Main widget
+		## 
+		# Main widget
+		##
 		self.flexgrid.AddMany(
 			[
 				( self._SetupTreeCtrl(), 1, wx.EXPAND )
@@ -41,13 +48,20 @@ class WpSplitLeftPanel( wx.Panel ):
 		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer )
 
+	#---------------------------------------------------------------
+	# Set up treecontroller (directory listing)
+	# @return object treectrl
+	#---------------------------------------------------------------
 	def _SetupTreeCtrl( self ):
 		self.treectrl = WpTreeCtrl( self )
 		
 		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=9999 )
 
 		return self.treectrl	
-		
+	
+	#---------------------------------------------------------------
+	# On selecting file inside treecontroller
+	#---------------------------------------------------------------
 	def _OnSelChanged( self, event ):
 		try:
 			filedata = self.treectrl.GetPyData( event.GetItem() )

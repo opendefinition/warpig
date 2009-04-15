@@ -19,19 +19,33 @@ class WpCallable:
         self.__call__ = call
 
 class WpFileSystem:
+	#---------------------------------------------------------------
+	# Save project file
+	# @param string projectpath
+	# @param string projectfilespath
+	# @return dictionary fileinfo
+	#---------------------------------------------------------------
 	def SaveProjectFile( projectpath, projectfilespath ):
+		##
 		# Splitting fullpath into easier manageable parts
+		##
 		fileinfo = os.path.split( projectpath )
 		filepath = fileinfo[ 0 ]
 		filename = fileinfo[ 1 ]
 		
+		##
 		# Get directory list
+		##
 		directory = WpFileSystem.ListDirectory( projectfilespath )
-
+	
+		##
 		# Convert directory to YAML
+		##
 		yamllist = WpFileSystem.StructureToYaml( directory )
 		
+		##
 		# Store YAML list inside project definition file
+		##
 		WpFileSystem.SaveToFile( yamllist, projectpath )
 		
 		return {
@@ -43,15 +57,26 @@ class WpFileSystem:
  			
  	SaveProjectFile = WpCallable( SaveProjectFile )
  	
+	#---------------------------------------------------------------
+	# Load projectfile
+	# @param string path
+	# @return dictionary fileinfo
+	#---------------------------------------------------------------
  	def LoadProjectFile( path ):
- 		# read from file
- 		content = WpFileSystem.ReadFromFile( path )
+ 		##
+		# read from file
+ 		##
+		content = WpFileSystem.ReadFromFile( path )
  		
+		##
  		# convert to native format
- 		structure = WpFileSystem.YamlToStructure( content )
+ 		##
+		structure = WpFileSystem.YamlToStructure( content )
  		
- 		# Creating response packet
- 		fileinfo = os.path.split( path )
+ 		##
+		# Creating response packet
+ 		##
+		fileinfo = os.path.split( path )
  		filepath = fileinfo[ 0 ]
  		filename = fileinfo[ 1 ]
  		
@@ -64,6 +89,11 @@ class WpFileSystem:
 
 	LoadProjectFile = WpCallable( LoadProjectFile )
 	
+	#---------------------------------------------------------------
+	# Split file path
+	# @param string path
+	# @return dictionary pathinfo
+	#---------------------------------------------------------------
 	def SplitFilepath( path ):
 		"""
 		Split path into path and filename
@@ -82,13 +112,15 @@ class WpFileSystem:
 	
 	SplitFilepath = WpCallable( SplitFilepath )
 	
+	#---------------------------------------------------------------
+	# List directory
+	# @param string path
+	# @return unknown information
+	#---------------------------------------------------------------
 	def ListDirectory( path ):
-		"""
-		List Directory
-		@param string path
-		"""
-
+		##
 		# Traversing current directory
+		##
 		dirlist = os.walk( path, topdown=True )
 		
 		files = []
@@ -107,31 +139,33 @@ class WpFileSystem:
 			
 	ListDirectory = WpCallable( ListDirectory )
 		
+	#---------------------------------------------------------------
+	# Convert any structure into YAML format
+	# @param mixed structure
+	# @return yaml structure
+	#---------------------------------------------------------------
 	def StructureToYaml( structure ):
-		"""
-		Convert any structure into Yaml format
-		@param mixed structure
-		"""
 		return yaml.dump( structure )
 
 	StructureToYaml = WpCallable( StructureToYaml )
 	
+	#---------------------------------------------------------------
+	# Convert YAML to structure
+	# @param yaml structure
+	# @return mixed structure
+	#---------------------------------------------------------------
 	def YamlToStructure( yml ):
-		"""
-		Convert Yaml to stucture
-		@param string yml
-		"""
 		return yaml.load( yml )
 		
 	YamlToStructure = WpCallable( YamlToStructure )
 	
+	#---------------------------------------------------------------
+	# Save to file
+	# @param string content
+	# @param string filename
+	# @param string writemode <optional>
+	#---------------------------------------------------------------
 	def SaveToFile( content, filename, mode='w' ):
-		"""
-		Write content to file
-		@param string content
-		@param string filename
-		@param string writemode
-		"""
 		file = open( filename, mode )
 		file.write( content )
 		file.close()
@@ -140,11 +174,12 @@ class WpFileSystem:
 		
 	SaveToFile = WpCallable( SaveToFile )
 	
+	#---------------------------------------------------------------
+	# Read from file
+	# @param string path
+	# @return string content
+	#---------------------------------------------------------------
 	def ReadFromFile( path ):
-		"""
-		Read content from file
-		@param string path
-		"""
 		file = open( path, 'r' )
 		retval = file.read()
 		file.close()

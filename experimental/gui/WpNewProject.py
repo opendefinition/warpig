@@ -22,13 +22,17 @@ class WpNewProject( wx.Dialog ):
 		
 		wx.Dialog.__init__( self, None, 6666, 'New Project', size=(500, 300) )
 		
+		##
 		# Main Panel
+		##
 		mainpanel = wx.Panel(self, -1, size=(500,500), style=wx.EXPAND )
 		mainsizer = wx.BoxSizer( wx.VERTICAL )
 		panelsizer = wx.BoxSizer( wx.VERTICAL )
 		panelsizer = wx.FlexGridSizer( 3, 1, 0, 0 )
 		
+		##
 		# Projectname
+		##
 		namesizer = wx.BoxSizer( wx.HORIZONTAL )
 		
 		projectnamelabel = wx.StaticText( mainpanel, -1, 'Projectname' )
@@ -37,7 +41,9 @@ class WpNewProject( wx.Dialog ):
 		namesizer.Add( projectnamelabel, 0, wx.EXPAND | wx.ALL, 5 )
 		namesizer.Add( self.projectnamefield, 1, wx.EXPAND | wx.ALL, 5 )
 		
+		##
 		# Button for adding files to project
+		##
 		filesizer = wx.BoxSizer( wx.VERTICAL )
 		filebuttonsizer = wx.BoxSizer( wx.HORIZONTAL )
 		filefoldersizer = wx.BoxSizer( wx.VERTICAL )
@@ -53,7 +59,9 @@ class WpNewProject( wx.Dialog ):
 		filesizer.Add( filebuttonsizer, 1, wx.EXPAND )
 		filesizer.Add( filefoldersizer, 1, wx.EXPAND )
 		
+		##
 		# Save and cancel buttons
+		##
 		buttonsizer = wx.BoxSizer( wx.HORIZONTAL )
 		
 		savebutton = wx.Button( mainpanel, 13, 'Save' ) 
@@ -62,7 +70,9 @@ class WpNewProject( wx.Dialog ):
 		buttonsizer.Add( cancelbutton, 0, wx.EXPAND | wx.ALL, 5 )
 		buttonsizer.Add( savebutton, 1, wx.EXPAND | wx.ALL, 5 )
 	
+		##
 		# Sewing things together
+		##
 		panelsizer.AddMany(
 			[
 				( namesizer, 1, wx.EXPAND ),
@@ -74,22 +84,26 @@ class WpNewProject( wx.Dialog ):
 		panelsizer.AddGrowableRow( 1 )
 		panelsizer.AddGrowableCol( 0 )
 	
+		##
 		# Set the main sizer to panel
+		##
 		mainsizer.Add( panelsizer, 1, wx.EXPAND )
 		
 		self.SetSizer( mainsizer )
 		
+		##
 		# Bindings
+		##
 		self.Bind( wx.EVT_BUTTON, self._onAssociateFiles, id=12)
 		self.Bind( wx.EVT_BUTTON, self._onSave, id=13 )
 		self.Bind( wx.EVT_BUTTON, self._onCancel, id=14 )
 
 		self.Center()
-		
+	
+	#---------------------------------------------------------------
+	# On adding files to project
+	#---------------------------------------------------------------
 	def _onAssociateFiles( self, event ):
-		"""
-		Open filedialog for associated files with a project
-		"""
 		filters = 'WarPig Project File (*.wpf)|*.wpf'
   		dialog = wx.DirDialog ( None, 'New Project', style = wx.OPEN )
   		
@@ -102,16 +116,16 @@ class WpNewProject( wx.Dialog ):
 		
 		dialog.Destroy()
 	
+	#---------------------------------------------------------------
+	# Cancel inside project dialog
+	#---------------------------------------------------------------
 	def _onCancel( self, event ):
-		""" 
-		Closing this dialog window
-		"""
 		self.Close()
 		
+	#---------------------------------------------------------------
+	# On saving project
+	#---------------------------------------------------------------
 	def _onSave( self, event ):
-		"""
-		Saving project to persistant storage
-		"""
 		path = './projects/' + "/" + self.projectnamefield.GetValue() + ".wpf"
 		information = WpFileSystem.SaveProjectFile( path, (self._projectpath+"/")  )
 		self._treectrl.treectrl.PopulateTree( information[ 'dirlist' ], information[ 'fname' ] )

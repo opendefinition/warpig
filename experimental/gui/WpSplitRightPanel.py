@@ -26,13 +26,20 @@ class WpSplitRightPanel( wx.Panel ):
 		
 		self._Setup()
 
+	#---------------------------------------------------------------
+	# Set up this splitted panel
+	#---------------------------------------------------------------
 	def _Setup( self ):
 		self.mainsizer = wx.BoxSizer( wx.VERTICAL )
 		
+		##
 		# Rows, Cols
+		##
 		self.flexgrid = wx.FlexGridSizer( 1, 1, 0, 0 )
 		
-		#-- Main widget
+		##
+		# Main widget
+		##
 		self.flexgrid.AddMany(
 			[
 				( self._SetupNotebook(), 0, wx.EXPAND )
@@ -45,12 +52,21 @@ class WpSplitRightPanel( wx.Panel ):
 		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer )	
 	
+	#---------------------------------------------------------------
+	# Setup notebook page 
+	# @return object notebook
+	#---------------------------------------------------------------
 	def _SetupNotebook( self ):
 		self.notebook = fnb.FlatNotebook( self, wx.ID_ANY, style=wx.EXPAND )
 		# self.AddDefaultPage()
 		
 		return self.notebook
 		
+	#---------------------------------------------------------------
+	# Add text editor to page
+	# @param string filepath <conditional>
+	# @return object texteditor
+	#---------------------------------------------------------------
 	def _AddTextEditor( self, filepath=None):
 		texteditor = WpTextEditor( self.notebook )
 		# Adding content
@@ -60,9 +76,10 @@ class WpSplitRightPanel( wx.Panel ):
 			
 		return texteditor
 	
-	#===============================================================================================
-	# Helper functions
-	#===============================================================================================
+	#---------------------------------------------------------------
+	# Add defualt page
+	# @param string filepath <conditional>
+	#---------------------------------------------------------------
 	def AddDefaultPage( self, filepath=None ):
 		title = '< empty >'
 		
@@ -75,6 +92,9 @@ class WpSplitRightPanel( wx.Panel ):
             
 		self.notebook.AddPage( self._AddTextEditor( filepath ), title, True )
 
+	#---------------------------------------------------------------
+	# Handling saving of file
+	#---------------------------------------------------------------
 	def SaveFile( self ):
 		focus = self.FindFocus()
 		
@@ -99,6 +119,11 @@ class WpSplitRightPanel( wx.Panel ):
 				# Make sure the editor got the filepath set
 				focus.SetFilePath( path )
 			
+	#---------------------------------------------------------------
+	# Find filename of current file
+	# @param string filepath
+	# @return string filename
+	#---------------------------------------------------------------
 	def FindFileName( self, filepath ):
 		length = len( filepath )
 		startindex = filepath.rfind( '/' )+1

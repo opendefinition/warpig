@@ -17,6 +17,11 @@ class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
 		wx.TreeCtrl.__init__( self, parent, 9999, style=wx.ALL | wx.EXPAND )
 		
+	#---------------------------------------------------------------
+	# Populate treecontroller
+	# @param unknown structure
+	# @param string projectname
+	#---------------------------------------------------------------
 	def PopulateTree( self, structure, projectname):
 		# Destroying all content is content is present
 		if( self.IsEmpty() == False ):
