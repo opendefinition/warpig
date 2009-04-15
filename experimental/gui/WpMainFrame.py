@@ -1,8 +1,16 @@
-# -*- coding: utf-8 -*-
-#==================================================================================================
-# Open Definition WpMainFrame
-# Author: Roger C.B. Johnsen
-#==================================================================================================
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpMainFrame
+# Desc: Class for managing this application mainframe
+#
+#---------------------------------------------------------------------------
+#
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#
+#---------------------------------------------------------------------------
 
 import wx
 import wx.stc as stc
@@ -16,20 +24,31 @@ class WpMainFrame( wx.Frame ):
 		wx.Frame.__init__( self, *args, **kwargs )
 		self.SetTitle( 'WarPig code Environment' )
 		self._Setup()
-		
+	
+	#---------------------------------------------------------------
+	# Prepare mainframe
+	#---------------------------------------------------------------
 	def _Setup( self ):
 		self.mainsizer = wx.BoxSizer( wx.VERTICAL )
 		
-		# Rows, Cols
+		##
+		# Rows, Cols - gaps are left to nil
+		##
 		self.flexgrid = wx.FlexGridSizer( 2, 1, 0, 0 )
 		
-		#-- Main widgets
+		##
+		# Main widgets
+		##
 		self.mainpanel = WpMainPanel( self )
 		
-		#-- Menubar
+		##
+		# Menubar
+		##
 		self.SetMenuBar( self._SetupMenuBar() )
 		
-		#-- Adding it all to the mix
+		##
+		# Adding it all to the mix
+		##
 		self.flexgrid.AddMany( 
 			[
 				( self.mainpanel, 1, wx.EXPAND ),
@@ -42,11 +61,18 @@ class WpMainFrame( wx.Frame ):
 		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer )
 		
-		#-- Display
+		##
+		# Display
+		##
 		self.Centre()
 		self.Maximize()
 		self.Show( True )
 		
+		
+	#---------------------------------------------------------------
+	# Create and setup menubar
+	# @return object menubar
+	#---------------------------------------------------------------
 	def _SetupMenuBar( self ):
 		self.menubar = wx.MenuBar()
 		
@@ -62,7 +88,9 @@ class WpMainFrame( wx.Frame ):
 		self.menubar.Append( plugins, '&Plugins' )
 		self.menubar.Append( help, '&Help' )
 		
+		##
 		# File menu entries
+		##
 		newproject = wx.MenuItem( file, 10101, '&New Project', 'Create new project' )
 		openproject = wx.MenuItem( file, 10102, '&Open Project', 'Open project' )
 		openfile = wx.MenuItem( file, 10103, '&Open File', 'Open file' )
@@ -70,7 +98,7 @@ class WpMainFrame( wx.Frame ):
 		savefile = wx.MenuItem( file, 10105, '&Save File', 'Save current file' )
 		savefileas = wx.MenuItem( file, 10106, '&Save File As', 'Save current file as...' )
 		exit = wx.MenuItem( file, 10107, '&Exit', 'Exit' )
-		
+	
 		file.AppendItem( newproject )
 		file.AppendItem( openproject )
 		file.AppendSeparator()
@@ -81,10 +109,31 @@ class WpMainFrame( wx.Frame ):
 		file.AppendSeparator()
 		file.AppendItem( exit )
 		
-	 	helpabout = wx.MenuItem( help, 10501, '&About', 'About WarPig'  )
+		##
+		# Edit menu entries
+		##
+		preferences = wx.MenuItem( edit, 20210, '&Preferences', 'Edit application preferences' )
+		
+		edit.AppendSeparator()
+		edit.AppendItem( preferences )
+		
+		##
+		# Help menu entries
+		##
+		
+		helphelp = wx.MenuItem( help, 10501, '&Help', 'Get help' )
+		helprequestfeature = wx.MenuItem( help, 10502, 'Request feature', 'Request feature' )
+		helpreportbug = wx.MenuItem( help, 10503, 'Report bug', 'Submit bug' )
+	 	helpabout = wx.MenuItem( help, 10510, '&About', 'About WarPig'  )
+		
+		help.AppendItem( helphelp )
+		help.AppendSeparator()
+		help.AppendItem( helprequestfeature )
+		help.AppendItem( helpreportbug ) 
+		help.AppendSeparator()
 		help.AppendItem( helpabout )
 		
-		self.Bind( wx.EVT_MENU, self._OnAbout, id=10501 )
+		self.Bind( wx.EVT_MENU, self._OnAbout, id=10510 )
 		self.Bind( wx.EVT_MENU, self._OnExit, id=10107 )
 		self.Bind( wx.EVT_MENU, self._OnNewProject, id=10101 )
 		self.Bind( wx.EVT_MENU, self._OnOpenProject, id=10102 )
@@ -94,19 +143,23 @@ class WpMainFrame( wx.Frame ):
 		
 		return self.menubar
 		
+	#---------------------------------------------------------------
+	# Create and setup statusbar
+	# @return object statusbar
+	#---------------------------------------------------------------
 	def _SetupStatusBar( self ):
 		self.statusbar = wx.StatusBar( self, -1 )
 		
 		return self.statusbar
 		
-	#===============================================================================================
-	# Bindings
-	#===============================================================================================
+	#---------------------------------------------------------------
+	# Bindings Section
+	#---------------------------------------------------------------
 	
+	#---------------------------------------------------------------
+	# Populates an about dialog and dispays it
+	#---------------------------------------------------------------
 	def _OnAbout( self, event ):
-		"""
-		Display about box
-		"""
 		information = wx.AboutDialogInfo()
  		information.SetName( 'WarPig Code Environment' )
  		information.SetVersion( '0.01 - Alpha Public' )
@@ -116,19 +169,26 @@ class WpMainFrame( wx.Frame ):
   		information.AddDeveloper( 'Roger C.B. Johnsen' )
   		
   		wx.AboutBox( information )
-  		
+  	
+	#---------------------------------------------------------------
+	# Handle 'on exit' event
+	#---------------------------------------------------------------
   	def _OnExit( self, event ):
+		# TODO: Add confirmation box and handle any unsaved files too
   		self.Close()
   		
+	#---------------------------------------------------------------
+	# Handle 'on new project' event
+	#---------------------------------------------------------------
   	def _OnNewProject( self, event ):
   		window = WpNewProject( self.mainpanel.leftsplit )
 		window.ShowModal()
 		window.Destroy()
 	
+	#---------------------------------------------------------------
+	# Handle 'on open project' event
+	#---------------------------------------------------------------
 	def _OnOpenProject( self, event ):
-		"""
-		Open project
-		"""
 		filter = 'WarPig Project File (*.wpf)|*.wpf'
 		dialog = wx.FileDialog( None, 'Open Project', wildcard=filter, style=wx.OPEN )
 		

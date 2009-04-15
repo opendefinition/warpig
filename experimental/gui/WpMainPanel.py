@@ -1,8 +1,16 @@
-# -*- coding: utf-8 -*-
-#==================================================================================================
-# Open Definition WpMainPanel
-# Author: Roger C.B. Johnsen
-#==================================================================================================
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpMainPanel
+# Desc: Class for managing this application mainpanel
+#
+#---------------------------------------------------------------------------
+#
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#
+#---------------------------------------------------------------------------
 
 import wx
 

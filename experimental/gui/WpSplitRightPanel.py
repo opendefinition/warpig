@@ -1,8 +1,14 @@
-# -*- coding: utf-8 -*-
-#==================================================================================================
-# Open Definition WpSplitRightPanel
-# Author: Roger C.B. Johnsen
-#==================================================================================================
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpSplitRightPanel
+# Desc: Class for setting up the right splitted panel
+#
+#---------------------------------------------------------------------------
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#---------------------------------------------------------------------------
 
 import os
 import wx

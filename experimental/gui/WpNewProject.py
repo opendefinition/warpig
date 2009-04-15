@@ -1,8 +1,14 @@
-# -*- coding: utf-8 -*-
-#==================================================================================================
-# Open Definition WpNewProject
-# Author: Roger C.B. Johnsen
-#==================================================================================================
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpNewProject
+# Desc: Class for handling operations regarding a project
+#
+#---------------------------------------------------------------------------
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#---------------------------------------------------------------------------
 
 import wx
 

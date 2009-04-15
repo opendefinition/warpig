@@ -1,10 +1,14 @@
-# -*- coding: utf-8 -*-
-#==================================================================================================
-# Open Definition WpFileSystem
-# Author: Roger C.B. Johnsen
-# 
-# Various filesystem helper functions wrapped in a class (static)
-#==================================================================================================
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpFileSystem
+# Desc: Various filesystem helper functions wrapped in a class (static)
+#
+#---------------------------------------------------------------------------
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#---------------------------------------------------------------------------
 
 import os
 import re
