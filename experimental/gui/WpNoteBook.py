@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpNoteBook
+# Desc: Class for setting up main notebook interface
+#
+#---------------------------------------------------------------------------
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#---------------------------------------------------------------------------
+
 import os
 import wx
 import wx.lib.flatnotebook as fnb
@@ -7,9 +19,6 @@ from gui.WpTextEditor import WpTextEditor
 class WpNoteBook( fnb.FlatNotebook ):
 	def __init__( self, parent ):
 		self.parent = parent
-		##
-		# We always construct parent with wx.TE_MULTILINE
-		##
 		fnb.FlatNotebook.__init__( self, parent, wx.ID_ANY, style=wx.EXPAND )
 
 	#---------------------------------------------------------------
@@ -27,7 +36,7 @@ class WpNoteBook( fnb.FlatNotebook ):
 		return texteditor
 	
 	#---------------------------------------------------------------
-	# Add defualt page
+	# Add default page
 	# @param string filepath <conditional>
 	#---------------------------------------------------------------
 	def AddDefaultPage( self, filepath=None ):
