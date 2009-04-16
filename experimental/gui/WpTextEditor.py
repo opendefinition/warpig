@@ -11,6 +11,7 @@
 #---------------------------------------------------------------------------
 
 import keyword
+import os
 import wx
 
 from system.WpFileSystem import WpFileSystem
@@ -75,7 +76,8 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		
 		self.StyleSetFont( 0, font )
 		self.SetDefaultLexer()
-	
+		self.SetFocus()
+		
 		self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 		
 		
@@ -229,28 +231,56 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		if( event.CmdDown() == True ):
 			if( event.GetUniChar() == 83 ):
 				print "We are trying to save"
-				
-			if( event.GetUniChar() == 65 ):
-				print "We are trying to select all"
+				self.SaveFile()
+			
+			##
+			# Add new page with editor to current notebook instance
+			##
+			if( event.GetUniChar() == 78 ):
+				self.parent.AddDefaultPage()
 				
 			if( event.GetUniChar() == 79 ):
 				print "We are trying to open a file"
 				
+			##
+			# Close current tab where this instance of the editor resides
+			#
 			if( event.GetUniChar() == 87 ):
-				print "We are trying to close current tab"
 				page = self.parent.GetSelection()
-				self.parent.DeletePage( page )
-				
-				if self.Parent.GetPageCount():
+				self.Parent.DeletePage( page )
+		
+				if( self.Parent.GetPageCount() ):
 					select = self.Parent.GetSelection()
 					self.Parent.SetSelection( 0 )
-					self.Parent.SetSelection( selelect )
-					
+					self.Parent.SetSelection( select )
+
 				self.Destroy()
 				
 			if( event.GetUniChar() == 81 ):
 				print "We are trying to close this application"
 				self.Close()
-				
 			
 		event.Skip()
+		
+	#---------------------------------------------------------------
+	# Handling saving of file
+	#---------------------------------------------------------------
+	def SaveFile( self ):
+		path = self.GetFilePath()
+		
+		if( path == None ): 
+			dialog = wx.FileDialog ( self, style = wx.SAVE )
+			response = dialog.ShowModal()
+			
+			if( response == wx.ID_OK ):
+				path = dialog.GetPath()
+				split = os.path.split( path )
+				self.parent.SetPageText( self.parent.GetSelection(), split[ 1 ] )
+				dialog.Destroy()
+	
+		WpFileSystem.SaveToFile( self.GetTextUTF8(), path )
+		
+		##
+		# Make sure the editor got the filepath set
+		##
+		self.SetFilePath( path )

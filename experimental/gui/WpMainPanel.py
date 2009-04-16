@@ -102,21 +102,27 @@ class WpMainPanel( wx.Panel ):
 	# On new page 
 	#---------------------------------------------------------------
    	def _OnToolBarNewPage( self, event ):
-		self.rightsplit.AddDefaultPage()
+		self.rightsplit.notebook.AddDefaultPage()
 	
 	#---------------------------------------------------------------
-	# On save page 
+	# On save page from toolbar
 	#---------------------------------------------------------------	
 	def _OnToolBarSavePage( self, event ):
-		self.rightsplit.SaveFile()
+		focus = self.FindFocus()
+		
+		if( type( focus ).__name__ == 'WpTextEditor' ):
+			focus.SaveFile()
 	
 	#---------------------------------------------------------------
 	# On open page 
 	#---------------------------------------------------------------
 	def _OnToolBarOpenPage( self, event ):
+		self.OpenPage()
+	
+	def OpenPage( self ):
 		dialog = wx.FileDialog ( None, style = wx.OPEN )
 		
 		if dialog.ShowModal() == wx.ID_OK:
-			self.rightsplit.AddDefaultPage( dialog.GetPath() )
+			self.rightsplit.notebook.AddDefaultPage( dialog.GetPath() )
 			
-		dialog.Destroy()	
+		dialog.Destroy()

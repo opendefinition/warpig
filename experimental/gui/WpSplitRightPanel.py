@@ -15,8 +15,7 @@ import wx
 import wx.lib.flatnotebook as fnb
 import wx.stc as stc
 
-from gui.WpTextEditor import WpTextEditor 
-
+from gui.WpNoteBook import WpNoteBook
 from system.WpFileSystem import WpFileSystem
 
 class WpSplitRightPanel( wx.Panel ):
@@ -57,67 +56,11 @@ class WpSplitRightPanel( wx.Panel ):
 	# @return object notebook
 	#---------------------------------------------------------------
 	def _SetupNotebook( self ):
-		self.notebook = fnb.FlatNotebook( self, wx.ID_ANY, style=wx.EXPAND )
-		# self.AddDefaultPage()
+		# self.notebook = fnb.FlatNotebook( self, wx.ID_ANY, style=wx.EXPAND )
+		self.notebook = WpNoteBook( self )
+		self.notebook.AddDefaultPage()
 		
 		return self.notebook
-		
-	#---------------------------------------------------------------
-	# Add text editor to page
-	# @param string filepath <conditional>
-	# @return object texteditor
-	#---------------------------------------------------------------
-	def _AddTextEditor( self, filepath=None):
-		texteditor = WpTextEditor( self.notebook )
-		# Adding content
-		if filepath is not None:
-			texteditor.SetFilePath( filepath )
-			texteditor.SetDefaultLexer()
-			
-		return texteditor
-	
-	#---------------------------------------------------------------
-	# Add defualt page
-	# @param string filepath <conditional>
-	#---------------------------------------------------------------
-	def AddDefaultPage( self, filepath=None ):
-		title = '< empty >'
-		
-		if filepath is None:
-			filepath = None
-		else:
-			split = os.path.split( filepath )
-			filepath = filepath
-			title = split[ 1 ]
-            
-		self.notebook.AddPage( self._AddTextEditor( filepath ), title, True )
-
-	#---------------------------------------------------------------
-	# Handling saving of file
-	#---------------------------------------------------------------
-	def SaveFile( self ):
-		focus = self.FindFocus()
-		
-		if( type( focus ).__name__ == 'WpTextEditor' ):
-			path = None
-			dosave = False
-			if( focus.GetFilePath() != None ):
-				path = focus.GetFilePath()
-				dosave = True
-			else: 
-				dialog = wx.FileDialog ( self, style = wx.SAVE )
-				response = dialog.ShowModal()
-				if( response == wx.ID_OK ):
-					path = dialog.GetPath()
-					split = os.path.split( path )
-					self.notebook.SetPageText( self.notebook.GetSelection(), split[ 1 ] )
-					dialog.Destroy()
-					dosave = True
-		
-			if( dosave == True ):
-				WpFileSystem.SaveToFile( focus.GetTextUTF8(), path )
-				# Make sure the editor got the filepath set
-				focus.SetFilePath( path )
 			
 	#---------------------------------------------------------------
 	# Find filename of current file
