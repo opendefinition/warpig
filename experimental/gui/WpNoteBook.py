@@ -48,6 +48,14 @@ class WpNoteBook( fnb.FlatNotebook ):
 			split = os.path.split( filepath )
 			filepath = filepath
 			title = split[ 1 ]
-            
+		
+		##
+		# Keeps notebook from flickering when adding pages. See Thaw later in this function.
+		##
+		self.Freeze()
 		self.AddPage( self._AddTextEditor( filepath ), title, True )
 		
+		##
+		# Thawing
+		##
+		self.Thaw()

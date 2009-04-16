@@ -25,7 +25,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# We always construct parent with wx.TE_MULTILINE
 		##
 		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
-		
+
 		##
 		# Setup default styles
 		##
@@ -226,7 +226,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		self.SetKeyWords( 0, " ".join( keyword.kwlist ) )
 		
 	def OnKeyDown( self, event ):
-		print event.GetUniChar()
+		print "Key #", event.GetUniChar()
 		
 		if( event.CmdDown() == True ):
 			if( event.GetUniChar() == 83 ):
@@ -244,17 +244,27 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				
 			##
 			# Close current tab where this instance of the editor resides
-			#
+			##
 			if( event.GetUniChar() == 87 ):
-				page = self.parent.GetSelection()
-				self.Parent.DeletePage( page )
-		
-				if( self.Parent.GetPageCount() ):
-					select = self.Parent.GetSelection()
-					self.Parent.SetSelection( 0 )
-					self.Parent.SetSelection( select )
-
-				self.Destroy()
+				
+				pagecount = self.Parent.GetPageCount()
+			
+				if( pagecount >= 0 ):
+					selected = self.Parent.GetSelection()	# Get which tab that is in focus
+					
+					##
+					# Making sure we add a new page if we're deleting the last page
+					##
+					if( pagecount == 1 ):
+						self.Parent.AddDefaultPage()
+						selection = 0
+					else:
+						selection = selected-1
+						
+					self.Parent.SetSelection( selection )	# Set focus to neighbour tab
+					self.Parent.DeletePage( selected )		# Delete unwanted tab
+				
+				return										# Force return or else it'll segfault
 				
 			if( event.GetUniChar() == 81 ):
 				print "We are trying to close this application"
