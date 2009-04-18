@@ -12,6 +12,7 @@
 
 import keyword
 import os
+import re 
 import wx
 
 from system.WpFileSystem import WpFileSystem
@@ -25,7 +26,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# We always construct parent with wx.TE_MULTILINE
 		##
 		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
-
+		
 		##
 		# Setup default styles
 		##
@@ -78,7 +79,9 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		self.SetDefaultLexer()
 		self.SetFocus()
 		
-		self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+		self.Bind( wx.EVT_KEY_DOWN, self._OnKeyDown )
+		self.Bind( wx.stc.EVT_STC_SAVEPOINTREACHED, self._OnSavePointReached )
+		self.Bind( wx.stc.EVT_STC_CHANGE, self._OnTextChange )
 		
 		
 	#---------------------------------------------------------------
@@ -224,29 +227,66 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# Keywords
 		##
 		self.SetKeyWords( 0, " ".join( keyword.kwlist ) )
+	
+	#---------------------------------------------------------------
+	# Handle events
+	#---------------------------------------------------------------
+	
+	#---------------------------------------------------------------
+	# Add ' * ' to tab title if text is modified
+	#---------------------------------------------------------------
+	def _OnTextChange( self, event ):
+		print "Hello"
+		tabheading = self.Parent.GetPageText( self.Parent.GetSelection() )
+		dirtyfilter = re.compile( ' \* ' )
 		
-	def OnKeyDown( self, event ):
-		print "Key #", event.GetUniChar()
+		if( dirtyfilter.search( tabheading ) == None ):
+			tabheading += ( ' * ' )
+			self.Parent.SetPageText( self.Parent.GetSelection(), tabheading )
 		
-		if( event.CmdDown() == True ):
-			if( event.GetUniChar() == 83 ):
-				print "We are trying to save"
+	#---------------------------------------------------------------
+	# Resetting title of tab
+	#---------------------------------------------------------------
+	def _OnSavePointReached( self, event ):
+		tabheading = self.Parent.GetPageText( self.Parent.GetSelection() )
+		
+		if( tabheading.endswith( ' * ' ) == True ):
+			self.Parent.SetPageText( self.Parent.GetSelection(), tabheading[:-3] )
+		
+	#---------------------------------------------------------------
+	# Handle key events
+	#---------------------------------------------------------------
+	def _OnKeyDown( self, event ):
+		print "Key #", event.GetUniChar(), " CmdDown is ", event.CmdDown()
+		key = event.GetUniChar()
+		cmd = event.CmdDown()
+		
+		if( cmd == True ):
+			##
+			# Saving current file
+			##
+			if( key == 83 | key == 115 ):
 				self.SaveFile()
-			
+				return
+				
 			##
 			# Add new page with editor to current notebook instance
 			##
-			if( event.GetUniChar() == 78 ):
+			if( key == 78 | key == 110 ):
 				self.parent.AddDefaultPage()
+				return
 				
-			if( event.GetUniChar() == 79 ):
-				print "We are trying to open a file"
+			##
+			# Open file
+			## 
+			if( key == 79 | key == 111 ):
+				self.Parent.Parent.Parent.Parent.OpenPage() # :)
+				return
 				
 			##
 			# Close current tab where this instance of the editor resides
 			##
-			if( event.GetUniChar() == 87 ):
-				
+			if( key == 87 | key == 119 ):
 				pagecount = self.Parent.GetPageCount()
 			
 				if( pagecount >= 0 ):
@@ -265,8 +305,11 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 					self.Parent.DeletePage( selected )		# Delete unwanted tab
 				
 				return										# Force return or else it'll segfault
-				
-			if( event.GetUniChar() == 81 ):
+			
+			##
+			# Closing this application
+			##
+			if( key == 81 | key == 113 ):
 				print "We are trying to close this application"
 				self.Close()
 			
@@ -288,6 +331,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				self.parent.SetPageText( self.parent.GetSelection(), split[ 1 ] )
 				dialog.Destroy()
 	
+		self.SetSavePoint()
 		WpFileSystem.SaveToFile( self.GetTextUTF8(), path )
 		
 		##

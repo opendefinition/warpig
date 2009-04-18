@@ -119,6 +119,9 @@ class WpMainPanel( wx.Panel ):
 	def _OnToolBarOpenPage( self, event ):
 		self.OpenPage()
 	
+	#---------------------------------------------------------------
+	# Open Page 
+	#---------------------------------------------------------------
 	def OpenPage( self ):
 		dialog = wx.FileDialog ( None, style = wx.OPEN )
 		

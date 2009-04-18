@@ -32,7 +32,8 @@ class WpNoteBook( fnb.FlatNotebook ):
 		if filepath is not None:
 			texteditor.SetFilePath( filepath )
 			texteditor.SetDefaultLexer()
-			
+		
+		texteditor.SetSavePoint()
 		return texteditor
 	
 	#---------------------------------------------------------------
