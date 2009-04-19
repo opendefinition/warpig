@@ -104,10 +104,13 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			)
 		
 		##
-		# Make sure we alwyas empty the undo before when adding pages
+		# Make sure we alwyas empty the undo before we add pages
 		##
 		self.EmptyUndoBuffer()
 		
+		##
+		# Set savepoint upon loading a page
+		##
 		self.SetSavePoint()
 		
 		return self
@@ -351,6 +354,9 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		
 		WpFileSystem.SaveToFile( self.GetTextUTF8(), path )
 		
+		##
+		# Setting savepoint upon save
+		##
 		self.SetSavePoint()
 		
 		##
