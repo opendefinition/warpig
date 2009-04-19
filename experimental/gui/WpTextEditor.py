@@ -92,7 +92,8 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		return self._curr_file_path
 	
 	#---------------------------------------------------------------
-	# Get filepath defined for this instance of WpTextEditor
+	# Set filepath defined for this instance of WpTextEditor and 
+	# load content
 	# @return self
 	#---------------------------------------------------------------	
 	def SetFilePath( self, filepath ):
@@ -106,6 +107,18 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# Make sure we alwyas empty the undo before when adding pages
 		##
 		self.EmptyUndoBuffer()
+		
+		self.SetSavePoint()
+		
+		return self
+		
+	#---------------------------------------------------------------
+	# Set filepath defined for this instance of WpTextEditor without 
+	# loading content
+	# @return self
+	#---------------------------------------------------------------
+	def SetFilePathNoRead( self, filepath ):
+		self._curr_file_path = filepath
 		
 		return self
 	
@@ -333,15 +346,14 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				path = dialog.GetPath()
 				split = os.path.split( path )
 				self.parent.SetPageText( self.parent.GetSelection(), split[ 1 ] )
-				self.SetFilePath( path )
+				self.SetFilePathNoRead( path )
 				dialog.Destroy()
 		
 		WpFileSystem.SaveToFile( self.GetTextUTF8(), path )
 		
 		self.SetSavePoint()
-		self.SetDirtyFilter( False )
 		
 		##
-		# Make sure the editor got the filepath set
+		# Make sure the editor got the filepath set (and that it's not re-read
 		##
-		self.SetFilePath( path )
+		self.SetFilePathNoRead( path )
