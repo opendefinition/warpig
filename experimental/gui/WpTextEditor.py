@@ -307,6 +307,26 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			# Close current tab where this instance of the editor resides
 			##
 			if( key == 87 | key == 119 ):
+				##
+				# If current editor is modified yield warning upon close
+				##
+				if( self.GetModify() == True ):	
+					dialog = wx.MessageDialog( None, 
+									'Are you sure to want to close this tab?', 
+									'Question',
+									wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION 
+								)
+		
+					status = dialog.ShowModal()
+	
+					if( status != wx.ID_YES ):
+						return
+					
+					dialog.Destroy()
+				
+				##
+				# Continue closing
+				##
 				pagecount = self.Parent.GetPageCount()
 			
 				if( pagecount >= 0 ):
