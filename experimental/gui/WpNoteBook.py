@@ -42,20 +42,39 @@ class WpNoteBook( fnb.FlatNotebook ):
 	def AddDefaultPage( self, filepath=None ):
 		title = '< empty >'
 		
-		if filepath is None:
-			filepath = None
+		##
+		# Testing if the file is already open
+		##
+		numpages = self.GetPageCount()
+		dontreload = False
+		
+		for index in range( 0, numpages ):
+			pagepath = self.GetPage( index ).GetFilePath()
+			
+			if( pagepath == filepath ):
+				dontreload = True
+				foundindex = index
+			elif( pagepath is None ):
+				continue
+		
+		
+		if( dontreload == False ):
+			if filepath is None:
+				filepath = None
+			else:
+				split = os.path.split( filepath )
+				filepath = filepath
+				title = split[ 1 ]
+		
+			##
+			# Keeps notebook from flickering when adding pages. See Thaw later in this function.
+			##
+			self.Freeze()
+			self.AddPage( self._AddTextEditor( filepath ), title, True )
+		
+			##
+			# Thawing
+			##
+			self.Thaw()
 		else:
-			split = os.path.split( filepath )
-			filepath = filepath
-			title = split[ 1 ]
-		
-		##
-		# Keeps notebook from flickering when adding pages. See Thaw later in this function.
-		##
-		self.Freeze()
-		self.AddPage( self._AddTextEditor( filepath ), title, True )
-		
-		##
-		# Thawing
-		##
-		self.Thaw()
+			self.SetSelection( foundindex )
