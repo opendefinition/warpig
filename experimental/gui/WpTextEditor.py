@@ -102,6 +102,11 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				WpFileSystem.ReadFromFile( self._curr_file_path )
 			)
 		
+		##
+		# Make sure we alwyas empty the undo before when adding pages
+		##
+		self.EmptyUndoBuffer()
+		
 		return self
 	
 	#---------------------------------------------------------------
@@ -252,7 +257,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		
 		if( tabheading.endswith( ' * ' ) == True ):
 			self.Parent.SetPageText( self.Parent.GetSelection(), tabheading[:-3] )
-		
+
 	#---------------------------------------------------------------
 	# Handle key events
 	#---------------------------------------------------------------
@@ -329,10 +334,13 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				path = dialog.GetPath()
 				split = os.path.split( path )
 				self.parent.SetPageText( self.parent.GetSelection(), split[ 1 ] )
+				self.SetFilePath( path )
 				dialog.Destroy()
-	
-		self.SetSavePoint()
+		
 		WpFileSystem.SaveToFile( self.GetTextUTF8(), path )
+		
+		self.SetSavePoint()
+		self.SetDirtyFilter( False )
 		
 		##
 		# Make sure the editor got the filepath set
