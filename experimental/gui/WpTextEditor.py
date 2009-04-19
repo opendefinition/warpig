@@ -241,7 +241,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	# Add ' * ' to tab title if text is modified
 	#---------------------------------------------------------------
 	def _OnTextChange( self, event ):
-		print "Hello"
 		tabheading = self.Parent.GetPageText( self.Parent.GetSelection() )
 		dirtyfilter = re.compile( ' \* ' )
 		

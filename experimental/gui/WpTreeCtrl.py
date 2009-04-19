@@ -56,3 +56,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
 					'fullpath': os.path.join( dirpath, filename )
 				}
 				self.AppendItem( ids[ dirpath ], filename, 2, 2, wx.TreeItemData( data ) )
+		
+		##
+		# Displaying tree
+		##
+		self.Parent.Parent.Parent.ResizeSash()

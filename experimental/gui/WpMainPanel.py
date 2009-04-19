@@ -114,7 +114,7 @@ class WpMainPanel( wx.Panel ):
 			focus.SaveFile()
 	
 	#---------------------------------------------------------------
-	# On open page 
+	# On open page event
 	#---------------------------------------------------------------
 	def _OnToolBarOpenPage( self, event ):
 		self.OpenPage()
