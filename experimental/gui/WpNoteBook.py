@@ -57,7 +57,9 @@ class WpNoteBook( fnb.FlatNotebook ):
 			elif( pagepath is None ):
 				continue
 		
-		
+		##
+		# Don't let the users open the same file multiple times
+		##
 		if( dontreload == False ):
 			if filepath is None:
 				filepath = None
@@ -70,7 +72,16 @@ class WpNoteBook( fnb.FlatNotebook ):
 			# Keeps notebook from flickering when adding pages. See Thaw later in this function.
 			##
 			self.Freeze()
-			self.AddPage( self._AddTextEditor( filepath ), title, True )
+			
+			##
+			# Make use of the very first page that is empty
+			##
+			if( numpages > 0 and self.GetPage( 0 ).GetFilePath() == None and len( self.GetPage( 0 ).GetText() ) == 0 ):
+				title = os.path.split( filepath )[ 1 ]
+				self.SetPageText( 0, title )
+				self.GetPage( 0 ).SetFilePath( filepath )
+			else:	
+				self.AddPage( self._AddTextEditor( filepath ), title, True )
 		
 			##
 			# Thawing

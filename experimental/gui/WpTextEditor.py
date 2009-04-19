@@ -104,7 +104,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			)
 		
 		##
-		# Make sure we alwyas empty the undo before we add pages
+		# Make sure we always empty the undo before we add pages
 		##
 		self.EmptyUndoBuffer()
 		
