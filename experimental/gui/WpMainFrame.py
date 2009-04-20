@@ -16,6 +16,7 @@ import wx
 import wx.stc as stc
 from gui.WpMainPanel import WpMainPanel
 from gui.WpNewProject import WpNewProject
+from gui.WpPreferences import WpPreferences
 
 from system.WpFileSystem import WpFileSystem
 
@@ -141,6 +142,7 @@ class WpMainFrame( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.mainpanel._OnToolBarOpenPage, id=10103 )
 		self.Bind( wx.EVT_MENU, self.mainpanel._OnToolBarNewPage, id=10104 )
 		self.Bind( wx.EVT_MENU, self.mainpanel._OnToolBarSavePage, id=10105 )
+		self.Bind( wx.EVT_MENU, self._OnPreferences, id=20210 )
 		
 		return self.menubar
 		
@@ -210,5 +212,8 @@ class WpMainFrame( wx.Frame ):
 			self.mainpanel.leftsplit.treectrl.PopulateTree(  structure[ 'dirlist' ], structure[ 'fname' ] )
 	
 		dialog.Destroy()
-			
+		
+	def _OnPreferences( self, event ):
+		preferences = WpPreferences()
+		preferences.ShowModal()
 		
