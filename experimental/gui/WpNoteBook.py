@@ -47,16 +47,16 @@ class WpNoteBook( fnb.FlatNotebook ):
 		##
 		numpages = self.GetPageCount()
 		dontreload = False
-		
+
 		for index in range( 0, numpages ):
 			pagepath = self.GetPage( index ).GetFilePath()
 			
-			if( pagepath == filepath ):
+			if( pagepath is None ):
+				continue
+			elif( pagepath == filepath ):
 				dontreload = True
 				foundindex = index
-			elif( pagepath is None ):
-				continue
-		
+			
 		##
 		# Don't let the users open the same file multiple times
 		##
@@ -67,7 +67,7 @@ class WpNoteBook( fnb.FlatNotebook ):
 				split = os.path.split( filepath )
 				filepath = filepath
 				title = split[ 1 ]
-		
+				
 			##
 			# Keeps notebook from flickering when adding pages. See Thaw later in this function.
 			##
@@ -76,16 +76,37 @@ class WpNoteBook( fnb.FlatNotebook ):
 			##
 			# Make use of the very first page that is empty
 			##
-			if( numpages > 0 and self.GetPage( 0 ).GetFilePath() == None and len( self.GetPage( 0 ).GetText() ) == 0 ):
+			
+			
+			### TODO: REWRITE THIS IF TEST
+			"""
+			if( numpages == 0 ):
+				self.AddPage( self._AddTextEditor( None ), title, True )
+			else:
+				if( self.GetPage( 0 ).GetFilePath() == None and len( self.GetPage( 0 ).GetText() ) == 0 ):
+					self.DeletePage( 0 )
+				
+				if( title == '< empty >' ):
+					filepath = None
+				
+				self.AddPage( self._AddTextEditor( filepath ), title, True )
+			
+			"""
+			if( numpages > 0 and self.GetPage( 0 ).GetFilePath() == None and len( self.GetPage( 0 ).GetText() ) == 0 and filepath != None):
 				title = os.path.split( filepath )[ 1 ]
 				self.SetPageText( 0, title )
 				self.GetPage( 0 ).SetFilePath( filepath )
-			else:	
+				print "We should not be in here right now"
+				# self.GetPage( 0 ).EmptyUndoBuffer()
+			else:
 				self.AddPage( self._AddTextEditor( filepath ), title, True )
-		
+	
 			##
 			# Thawing
 			##
 			self.Thaw()
 		else:
+			##
+			# File is already opened, focus it
+			##
 			self.SetSelection( foundindex )

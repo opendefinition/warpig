@@ -108,11 +108,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		##
 		self.EmptyUndoBuffer()
 		
-		##
-		# Set savepoint upon loading a page
-		##
-		self.SetSavePoint()
-		
 		return self
 		
 	#---------------------------------------------------------------
@@ -217,6 +212,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# Class name definition
 		##
 		self.StyleSetSpec( wx.stc.STC_P_CLASSNAME, "fore:#E78B0B,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_CLASSNAME, "fore:#E78B0B,back:#232323" )
 		
 		##
 		# Function or method name definition
@@ -285,28 +281,30 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			##
 			# Saving current file
 			##
-			if( key == 83 | key == 115 ):
+			if( key == 83 or key == 115 ):
 				self.SaveFile()
 				return
 				
 			##
 			# Add new page with editor to current notebook instance
 			##
-			if( key == 78 | key == 110 ):
+			if( key == 78 or key == 110 ):
+				print "Adding new empty page"
 				self.parent.AddDefaultPage()
 				return
 				
 			##
 			# Open file
 			## 
-			if( key == 79 | key == 111 ):
+			if( key == 79 or key == 111 ):
+				print "Trying to open file"
 				self.Parent.Parent.Parent.Parent.OpenPage() # :)
 				return
 				
 			##
 			# Close current tab where this instance of the editor resides
 			##
-			if( key == 87 | key == 119 ):
+			if( key == 87 or key == 119 ):
 				##
 				# If current editor is modified yield warning upon close
 				##
@@ -349,7 +347,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			##
 			# Closing this application
 			##
-			if( key == 81 | key == 113 ):
+			if( key == 81 or key == 113 ):
 				print "We are trying to close this application"
 				self.Close()
 			
