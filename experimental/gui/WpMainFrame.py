@@ -80,13 +80,13 @@ class WpMainFrame( wx.Frame ):
 		file = wx.Menu()
 		edit = wx.Menu()
 		view = wx.Menu()
-		plugins = wx.Menu()
+		piglets = wx.Menu()
 		help = wx.Menu()
 		
 		self.menubar.Append( file, '&File' )
 		self.menubar.Append( edit, '&Edit' )
 		self.menubar.Append( view, '&View' )
-		self.menubar.Append( plugins, '&Plugins' )
+		self.menubar.Append( piglets, '&Piglets' )
 		self.menubar.Append( help, '&Help' )
 		
 		##
