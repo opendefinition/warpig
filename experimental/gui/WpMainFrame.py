@@ -16,7 +16,7 @@ import wx
 import wx.stc as stc
 from gui.WpMainPanel import WpMainPanel
 from gui.WpNewProject import WpNewProject
-from gui.WpPreferences import WpPreferences
+from gui.preferences.WpPreferences import WpPreferences
 
 from system.WpFileSystem import WpFileSystem
 

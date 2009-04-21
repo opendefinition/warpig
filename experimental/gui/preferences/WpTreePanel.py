@@ -12,10 +12,12 @@
 
 import wx
 
-from system.WpFileSystem import WpFileSystem
-
-class WpPreferences( wx.Dialog ):
-	def __init__( self ):
+class WpTreePanel( wx.Panel ):
+	def __init__( self, parent , *args, **kwargs ):
+		wx.Panel.__init__( self, parent, *args, **kwargs )
 		
-		wx.Dialog.__init__( self, None, 6666, 'WarPig Preferences', size=(600, 600) )
-		self.Center()
+		sizer = wx.BoxSizer( wx.VERTICAL )
+		self.treectrl = wx.TreeCtrl( self )
+		
+		sizer.Add( self.treectrl, 1, wx.EXPAND )
+		self.SetSizer( sizer, wx.EXPAND )
