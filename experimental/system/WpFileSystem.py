@@ -25,7 +25,33 @@ class WpFileSystem:
 	# @param string projectfilespath
 	# @return dictionary fileinfo
 	#---------------------------------------------------------------
-	def SaveProjectFile( projectpath, projectfilespath ):
+	def SaveProjectFile( projectfile, directories ):
+	
+		project = {
+			'project' : {
+						'path': projectfile,
+						'name': os.path.split( projectfile )[ 1 ][0:-4]
+					},
+			'dir' : []
+		}
+		
+		# Build up directory list
+		for dir in directories:
+			project['dir'].append( dir )
+			
+		# Convert projectinformation to YAML
+		yamldata = WpFileSystem.StructureToYaml( project )
+		
+		# Store projectfile
+		WpFileSystem.SaveToFile( yamldata, projectfile )
+		
+		# Always return the path to the current project file
+		return projectfile
+	
+	
+		"""
+	
+	
 		##
 		# Splitting fullpath into easier manageable parts
 		##
@@ -54,8 +80,11 @@ class WpFileSystem:
 				'orig'		: projectfilespath,
 				'dirlist' 	: directory
  			}
- 			
+				
+		"""
+		
  	SaveProjectFile = WpCallable( SaveProjectFile )
+	
  	
 	#---------------------------------------------------------------
 	# Load projectfile
@@ -73,6 +102,8 @@ class WpFileSystem:
  		##
 		structure = WpFileSystem.YamlToStructure( content )
  		
+		return structure
+		"""
  		##
 		# Creating response packet
  		##
@@ -86,6 +117,7 @@ class WpFileSystem:
  				'orig'		: path,
  				'dirlist'	: structure
  			}
+		"""
 
 	LoadProjectFile = WpCallable( LoadProjectFile )
 	
