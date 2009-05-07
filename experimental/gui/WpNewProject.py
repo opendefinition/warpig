@@ -11,6 +11,8 @@
 #---------------------------------------------------------------------------
 
 import wx
+import wx.lib.buttons as buttons
+
 from wx.lib.agw.multidirdialog import MultiDirDialog
 from system.WpFileSystem import WpFileSystem
 
@@ -52,7 +54,8 @@ class WpNewProject( wx.Dialog ):
 								)
 		
 		self.filelist.InsertColumn( 0, 'Path' )
-		
+		self.filelist.SetColumnWidth( 0, 1000 )
+
 		fileactionsizer = wx.BoxSizer( wx.VERTICAL )
 
 		imageadd = wx.Image( "./gui/icons/list-add.png", wx.BITMAP_TYPE_PNG ).ConvertToBitmap()
@@ -84,8 +87,8 @@ class WpNewProject( wx.Dialog ):
 		##
 		buttonsizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		savebutton = wx.Button( mainpanel, 13, 'Save' ) 
-		cancelbutton = wx.Button( mainpanel, 14, 'Cancel' )
+		savebutton = buttons.ThemedGenButton( mainpanel, 13, 'Save' ) 
+		cancelbutton = buttons.ThemedGenButton( mainpanel, 14, 'Cancel' )
 		
 		buttonsizer.Add( cancelbutton, 0, wx.EXPAND | wx.ALL, 5 )
 		buttonsizer.Add( savebutton, 1, wx.EXPAND | wx.ALL, 5 )
@@ -115,7 +118,7 @@ class WpNewProject( wx.Dialog ):
 		# Bindings
 		##
 		self.Bind( wx.EVT_BUTTON, self._onAssociateFiles, id=11)
-		# self.Bind( wx.EVT_BUTTON, self._onRemoveFiles, id=12)
+		self.Bind( wx.EVT_BUTTON, self._onRemovingFilesFromProject, id=12)
 		self.Bind( wx.EVT_BUTTON, self._onSave, id=13 )
 		self.Bind( wx.EVT_BUTTON, self._onCancel, id=14 )
 
@@ -137,7 +140,21 @@ class WpNewProject( wx.Dialog ):
 				count += 1
 		
 		dialog.Destroy()
-	
+		
+	def _onRemovingFilesFromProject( self, event ):
+		pos = self.filelist.GetFirstSelected()
+		tmp = []
+		
+		while pos != -1:
+			tmp.append( pos )
+			pos = self.filelist.GetNextSelected( pos )
+			
+		tmp.sort()
+		tmp.reverse()
+		
+		for thingy in tmp:
+			self.filelist.DeleteItem( thingy ) 
+
 	#---------------------------------------------------------------
 	# Cancel inside project dialog
 	#---------------------------------------------------------------
