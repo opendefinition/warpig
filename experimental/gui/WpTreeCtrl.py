@@ -24,11 +24,10 @@ class WpTreeCtrl( wx.TreeCtrl ):
 	# @param unknown structure
 	# @param string projectname
 	#---------------------------------------------------------------
-	# def PopulateTree( self, structure, projectname):
 	def PopulateTree( self, filepath ):
 		project = WpFileSystem.LoadProjectFile( filepath )
 	
-		# Destroying all content is content is present
+		# Destroying all content if content is present
 		if( self.IsEmpty() == False ):
 			self.DeleteAllItems()
 		
@@ -51,7 +50,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		for dir in project[ 'dir' ]:
 			dlist = WpFileSystem.ListDirectory( dir )
 			
-			subroot = self.AppendItem( treeroot, os.path.split(dir)[1], 0, 1, wx.TreeItemData( dir ) )
+			subroot = self.AppendItem( treeroot, os.path.split(dir)[1], 0, 1, wx.TreeItemData( None ) )
 			self.SetItemHasChildren( subroot, True )
 			
 			ids = {dir: subroot}
@@ -59,7 +58,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 			for( dirpath, dirnames, filenames ) in dlist[ 'files' ]:
 				for dirname in dirnames:
 					fullpath = os.path.join( dirpath, dirname )
-					ids[ fullpath ] = self.AppendItem( ids[ dirpath ], dirname, 0, 1, wx.TreeItemData( dirpath ) )
+					ids[ fullpath ] = self.AppendItem( ids[ dirpath ], dirname, 0, 1, wx.TreeItemData( None ) )
 					
 				for filename in sorted( filenames ):
 					data = {
@@ -70,31 +69,47 @@ class WpTreeCtrl( wx.TreeCtrl ):
 					self.AppendItem( ids[ dirpath ], filename, 2, 2, wx.TreeItemData( data ) )
 					
 		self.Parent.Parent.Parent.ResizeSash()
-			
-		"""
-		# Removing trailing file extension
-		prjname = projectname[0:-4]
-		treeroot = self.AddRoot( str( prjname ), 0, 1, wx.TreeItemData( projectname ) )
-		self.SetItemHasChildren( treeroot, True )
-	
-		root = structure[ 'files' ][ 0 ][ 0 ]
-		ids = {root: treeroot}
 		
-		for ( dirpath, dirnames, filenames ) in structure[ 'files' ]:
-			for dirname in dirnames:
-				fullpath = os.path.join( dirpath, dirname )
-				ids[ fullpath ] =  self.AppendItem( ids[ dirpath ], dirname, 0, 1 )
-				
-			for filename in sorted( filenames ):
-				data = {
-					'path': dirpath,
-					'fname': filename,
-					'fullpath': os.path.join( dirpath, filename )
-				}
-				self.AppendItem( ids[ dirpath ], filename, 2, 2, wx.TreeItemData( data ) )
+		self.SetupBindings()
 		
-		##
-		# Displaying tree
-		##
-		self.Parent.Parent.Parent.ResizeSash()
-		"""
+	def SetupBindings( self ):
+		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=9999 )
+		self.Bind( wx.EVT_TREE_ITEM_MENU, self._OnTreeRightClick, id=wx.ID_ANY )
+		
+	##
+	# Bindings
+	##
+	def _OnTreeRightClick( self, event ):
+		menu = wx.Menu()
+		
+		newmenu = wx.Menu()
+		newfile = wx.MenuItem( newmenu, wx.ID_ANY,"New file" )
+		newfolder = wx.MenuItem( newmenu, wx.ID_ANY,"New folder" )
+		newmenu.AppendItem( newfile )
+		newmenu.AppendItem( newfolder )
+		
+		delete = wx.MenuItem( menu, wx.ID_ANY,"Delete" )
+		refreshtree = wx.MenuItem( menu, wx.ID_ANY,"Refresh tree" )
+		
+		menu.AppendMenu( wx.ID_ANY, 'New', newmenu )
+		menu.AppendItem( delete )
+		menu.AppendSeparator()
+		menu.AppendItem( refreshtree )
+		
+		self.PopupMenu(menu)
+		menu.Destroy()
+		
+	#---------------------------------------------------------------
+	# On selecting file inside treecontroller
+	#---------------------------------------------------------------
+	def _OnSelChanged( self, event ):
+		filedata = self.GetPyData( event.GetItem() )
+		
+		try:
+			self.Parent.rightpanel.notebook.AddDefaultPage( filedata[ 'fullpath' ] )
+		except TypeError:
+			##
+			# When this occur we are double clicking on a node
+			# without a path set. E.g. projectnode.
+			##
+			pass

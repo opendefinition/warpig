@@ -54,22 +54,4 @@ class WpSplitLeftPanel( wx.Panel ):
 	#---------------------------------------------------------------
 	def _SetupTreeCtrl( self ):
 		self.treectrl = WpTreeCtrl( self )
-		
-		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=9999 )
-
-		return self.treectrl	
-	
-	#---------------------------------------------------------------
-	# On selecting file inside treecontroller
-	#---------------------------------------------------------------
-	def _OnSelChanged( self, event ):
-		filedata = self.treectrl.GetPyData( event.GetItem() )
-		
-		try:
-			self.rightpanel.notebook.AddDefaultPage( filedata[ 'fullpath' ] )
-		except TypeError:
-			##
-			# When this occur we are double clicking on a node
-			# without a path set. E.g. projectnode.
-			##
-			pass
+		return self.treectrl

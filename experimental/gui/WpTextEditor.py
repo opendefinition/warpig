@@ -327,22 +327,21 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				##
 				pagecount = self.Parent.GetPageCount()
 			
-				if( pagecount >= 0 ):
-					selected = self.Parent.GetSelection()	# Get which tab that is in focus
-					
-					##
-					# Making sure we add a new page if we're deleting the last page
-					##
-					if( pagecount == 1 ):
-						self.Parent.AddDefaultPage()
-						selection = 0
-					else:
-						selection = selected-1
-						
-					self.Parent.SetSelection( selection )	# Set focus to neighbour tab
-					self.Parent.DeletePage( selected )		# Delete unwanted tab
+				selected = self.Parent.GetSelection()	# Get which tab that is in focus
 				
-				return										# Force return or else it'll segfault
+				##
+				# Making sure we add a new page if we're deleting the last page
+				##
+				if( pagecount == 1 ):
+					self.Parent.AddDefaultPage()
+					selection = 0
+				else:
+					selection = selected-1
+				self.Parent.DeletePage( selected )		# Delete unwanted tab	
+				self.Parent.SetSelection( selection )	# Set focus to neighbour tab
+				
+				
+				return									# Force return or else it'll segfault
 			
 			##
 			# Closing this application
