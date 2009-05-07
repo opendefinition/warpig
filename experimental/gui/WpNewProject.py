@@ -11,12 +11,10 @@
 #---------------------------------------------------------------------------
 
 import wx
-
+from wx.lib.agw.multidirdialog import MultiDirDialog
 from system.WpFileSystem import WpFileSystem
 
 class WpNewProject( wx.Dialog ):
-	_projectpath = None
-
 	def __init__( self, treectrl ):
 		self._treectrl = treectrl
 		
@@ -33,31 +31,53 @@ class WpNewProject( wx.Dialog ):
 		##
 		# Projectname
 		##
-		namesizer = wx.BoxSizer( wx.HORIZONTAL )
+		prjnamesizer = wx.BoxSizer( wx.HORIZONTAL )
+		prjnamelabel = wx.StaticText( mainpanel, -1, 'Name' )
+		self.prjnameinput = wx.TextCtrl( mainpanel, -1 )
 		
-		projectnamelabel = wx.StaticText( mainpanel, -1, 'Projectname' )
-		self.projectnamefield = wx.TextCtrl( mainpanel, -1 )
-		
-		namesizer.Add( projectnamelabel, 0, wx.EXPAND | wx.ALL, 5 )
-		namesizer.Add( self.projectnamefield, 1, wx.EXPAND | wx.ALL, 5 )
+		prjnamesizer.Add( prjnamelabel, 0, wx.EXPAND | wx.ALL, 5 )
+		prjnamesizer.Add( self.prjnameinput , 1, wx.EXPAND | wx.ALL, 5 )
 		
 		##
-		# Button for adding files to project
+		# Controls for adding files to project
 		##
-		filesizer = wx.BoxSizer( wx.VERTICAL )
-		filebuttonsizer = wx.BoxSizer( wx.HORIZONTAL )
-		filefoldersizer = wx.BoxSizer( wx.VERTICAL )
+		prjfilesizer =wx.BoxSizer( wx.HORIZONTAL )
 		
-		filebutton = wx.Button( mainpanel, 12, 'Associate Files To Project' )
-		self.chosenfolderlabel = wx.StaticText( mainpanel, -1, '' )
-		self.chosenfolderpath  = wx.StaticText( mainpanel, -1, '' )
+		self.filelist = wx.ListCtrl( mainpanel, 
+								-1,
+								style=wx.BORDER_SUNKEN 
+									| wx.LC_REPORT
+									| wx.LC_VRULES
+									| wx.LC_HRULES
+								)
 		
-		filebuttonsizer.Add( filebutton, 1, wx.EXPAND | wx.ALL, 30 )
-		filefoldersizer.Add( self.chosenfolderlabel, 0, wx.EXPAND | wx.ALL, 5 )
-		filefoldersizer.Add( self.chosenfolderpath, 1, wx.EXPAND | wx.ALL, 5 )
+		self.filelist.InsertColumn( 0, 'Path' )
 		
-		filesizer.Add( filebuttonsizer, 1, wx.EXPAND )
-		filesizer.Add( filefoldersizer, 1, wx.EXPAND )
+		fileactionsizer = wx.BoxSizer( wx.VERTICAL )
+
+		imageadd = wx.Image( "./gui/icons/list-add.png", wx.BITMAP_TYPE_PNG ).ConvertToBitmap()
+		imagerem = wx.Image( "./gui/icons/list-remove.png", wx.BITMAP_TYPE_PNG ).ConvertToBitmap()
+		
+		addfilebutton = wx.BitmapButton( mainpanel,
+										11, 
+										bitmap=imageadd, 
+										pos=(10,20), 
+										size=(imageadd.GetWidth(), imageadd.GetHeight() ),
+										style=wx.NO_BORDER
+										)
+		remfilebutton = wx.BitmapButton( mainpanel,
+										12, 
+										bitmap=imagerem, 
+										pos=(10,20), 
+										size=(imagerem.GetWidth(), imagerem.GetHeight() ),
+										style=wx.NO_BORDER
+										)
+		
+		fileactionsizer.Add( addfilebutton )
+		fileactionsizer.Add( remfilebutton )
+	
+		prjfilesizer.Add( self.filelist, 1, wx.EXPAND | wx.ALL, 5 )
+		prjfilesizer.Add( fileactionsizer )
 		
 		##
 		# Save and cancel buttons
@@ -69,14 +89,14 @@ class WpNewProject( wx.Dialog ):
 		
 		buttonsizer.Add( cancelbutton, 0, wx.EXPAND | wx.ALL, 5 )
 		buttonsizer.Add( savebutton, 1, wx.EXPAND | wx.ALL, 5 )
-	
+		
 		##
 		# Sewing things together
 		##
 		panelsizer.AddMany(
 			[
-				( namesizer, 1, wx.EXPAND ),
-				( filesizer, 1, wx.EXPAND ),
+				( prjnamesizer, 1, wx.EXPAND ),
+				( prjfilesizer, 1, wx.EXPAND ),
 				( buttonsizer, 1, wx.EXPAND )
 			]
 		)
@@ -94,7 +114,8 @@ class WpNewProject( wx.Dialog ):
 		##
 		# Bindings
 		##
-		self.Bind( wx.EVT_BUTTON, self._onAssociateFiles, id=12)
+		self.Bind( wx.EVT_BUTTON, self._onAssociateFiles, id=11)
+		# self.Bind( wx.EVT_BUTTON, self._onRemoveFiles, id=12)
 		self.Bind( wx.EVT_BUTTON, self._onSave, id=13 )
 		self.Bind( wx.EVT_BUTTON, self._onCancel, id=14 )
 
@@ -105,14 +126,15 @@ class WpNewProject( wx.Dialog ):
 	#---------------------------------------------------------------
 	def _onAssociateFiles( self, event ):
 		filters = 'WarPig Project File (*.wpf)|*.wpf'
-  		dialog = wx.DirDialog ( None, 'New Project', style = wx.OPEN )
+  		dialog = wx.lib.agw.multidirdialog.MultiDirDialog ( None, 'New Project' )
   		
   		if dialog.ShowModal() == wx.ID_OK:
-			path = dialog.GetPath()
-			self._projectpath = path
+			paths = dialog.GetPaths()
 			
-			self.chosenfolderlabel.SetLabel( "Folder: " )
-			self.chosenfolderpath.SetLabel( path )
+			count = self.filelist.GetItemCount()+1
+			for path in paths:
+				self.filelist.InsertStringItem( count, path )
+				count += 1
 		
 		dialog.Destroy()
 	
@@ -126,14 +148,18 @@ class WpNewProject( wx.Dialog ):
 	# On saving project
 	#---------------------------------------------------------------
 	def _onSave( self, event ):
-		path = './projects/' + "/" + self.projectnamefield.GetValue() + ".wpf"
+		path = './projects/' + "/" + self.prjnameinput .GetValue() + ".wpf"
 		
-		dir = [
-				self._projectpath
-			]
+		##
+		# Get all paths that belongs to this project
+		##
+		dir = []
+		numpaths = self.filelist.GetItemCount()
+		
+		for index in range( 0, numpaths ):
+			dir.append( self.filelist.GetItem( index, 0 ).GetText() )
 		
 		projectfile = WpFileSystem.SaveProjectFile( path, dir )
-		# self._treectrl.treectrl.PopulateTree( information[ 'dirlist' ], information[ 'fname' ] )
 		self._treectrl.treectrl.PopulateTree( projectfile )
 
 		self.Close()

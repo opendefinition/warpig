@@ -12,7 +12,7 @@
 
 import wx
 
-from gui.WpTreeCtrl import WpTreeCtrl
+from gui.tree.WpTreeCtrl import WpTreeCtrl
 
 class WpSplitLeftPanel( wx.Panel ):
 	def __init__( self, parent, rightpanel , *args, **kwargs ):
