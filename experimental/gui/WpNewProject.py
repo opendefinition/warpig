@@ -10,6 +10,7 @@
 # License: Open Definiton General Lisence (ODGL). Available upon request.
 #---------------------------------------------------------------------------
 
+import re
 import wx
 import wx.lib.buttons as buttons
 
@@ -128,14 +129,19 @@ class WpNewProject( wx.Dialog ):
 	# On adding files to project
 	#---------------------------------------------------------------
 	def _onAssociateFiles( self, event ):
-		filters = 'WarPig Project File (*.wpf)|*.wpf'
-  		dialog = wx.lib.agw.multidirdialog.MultiDirDialog ( None, 'New Project' )
+  		dialog = wx.lib.agw.multidirdialog.MultiDirDialog( None, 'New Project', 'Associate folders', defaultPath='/Users' )
   		
   		if dialog.ShowModal() == wx.ID_OK:
 			paths = dialog.GetPaths()
 			
 			count = self.filelist.GetItemCount()+1
 			for path in paths:
+				# If on Mac, remove "Macintosh HD"
+				macfilter = re.compile( "Macintosh HD" )
+			
+				if( macfilter.search( path ) != None ):
+					path = path[12:len(path)]
+			
 				self.filelist.InsertStringItem( count, path )
 				count += 1
 		
@@ -165,6 +171,7 @@ class WpNewProject( wx.Dialog ):
 	# On saving project
 	#---------------------------------------------------------------
 	def _onSave( self, event ):
+		self.Close()
 		path = './projects/' + "/" + self.prjnameinput .GetValue() + ".wpf"
 		
 		##
@@ -178,5 +185,3 @@ class WpNewProject( wx.Dialog ):
 		
 		projectfile = WpFileSystem.SaveProjectFile( path, dir )
 		self._treectrl.treectrl.PopulateTree( projectfile )
-
-		self.Close()

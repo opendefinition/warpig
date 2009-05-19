@@ -17,7 +17,7 @@ from system.WpFileSystem import WpFileSystem
 
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
-		wx.TreeCtrl.__init__( self, parent, 9999, style=wx.ALL | wx.EXPAND )
+		wx.TreeCtrl.__init__( self, parent, 9999, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND )
 		
 	#---------------------------------------------------------------
 	# Populate treecontroller
@@ -25,6 +25,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 	# @param string projectname
 	#---------------------------------------------------------------
 	def PopulateTree( self, filepath ):
+		self.SetIndent( 5 )
 		project = WpFileSystem.LoadProjectFile( filepath )
 	
 		# Destroying all content if content is present
