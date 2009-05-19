@@ -14,6 +14,7 @@ import os
 import wx
 
 from system.WpFileSystem import WpFileSystem
+from gui.WpProgressDialog import WpProgressDialog
 
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
@@ -25,6 +26,14 @@ class WpTreeCtrl( wx.TreeCtrl ):
 	# @param string projectname
 	#---------------------------------------------------------------
 	def PopulateTree( self, filepath ):
+	
+		##
+		# Testing
+		##
+		progress = WpProgressDialog( "Opening project files" )
+		progress.AppendStatusText( "Something" )
+		progress.Show()
+		
 		self.SetIndent( 5 )
 		project = WpFileSystem.LoadProjectFile( filepath )
 	
@@ -72,6 +81,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		self.Parent.Parent.Parent.ResizeSash()
 		
 		self.SetupBindings()
+		
+		progress.Close()
 		
 	def SetupBindings( self ):
 		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=9999 )
