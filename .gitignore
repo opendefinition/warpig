@@ -1,0 +1,6 @@
+# We don't want any compiled Python files in our tree
+*.pyc
+# We don't want to put Warpig project files to our tree
+*.wpf
+# Swap files no no
+*.swp

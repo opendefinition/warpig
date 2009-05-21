@@ -1,13 +1,18 @@
-=============================================================================
-WarPig Code Editor
-=============================================================================
++---------------------------------------------------------------------------+
+	Release name: Warpig CE
+	Fullname: Warpig Code Environment
++---------------------------------------------------------------------------+
 
-Projectstart:	Janury 10th, 2009. 
-Lead developer: Roger C.B. Johnsen
-Contact: 		johnsen@opendefinition.com
-Organization: 	Open Definition
-WWW: 			http://www.opendefinition.com
-License:		TBD.
+	Projectstart:	Janury 10th, 2009. 
+	Lead developer: Roger C.B. Johnsen
+	Contact: 	johnsen@opendefinition.com
+	Organization: 	Open Definition
+	WWW: 		http://www.opendefinition.com
+	License:	TBD.
 
-About:
-TBD.
+	About:
+
+	Warpig CE is a tool for programmers. It is not an IDE per se,
+	but rather a coding environment.
+
++---------------------------------------------------------------------------+
