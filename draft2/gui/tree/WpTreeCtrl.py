@@ -30,10 +30,11 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		##
 		# Testing
 		##
+		"""
 		progress = WpProgressDialog( "Opening project files" )
 		progress.AppendStatusText( "Something" )
 		progress.Show()
-		
+		"""
 		self.SetIndent( 5 )
 		project = WpFileSystem.LoadProjectFile( filepath )
 	
@@ -78,11 +79,11 @@ class WpTreeCtrl( wx.TreeCtrl ):
 						}
 					self.AppendItem( ids[ dirpath ], filename, 2, 2, wx.TreeItemData( data ) )
 					
-		self.Parent.Parent.Parent.ResizeSash()
+		self.Parent.Parent.Parent.Parent.ResizeSash()
 		
 		self.SetupBindings()
 		
-		progress.Close()
+		# progress.Close()
 		
 	def SetupBindings( self ):
 		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=9999 )
