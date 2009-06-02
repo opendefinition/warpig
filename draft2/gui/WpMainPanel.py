@@ -14,6 +14,8 @@
 import wx.lib.colourselect as csel
 import os
 import wx
+import wx.py as py
+
 from wx.lib.agw import labelbook as LB
 from wx.lib.agw.fmresources import *
 
@@ -106,7 +108,8 @@ class WpMainPanel( wx.Panel ):
 
 		labelbook.AddPage( wx.Button( labelbook, wx.ID_ANY, "Test1" ) , "Info", True, 0 )
 		labelbook.AddPage( self.splitter, "Editor", True, 1 )
-		labelbook.AddPage( wx.Button( labelbook, wx.ID_ANY, "Test3" ) , "Terminal", True, 2 )
+		labelbook.AddPage( py.crust.Crust( labelbook, -1 ) , "Terminal", True, 2 )
+    
 		labelbook.SetSelection(0)  
 		
 		mainsizer.Add( labelbook, 1, wx.EXPAND )
