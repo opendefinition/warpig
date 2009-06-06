@@ -16,6 +16,8 @@ import os
 import wx
 import wx.py as py
 
+from wx.html import HtmlWindow
+
 from gui.WpModeBar import WpModeBar
 from gui.WpSplitLeftPanel import WpSplitLeftPanel
 from gui.WpSplitRightPanel import WpSplitRightPanel
@@ -69,8 +71,12 @@ class WpMainPanel( wx.Panel ):
 		modebar.AddIcon( "accessories-text-editor.png" ) 
 		modebar.AddIcon( "utilities-terminal.png" )
 		
+		# Channel browser component
+		html =  HtmlWindow( self, wx.ID_ANY )
+		html.LoadFile( "./infochannel.html" )
+		
 		# Add modes to modebar
-		modebar.AddModePage( wx.Button( self, wx.ID_ANY, "Test1" ) , "Info", True, 0 )
+		modebar.AddModePage( html, "Info", True, 0 )
 		modebar.AddModePage( self.splitter, "Editor", True, 1 )
 		modebar.AddModePage( py.crust.Crust( self, -1 ) , "Terminal", True, 2 )
     
