@@ -11,16 +11,15 @@
 # License: Open Definiton General Lisence (ODGL). Available upon request.
 #
 #---------------------------------------------------------------------------
-import wx.lib.colourselect as csel
+
 import os
 import wx
 import wx.py as py
 
-from wx.lib.agw import labelbook as LB
-from wx.lib.agw.fmresources import *
-
+from gui.WpModeBar import WpModeBar
 from gui.WpSplitLeftPanel import WpSplitLeftPanel
 from gui.WpSplitRightPanel import WpSplitRightPanel
+
 
 class WpMainPanel( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
@@ -50,109 +49,38 @@ class WpMainPanel( wx.Panel ):
 		self.splitter.SetBorderSize( 0 )
 
 		##
-		# Main widget
-		##
-		"""
-		self.flexgrid.AddMany(
-			[
-				( self._SetupToolbar(), 0 ),
-				( self.splitter, 1, wx.EXPAND )
-			]
-		) 
-		"""
-		"""
-		##
-		# Binding the splitter
-		##
-		self.Bind( wx.EVT_SPLITTER_DCLICK, self._OnSplitterDblClk, id=1333 ) 
-	
-		self.flexgrid.AddGrowableCol( 1 )
-		self.flexgrid.AddGrowableRow( 0 )
-		
-		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
-		self.SetSizer( self.mainsizer )
-		"""
-		##
 		# Binding the splitter
 		##
 		self.Bind( wx.EVT_SPLITTER_DCLICK, self._OnSplitterDblClk, id=1333 )
 		
-		## Main sizer for this panel
-		mainsizer = wx.BoxSizer( wx.HORIZONTAL)
+		##
+		# Main sizer for this panel
+		## 
+		mainsizer = wx.BoxSizer( wx.HORIZONTAL) 
 		
-		## Adding images to the book
-		imagelist = wx.ImageList( 32, 32 )
-		pageIcons = [ 
-						"internet-web-browser.png",
-						"accessories-text-editor.png", 
-						"utilities-terminal.png"
-					]
+		##
+		# Mode Bar
+		##
+		modebar = WpModeBar( self )
+	
+		# Adding icons
+		modebar.SetIconPath( "./gui/icons/modebar" )
+		modebar.AddIcon( "internet-web-browser.png" )
+		modebar.AddIcon( "accessories-text-editor.png" ) 
+		modebar.AddIcon( "utilities-terminal.png" )
 		
-		for img in pageIcons:
-			image = os.path.join( "./gui/icons/modebar", img )
-			bmp = wx.Bitmap( image, wx.BITMAP_TYPE_PNG )
-			imagelist.Add( bmp )
-		
-		## Labelbook that holds the main navigation feature of this application
-		labelbook = LB.LabelBook( self, -1 )
-
-		## Styling
-		labelbook.AssignImageList( imagelist )
-		
-		labelbook.SetColour( INB_TAB_AREA_BACKGROUND_COLOR, "#505151" )
-		labelbook.SetColour( INB_ACTIVE_TAB_COLOR, "#eeeeee" )
-		labelbook.SetColour( INB_TABS_BORDER_COLOR, "#e0e0e0" )
-		labelbook.SetColour( INB_TEXT_COLOR, "#c0c0c0" )
-		labelbook.SetColour( INB_ACTIVE_TEXT_COLOR, "#505151" )
-		labelbook.SetColour( INB_HILITE_TAB_COLOR, "#99c00" )
-
-		labelbook.AddPage( wx.Button( labelbook, wx.ID_ANY, "Test1" ) , "Info", True, 0 )
-		labelbook.AddPage( self.splitter, "Editor", True, 1 )
-		labelbook.AddPage( py.crust.Crust( labelbook, -1 ) , "Terminal", True, 2 )
+		# Add modes to modebar
+		modebar.AddModePage( wx.Button( self, wx.ID_ANY, "Test1" ) , "Info", True, 0 )
+		modebar.AddModePage( self.splitter, "Editor", True, 1 )
+		modebar.AddModePage( py.crust.Crust( self, -1 ) , "Terminal", True, 2 )
     
-		labelbook.SetSelection(0)  
+    	# Run/Render/Populate modebar
+		modebar.Run()
 		
-		mainsizer.Add( labelbook, 1, wx.EXPAND )
+		mainsizer.Add( modebar, 1, wx.EXPAND )
+		
 		self.SetSizer( mainsizer )		
-		
-	"""
-	def _Setup( self ):
-		self.mainsizer = wx.BoxSizer( wx.VERTICAL )
-		
-		##
-		# Rows, Cols
-		##
-		self.flexgrid = wx.FlexGridSizer( 1, 2, 0, 0 )
 	
-		self.splitter = wx.SplitterWindow( self, 1333, style=wx.SP_NO_XP_THEME | wx.SP_3DSASH )
-		self.splitter.SetMinimumPaneSize( 1 )
-		self.rightsplit = WpSplitRightPanel( self.splitter )
-		self.leftsplit = WpSplitLeftPanel( self.splitter, self.rightsplit )
-		self.splitter.SplitVertically( self.leftsplit, self.rightsplit )
-		self.splitter.SetSashPosition( 1, True )
-		self.splitter.SetBorderSize( 0 )
-
-		##
-		# Main widget
-		##
-		self.flexgrid.AddMany(
-			[
-				( self._SetupToolbar(), 0 ),
-				( self.splitter, 1, wx.EXPAND )
-			]
-		) 
-	
-		##
-		# Binding the splitter
-		##
-		self.Bind( wx.EVT_SPLITTER_DCLICK, self._OnSplitterDblClk, id=1333 ) 
-	
-		self.flexgrid.AddGrowableCol( 1 )
-		self.flexgrid.AddGrowableRow( 0 )
-		
-		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
-		self.SetSizer( self.mainsizer )
-	"""
 	#---------------------------------------------------------------
 	# Handle 'on doubleclick' on sash
 	#---------------------------------------------------------------
