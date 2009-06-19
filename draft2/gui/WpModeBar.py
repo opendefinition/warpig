@@ -35,7 +35,7 @@ class WpModeBar( wx.lib.agw.labelbook.LabelBook ):
 		
 		## Styling
 		self.AssignImageList( self._imagelist )
-		
+
 		self.SetColour( INB_TAB_AREA_BACKGROUND_COLOR, "#505151" )
 		self.SetColour( INB_ACTIVE_TAB_COLOR, "#eeeeee" )
 		self.SetColour( INB_TABS_BORDER_COLOR, "#e0e0e0" )

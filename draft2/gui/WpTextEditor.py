@@ -137,10 +137,11 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		##
 		# Global default styles for all languages
 		##
-		self.StyleSetSpec( 0, "back:#232323,fore:#FFFFFF")
-		self.StyleSetSpec( wx.stc.STC_STYLE_DEFAULT, "back:#232323,fore:#505151")	
-		self.StyleSetSpec( wx.stc.STC_STYLE_BRACELIGHT, "fore:#00FF00,back:#232323,bold" )
-		self.StyleSetSpec( wx.stc.STC_STYLE_BRACEBAD, "fore:#00FF00,back:#232323,bold" )
+		self.StyleSetSpec( 0, "back:#FFFFFF,fore:#FFFFFF")
+		self.StyleSetSpec( wx.stc.STC_STYLE_DEFAULT, "back:#FFFFFF,fore:#505151")	
+		#self.StyleSetSpec( wx.stc.STC_STYLE_DEFAULT, "back:#FFFFFF,fore:#FFFFFF")	
+		self.StyleSetSpec( wx.stc.STC_STYLE_BRACELIGHT, "fore:#00FF00,back:#FFFFFF,bold" )
+		self.StyleSetSpec( wx.stc.STC_STYLE_BRACEBAD, "fore:#00FF00,back:#FFFFFF,bold" )
 		
 		##
 		# Python styles
@@ -161,78 +162,78 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		##
 		# Default
 		##
-		self.StyleSetSpec( wx.stc.STC_P_DEFAULT, "fore:#000000,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_DEFAULT, "fore:#000000,back:#FFFFFF" )
 	
 		##
 		# Linenumbers
 		##
-		self.StyleSetSpec( wx.stc.STC_STYLE_LINENUMBER, "fore:#555753,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_STYLE_LINENUMBER, "fore:#555753,back:#FFFFFF" )
 		
 		##
 		# Comments
 		##
-		self.StyleSetSpec( wx.stc.STC_P_COMMENTLINE, "fore:#00FF00,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_COMMENTLINE, "fore:#00FF00,back:#FFFFFF" )
 		
 		##
 		# Comment-blocks
 		##
-		self.StyleSetSpec( wx.stc.STC_P_COMMENTBLOCK, "fore:#00FF00,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_COMMENTBLOCK, "fore:#00FF00,back:#FFFFFF" )
 		
 		##
 		# Number
 		##
-		self.StyleSetSpec( wx.stc.STC_P_NUMBER, "fore:#D42C5C,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_NUMBER, "fore:#D42C5C,back:#FFFFFF" )
 		
 		##
 		# String
 		##
-		self.StyleSetSpec( wx.stc.STC_P_STRING, "fore:#C83430,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_STRING, "fore:#C83430,back:#FFFFFF" )
 	
 		##
 		# Single quoted string
 		##
-		self.StyleSetSpec( wx.stc.STC_P_CHARACTER, "fore:#C83430,back:#232323" )  
+		self.StyleSetSpec( wx.stc.STC_P_CHARACTER, "fore:#C83430,back:#FFFFFF" )  
 		
 		##
 		# Keyword
 		##
-		self.StyleSetSpec( wx.stc.STC_P_WORD, "fore:#097AC2,bold,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_WORD, "fore:#097AC2,bold,back:#FFFFFF" )
 		
 		##
 		# Triple quotes
 		##
-		self.StyleSetSpec( wx.stc.STC_P_TRIPLE, "fore:#C83430back:#232323" ) 
+		self.StyleSetSpec( wx.stc.STC_P_TRIPLE, "fore:#C83430back:#FFFFFF" ) 
 		
 		##
 		# Triple double quotes
 		##
-		self.StyleSetSpec( wx.stc.STC_P_TRIPLEDOUBLE, "fore:#C83430,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_TRIPLEDOUBLE, "fore:#C83430,back:#FFFFFF" )
 		
 		##
 		# Class name definition
 		##
-		self.StyleSetSpec( wx.stc.STC_P_CLASSNAME, "fore:#E78B0B,back:#232323" )
-		self.StyleSetSpec( wx.stc.STC_P_CLASSNAME, "fore:#E78B0B,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_CLASSNAME, "fore:#E78B0B,back:#FFFFFF" )
+		self.StyleSetSpec( wx.stc.STC_P_CLASSNAME, "fore:#E78B0B,back:#FFFFFF" )
 		
 		##
 		# Function or method name definition
 		##
-		self.StyleSetSpec( wx.stc.STC_P_DEFNAME, "fore:#E78B0B,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_DEFNAME, "fore:#E78B0B,back:#FFFFFF" )
 		
 		##
 		# Operators
 		##
-		self.StyleSetSpec( wx.stc.STC_P_OPERATOR, "fore:#00FF00,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_OPERATOR, "fore:#00FF00,back:#FFFFFF" )
 		
 		##
 		# Identifiers
 		##
-		self.StyleSetSpec( wx.stc.STC_P_IDENTIFIER, "fore:#E5E5E5,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_IDENTIFIER, "fore:#E5E5E5,back:#FFFFFF" )
 		
 		##
 		# End of line where string is not closed
 		##
-		self.StyleSetSpec( wx.stc.STC_P_STRINGEOL, "fore:#55FF55,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_STRINGEOL, "fore:#55FF55,back:#FFFFFF" )
 		
 		##
 		# Caret

@@ -15,6 +15,8 @@ import wx
 import wx.lib.flatnotebook as fnb
 import wx.stc as stc
 
+from wx.lib.agw import buttonpanel as bp
+
 from gui.WpNoteBook import WpNoteBook
 from system.WpFileSystem import WpFileSystem
 
@@ -37,11 +39,31 @@ class WpSplitRightPanel( wx.Panel ):
 		self.flexgrid = wx.FlexGridSizer( 1, 1, 0, 0 )
 		
 		##
+		# Button panel
+		##
+		self.alignment = bp.BP_ALIGN_LEFT
+		self.style = bp.BP_USE_GRADIENT
+		self.buttonpanel = bp.ButtonPanel(self, -1, "", style=self.style, alignment=self.alignment)
+	
+		btn1 = bp.ButtonInfo(self.buttonpanel, wx.NewId(), wx.Bitmap("./gui/icons/document-new.png", wx.BITMAP_TYPE_PNG))
+		self.buttonpanel.AddButton(btn1)
+		btn2 = bp.ButtonInfo(self.buttonpanel, wx.NewId(), wx.Bitmap("./gui/icons/folder.png", wx.BITMAP_TYPE_PNG))
+		self.buttonpanel.AddButton(btn2)
+		btn3 = bp.ButtonInfo(self.buttonpanel, wx.NewId(), wx.Bitmap("./gui/icons/media-floppy.png", wx.BITMAP_TYPE_PNG))
+		self.buttonpanel.AddButton(btn3)
+		
+		self.buttonpanel.DoLayout()
+		
+		self.somesizer = wx.BoxSizer( wx.VERTICAL )
+		self.somesizer.Add( self.buttonpanel, 0, wx.EXPAND )
+		self.somesizer.Add( self._SetupNotebook(), 1, wx.EXPAND )
+		
+		##
 		# Main widget
 		##
 		self.flexgrid.AddMany(
 			[
-				( self._SetupNotebook(), 0, wx.EXPAND )
+				( self.somesizer, 0, wx.EXPAND )
 			]
 		) 
 	

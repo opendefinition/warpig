@@ -41,7 +41,7 @@ class WpMainPanel( wx.Panel ):
 		##
 		self.flexgrid = wx.FlexGridSizer( 1, 2, 0, 0 )
 	
-		self.splitter = wx.SplitterWindow( self, 1333, style=wx.SP_NO_XP_THEME | wx.SP_3DSASH )
+		self.splitter = wx.SplitterWindow( self, 1333, style=wx.SP_3DSASH )
 		self.splitter.SetMinimumPaneSize( 1 )
 		self.rightsplit = WpSplitRightPanel( self.splitter )
 		self.leftsplit = WpSplitLeftPanel( self.splitter, self.rightsplit )
@@ -63,7 +63,7 @@ class WpMainPanel( wx.Panel ):
 		##
 		# Mode Bar
 		##
-		modebar = WpModeBar( self )
+		modebar = WpModeBar( self )#, style=wx.lib.agw.labelbook.INB_GRADIENT_BACKGROUND )
 	
 		# Adding icons
 		modebar.SetIconPath( "./gui/icons/modebar" )
