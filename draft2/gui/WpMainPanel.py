@@ -49,6 +49,7 @@ class WpMainPanel( wx.Panel ):
 		self.splitter.SplitVertically( self.rightsplit, self.leftsplit )		
 		self.splitter.SetSashPosition( -1, True )
 		self.splitter.SetBorderSize( 0 )
+		self.sashpos = None
 
 		##
 		# Binding the splitter
@@ -75,13 +76,13 @@ class WpMainPanel( wx.Panel ):
 	def ResizeSash( self ):
 		windowsize = self.splitter.GetSize()[0]
 		sashpos = self.splitter.GetSashPosition()
-		
-		size = windowsize-sashpos
-	
-		if size <= 5:
+			
+		if self.sashpos == None or self.sashpos < sashpos:
 			self.splitter.SetSashPosition( (windowsize-200), True )
 		else:
 			self.splitter.SetSashPosition( -1, True )
+			
+		self.sashpos = sashpos
 	
 	#---------------------------------------------------------------
 	# Set up toolbar
