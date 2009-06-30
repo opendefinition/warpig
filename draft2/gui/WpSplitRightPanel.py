@@ -45,14 +45,29 @@ class WpSplitRightPanel( wx.Panel ):
 		self.style = bp.BP_USE_GRADIENT
 		self.buttonpanel = bp.ButtonPanel(self, -1, "", style=self.style, alignment=self.alignment)
 	
-		btn1 = bp.ButtonInfo(self.buttonpanel, wx.NewId(), wx.Bitmap("./gui/icons/document-new.png", wx.BITMAP_TYPE_PNG))
+		btn1 = bp.ButtonInfo( self.buttonpanel, 
+								wx.ID_NEW, 
+								wx.Bitmap("./gui/icons/document-new.png", wx.BITMAP_TYPE_PNG)
+								)
 		self.buttonpanel.AddButton(btn1)
-		btn2 = bp.ButtonInfo(self.buttonpanel, wx.NewId(), wx.Bitmap("./gui/icons/folder.png", wx.BITMAP_TYPE_PNG))
+		 
+		btn2 = bp.ButtonInfo( self.buttonpanel, 
+								wx.ID_OPEN, 
+								wx.Bitmap("./gui/icons/folder.png", wx.BITMAP_TYPE_PNG)
+								)
 		self.buttonpanel.AddButton(btn2)
-		btn3 = bp.ButtonInfo(self.buttonpanel, wx.NewId(), wx.Bitmap("./gui/icons/media-floppy.png", wx.BITMAP_TYPE_PNG))
+		
+		btn3 = bp.ButtonInfo( self.buttonpanel, 
+								wx.ID_SAVE, 
+								wx.Bitmap("./gui/icons/media-floppy.png", wx.BITMAP_TYPE_PNG)
+								)
 		self.buttonpanel.AddButton(btn3)
 		
 		self.buttonpanel.DoLayout()
+		
+		self.Bind( wx.EVT_BUTTON, self.Parent.Parent._OnToolBarNewPage, id=btn1.GetId() )
+		self.Bind( wx.EVT_BUTTON, self.Parent.Parent._OnToolBarOpenPage, id=btn2.GetId() )
+		self.Bind( wx.EVT_BUTTON, self.Parent.Parent._OnToolBarSavePage, id=btn3.GetId() )
 		
 		self.somesizer = wx.BoxSizer( wx.VERTICAL )
 		self.somesizer.Add( self.buttonpanel, 0, wx.EXPAND )
@@ -72,7 +87,7 @@ class WpSplitRightPanel( wx.Panel ):
 		
 		self.mainsizer.Add( self.flexgrid, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer )	
-	
+
 	#---------------------------------------------------------------
 	# Setup notebook page 
 	# @return object notebook

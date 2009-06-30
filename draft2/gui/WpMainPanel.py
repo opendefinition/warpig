@@ -46,7 +46,7 @@ class WpMainPanel( wx.Panel ):
 		self.rightsplit = WpSplitRightPanel( self.splitter )
 		self.leftsplit = WpSplitLeftPanel( self.splitter, self.rightsplit )
 		# self.splitter.SplitVertically( self.leftsplit, self.rightsplit )
-		self.splitter.SplitVertically( self.rightsplit, self.leftsplit )
+		self.splitter.SplitVertically( self.rightsplit, self.leftsplit )		
 		self.splitter.SetSashPosition( -1, True )
 		self.splitter.SetBorderSize( 0 )
 
@@ -60,31 +60,7 @@ class WpMainPanel( wx.Panel ):
 		## 
 		mainsizer = wx.BoxSizer( wx.HORIZONTAL) 
 		
-		##
-		# Mode Bar
-		##
-		modebar = WpModeBar( self )#, style=wx.lib.agw.labelbook.INB_GRADIENT_BACKGROUND )
-	
-		# Adding icons
-		modebar.SetIconPath( "./gui/icons/modebar" )
-		modebar.AddIcon( "internet-web-browser.png" )
-		modebar.AddIcon( "accessories-text-editor.png" ) 
-		modebar.AddIcon( "utilities-terminal.png" )
-		
-		# Channel browser component
-		html =  HtmlWindow( self, wx.ID_ANY )
-		html.LoadFile( "./infochannel.html" )
-		
-		# Add modes to modebar
-		modebar.AddModePage( html, "Info", True, 0 )
-		modebar.AddModePage( self.splitter, "Editor", True, 1 )
-		modebar.AddModePage( py.crust.Crust( self, -1 ) , "Terminal", True, 2 )
-    
-    	# Run/Render/Populate modebar
-		modebar.Run()
-		
-		mainsizer.Add( modebar, 1, wx.EXPAND )
-		
+		mainsizer.Add( self.splitter, 1, wx.EXPAND )
 		self.SetSizer( mainsizer )		
 	
 	#---------------------------------------------------------------
@@ -97,8 +73,13 @@ class WpMainPanel( wx.Panel ):
 	# Handling resizing of sash
 	#---------------------------------------------------------------
 	def ResizeSash( self ):
-		if( self.splitter.GetSashPosition() == 1 ):
-			self.splitter.SetSashPosition( -200, True )
+		windowsize = self.splitter.GetSize()[0]
+		sashpos = self.splitter.GetSashPosition()
+		
+		size = windowsize-sashpos
+	
+		if size <= 5:
+			self.splitter.SetSashPosition( (windowsize-200), True )
 		else:
 			self.splitter.SetSashPosition( -1, True )
 	
