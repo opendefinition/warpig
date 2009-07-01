@@ -13,22 +13,40 @@
 import wx
 
 from gui.preferences.WpTreePanel import WpTreePanel
-from gui.preferences.WpContentPanel import WpContentPanel
+from gui.preferences.WpPreferenceTree import WpPreferenceTree
 
 class WpPreferences( wx.Dialog ):
 	def __init__( self ):
 		
 		wx.Dialog.__init__( self, None, wx.ID_ANY, 'WarPig Preferences', size=(600, 600) )
 		
-		self.splitter = wx.SplitterWindow( self, wx.ID_ANY )
-						self.treepanel = WpTreePanel( self.splitter )
-		self.contentpanel = WpContentPanel( self.splitter )
-		
-		self.splitter.SetSashPosition( 200, True )
-		self.splitter.SplitVertically( self.treepanel, self.contentpanel )
-		
-		sizer = wx.BoxSizer( wx.VERTICAL )
-		sizer.Add( self.splitter, 1, wx.EXPAND )
-		self.SetSizer( sizer, wx.EXPAND )
-	
+		self.Setup()
 		self.Center()
+		
+	def Setup( self ):
+		##
+		# Mainpanel to hold everything
+		##
+		sizeHeight = self.GetSize()[1]
+		sizeWidth = self.GetSize()[0]
+
+		self.mainpanel = wx.Panel( self, -1, size=( sizeHeight, sizeWidth ) )
+		self.panelsizer = wx.BoxSizer( wx.VERTICAL ) 
+		
+		##
+		# Preferencetree widget
+		##
+		self.preferencetree = WpPreferenceTree( self.mainpanel, -1 )
+		
+		##
+		# Mainsizer
+		self.mainsizer = wx.BoxSizer( wx.VERTICAL )
+		
+		##
+		# Sewing it all together
+		##
+		##
+		self.panelsizer.Add( self.preferencetree, 1, wx.EXPAND )
+		self.mainsizer.Add( self.panelsizer, 1, wx.EXPAND )
+		self.SetSizer( self.mainsizer, wx.EXPAND )
+		
