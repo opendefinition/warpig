@@ -1,5 +1,7 @@
 import wx
 
+from gui.preferences.WpEditorSettings import WpEditorSettings
+
 class WpPreferenceTree( wx.Treebook ):
 	def __init__(self, parent, id ):
 		wx.Treebook.__init__(self, parent, id, style=wx.BK_DEFAULT|wx.EXPAND )
@@ -24,7 +26,7 @@ class WpPreferenceTree( wx.Treebook ):
 		##
 		
 		self.AddPage( testpanel1, "General" )
-		self.AddSubPage( wx.Panel( self, -1 ), "Editor" )
+		self.AddSubPage( WpEditorSettings( self ), "Editor" )
 		self.AddSubPage( wx.Panel( self, -1 ), "Fonts" )
 		self.AddPage( testpanel2, "Look and feel" )
 		self.AddPage( testpanel3, "VCS" )

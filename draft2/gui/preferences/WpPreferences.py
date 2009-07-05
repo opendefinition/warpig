@@ -12,7 +12,6 @@
 
 import wx
 
-from gui.preferences.WpTreePanel import WpTreePanel
 from gui.preferences.WpPreferenceTree import WpPreferenceTree
 
 class WpPreferences( wx.Dialog ):

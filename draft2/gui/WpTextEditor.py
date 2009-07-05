@@ -337,6 +337,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 					selection = 0
 				else:
 					selection = selected-1
+				
 				self.Parent.DeletePage( selected )		# Delete unwanted tab	
 				self.Parent.SetSelection( selection )	# Set focus to neighbour tab
 				
