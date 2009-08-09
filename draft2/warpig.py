@@ -13,6 +13,7 @@
 import sys
 import wx
 
+
 from gui.WpMainFrame import WpMainFrame
 
 class WpWarPig( wx.App ):
