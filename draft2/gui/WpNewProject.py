@@ -13,6 +13,7 @@
 import re
 import wx
 import wx.lib.buttons as buttons
+import os
 
 from wx.lib.agw.multidirdialog import MultiDirDialog
 from system.WpFileSystem import WpFileSystem
@@ -128,7 +129,19 @@ class WpNewProject( wx.Dialog ):
 	# On adding files to project
 	#---------------------------------------------------------------
 	def _onAssociateFiles( self, event ):
-  		dialog = wx.lib.agw.multidirdialog.MultiDirDialog( None, 'New Project', 'Associate folders', defaultPath='/Users' )
+		## Find out where base path is dependend on platform
+		## TODO: Probably change this into the users own home directories in order to 
+		## avoid having to load to much information. 
+		opsysname = os.name
+		
+		if opsysname == 'nt':
+			basepath = 'C:\\'
+		elif opsysname == 'posix': 
+			basepath = '/'
+		elif opsysname == 'mac':
+			basepath = '/Users'
+	
+  		dialog = wx.lib.agw.multidirdialog.MultiDirDialog( None, 'New Project', 'Associate folders', defaultPath=basepath )
   		
   		if dialog.ShowModal() == wx.ID_OK:
 			paths = dialog.GetPaths()
