@@ -37,8 +37,9 @@ def main(argv):
 			# Update engine
 			print 'Running update engine (not implemented)'
 		if argv[1] == '--setup':
-			RunSetup()
-			
+			RunSetup() # a setup is basically a full reset
+		if argv[1] == '--reset':
+			RunSetup() # a reset is basically a new installation			
 	else:
 		# Boot
 		app = WpWarPig( 0 )
