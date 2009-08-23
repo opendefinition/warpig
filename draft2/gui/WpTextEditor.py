@@ -285,7 +285,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	# Handle key events
 	#---------------------------------------------------------------
 	def _OnKeyDown( self, event ):
-		print "Key #", event.GetUniChar(), " CmdDown is ", event.CmdDown()
+		## print "Key #", event.GetUniChar(), " CmdDown is ", event.CmdDown()
 		key = event.GetUniChar()
 		cmd = event.CmdDown()
 		
@@ -301,7 +301,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			# Add new page with editor to current notebook instance
 			##
 			if( key == 78 or key == 110 ):
-				print "Adding new empty page"
 				self.parent.AddDefaultPage()
 				return
 				
@@ -309,7 +308,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			# Open file
 			## 
 			if( key == 79 or key == 111 ):
-				print "Trying to open file"
 				self.Parent.Parent.Parent.Parent.OpenPage() # :)
 				return
 				

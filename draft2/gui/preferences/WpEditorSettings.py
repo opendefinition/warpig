@@ -23,29 +23,25 @@ class WpEditorSettings( wx.Panel ):
 		None
 		
 	def Setup( self ):
-		self.mainsizer = wx.BoxSizer( wx.VERTICAL )
+		self.mainSizer = wx.FlexGridSizer( rows=4, cols=1, vgap=5, hgap=5 )
+		self.saveBt = wx.Button( self, wx.ID_ANY, 'Save' )
 		
-		self.mainsizer.Add( self.TabSetting() )
-		self.mainsizer.Add( self.StaticLine() )
-		self.mainsizer.Add( self.MarginSetting() )
-		self.mainsizer.Add( self.StaticLine() )
-		self.mainsizer.Add( self.FontSetting() )
-		self.mainsizer.Add( self.StaticLine() )
+		self.mainSizer.AddMany(
+			[
+				( self.TabSetting(), 1, wx.EXPAND ),
+				( self.MarginSetting(), 1, wx.EXPAND ),
+				( self.FontSetting(), 1, wx.EXPAND ),
+				( self.saveBt, 1, wx.EXPAND )
+			]
+		) 
 		
-		savebt = wx.Button( self, wx.ID_ANY, 'Save' )
-		self.mainsizer.Add( savebt )
-		
-		self.SetSizer( self.mainsizer, wx.EXPAND )
+		self.SetSizer( self.mainSizer, wx.EXPAND )
 		
 		## Bind Savebutton
-		self.Bind( wx.EVT_BUTTON, self.OnSaveSettings, id=savebt.GetId() )
-		
-		
-	def StaticLine( self ): 
-		return wx.StaticLine( self, wx.ID_ANY, size=(100,-1), style=wx.LI_HORIZONTAL )
+		self.Bind( wx.EVT_BUTTON, self.OnSaveSettings, id=self.saveBt.GetId() )
 		
 	def TabSetting( self ):
-		sizer = wx.BoxSizer( wx.VERTICAL )
+		sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
 		inputsizer =  wx.BoxSizer( wx.HORIZONTAL )
 		checkboxsizer =  wx.BoxSizer( wx.HORIZONTAL )
@@ -71,6 +67,7 @@ class WpEditorSettings( wx.Panel ):
 		
 		label = wx.StaticText( self, wx.ID_ANY, "Margin size: " )
 		self.marginSizeInput = wx.TextCtrl( self, wx.ID_ANY, size=(100, -1) )
+		self.marginSizeInput.SetValue( self.configobj.settings['editor-textmargin'] )
 		
 		marginsizer.Add( label )
 		marginsizer.Add( self.marginSizeInput )
@@ -78,49 +75,51 @@ class WpEditorSettings( wx.Panel ):
 		return marginsizer
 		
 	def FontSetting( self ):
+		## Sizers
 		sizer = wx.BoxSizer( wx.VERTICAL )
+		fontSizer =  wx.FlexGridSizer(rows=2, cols=2, vgap=0, hgap=0)
 		
-		fontsizesizer = wx.BoxSizer( wx.HORIZONTAL )
-		label = wx.StaticText( self, wx.ID_ANY, "Font size: " )
+		## Font size selector
+		fontSizes = ['9','10','11','12', '13','14','15','16','17','18','19','20']
+		fontSizeLabel = wx.StaticText( self, wx.ID_ANY, 'Font size' )
+		self.fontSizeSelect = wx.Choice( self, -1, (100, 50), choices=fontSizes )
 		
-		fontsizes = ['9','10','11','12', '13','14','15','16','17','18','19','20']
-		
-		self.fontsizeinput = wx.Choice( self, -1, (100, 50), choices=fontsizes )
-		fontsizesizer.Add( label )
-		fontsizesizer.Add( self.fontsizeinput )
-		
-		fontfamilysizer = wx.BoxSizer( wx.VERTICAL )
-		fontfamilylabel = wx.StaticText( self, wx.ID_ANY, "Font family: " )
-		
-		## Getting system fonts
+		## Font family selector
+		fontFamilylabel = wx.StaticText( self, wx.ID_ANY, 'Font family' )
 		enumerator = wx.FontEnumerator()
 		enumerator.EnumerateFacenames()
 		fontlist = enumerator.GetFacenames()
 		
-		## Font list control
-		self.fontlistctrl = wx.ListBox( self, wx.ID_ANY, choices=fontlist )
+		self.fontListCtrl = wx.ListBox( self, wx.ID_ANY, choices=fontlist )
+				
+		## Grouping
+		fontSizer.AddMany(
+			[
+				( fontSizeLabel, 1, wx.EXPAND ),
+				( fontFamilylabel, 1, wx.EXPAND ),
+				( self.fontListCtrl, 1, wx.EXPAND ),
+				( self.fontSizeSelect, 1, wx.EXPAND )
+			]
+		) 
 		
 		## Demo text
-		self.demotext = wx.StaticText( self, wx.ID_ANY, "Fear of the D'Arc..." )
-		
-		fontfamilysizer.Add( fontfamilylabel )
-		fontfamilysizer.Add( self.fontlistctrl )
-		fontfamilysizer.Add( self.demotext )
-		
-		sizer.Add( fontsizesizer )
-		sizer.Add( fontfamilysizer )
-		
+		self.previewText = wx.StaticText( self, wx.ID_ANY, "Warpig Code Environment Text" )
+
 		## Font events
-		self.Bind( wx.EVT_LISTBOX, self.OnFontSelect, id=self.fontlistctrl.GetId() )
+		self.Bind( wx.EVT_CHOICE, self.OnFontSelect, id=self.fontSizeSelect.GetId() )
+		self.Bind( wx.EVT_LISTBOX, self.OnFontSelect, id=self.fontListCtrl.GetId() )
 		
+		## Adding controllers to main sizer
+		sizer.Add( fontSizer )
+		sizer.Add( self.previewText )
 		return sizer
 
 	def OnFontSelect( self, event ):
-		face = self.fontlistctrl.GetStringSelection()
-		size = int( self.fontsizeinput.GetString( self.fontsizeinput.GetSelection() ) )
+		face = self.fontListCtrl.GetStringSelection()
+		size = int( self.fontSizeSelect.GetString( self.fontSizeSelect.GetSelection() ) )
 	
 		font = wx.Font( size, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, face )
-		self.demotext.SetFont( font )
+		self.previewText.SetFont( font )
 		
 	def OnSaveSettings( self, event ):
 		db = WpDatabaseAPI()
@@ -131,8 +130,8 @@ class WpEditorSettings( wx.Panel ):
 		self.configobj.settings['editor-textmargin'] = textMarginValue
 		
 		## Saving fonts
-		fontFace = self.fontlistctrl.GetStringSelection()
-		fontSize = int( self.fontsizeinput.GetString( self.fontsizeinput.GetSelection() ) )
+		fontFace = self.fontListCtrl.GetStringSelection()
+		fontSize = int( self.fontSizeSelect.GetString( self.fontSizeSelect.GetSelection() ) )
 		
 		db.AddRegisterSetting( 'fontface', fontFace, 'editor' )
 		self.configobj.settings['editor-fontface'] = fontFace
