@@ -23,6 +23,10 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	
 	def __init__( self, parent ):
 		self.parent = parent
+		
+		## Database
+		db = WpDatabaseAPI()
+		
 		##
 		# We always construct parent with wx.TE_MULTILINE
 		##
@@ -34,14 +38,22 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		self.SetMarginType( 0, wx.stc.STC_MARGIN_NUMBER ) 	# Line numbering
 		self.SetMarginWidth( 0, 35 ) 						# Margin for line numbering
 		self.SetEdgeColour( "#555753" )
-		self.SetEdgeColumn( 200 )
+		
+		
+		## Text margin
+		textMarginResult = db.GetRegisterSetting( 'textmargin', 'editor' )
+		
+		if len(textMarginResult) > 0:
+			textMarginWidth =  int(textMarginResult[0][1])
+		else:
+			textMarginWidth = 80;
+			
+		self.SetEdgeColumn( textMarginWidth )	# Text margin
 		self.SetEdgeMode( wx.stc.STC_EDGE_LINE )
 		
 		##
-		# Fonts - always load from database, if fonts isn't defined, go with the defaults
-		##	
-		db = WpDatabaseAPI()
-		
+		# Fonts
+		##
 		fontFaceResult = db.GetRegisterSetting( 'fontface' ,'editor' ) # to be refactored
 		fontSizeResult = db.GetRegisterSetting( 'fontsize' ,'editor' ) # to be refactored
 		

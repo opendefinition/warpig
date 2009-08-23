@@ -55,10 +55,10 @@ class WpEditorSettings( wx.Panel ):
 		marginsizer = wx.BoxSizer( wx.HORIZONTAL )
 		
 		label = wx.StaticText( self, wx.ID_ANY, "Margin size: " )
-		marginsizeinput = wx.TextCtrl( self, wx.ID_ANY, size=(100, -1) )
+		self.marginSizeInput = wx.TextCtrl( self, wx.ID_ANY, size=(100, -1) )
 		
 		marginsizer.Add( label )
-		marginsizer.Add( marginsizeinput )
+		marginsizer.Add( self.marginSizeInput )
 		
 		return marginsizer
 		
@@ -95,7 +95,7 @@ class WpEditorSettings( wx.Panel ):
 		sizer.Add( fontsizesizer )
 		sizer.Add( fontfamilysizer )
 		
-		## Testing font events
+		## Font events
 		self.Bind( wx.EVT_LISTBOX, self.OnFontSelect, id=self.fontlistctrl.GetId() )
 		
 		return sizer
@@ -109,6 +109,10 @@ class WpEditorSettings( wx.Panel ):
 		
 	def OnSaveSettings( self, event ):
 		db = WpDatabaseAPI()
+		
+		## Savin margin settings
+		textMarginValue = self.marginSizeInput.GetValue()
+		db.AddRegisterSetting( 'textmargin', textMarginValue, 'editor' )
 		
 		## Saving fonts
 		fontFace = self.fontlistctrl.GetStringSelection()
