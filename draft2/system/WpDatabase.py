@@ -10,8 +10,11 @@ class WpDatabase():
 		@return Boolean status
 		"""
 		try:
+
 			self.connection = connect( self.dbName )
+
 			self.cursor = self.connection.cursor()
+			self.connection.row_factory = sqlite3.Row
 			
 			return True
 		except:
@@ -54,7 +57,7 @@ class WpDatabase():
 		
 		self.cursor.execute( querystring )
 		self.connection.commit()
-		retval = self.cursor
+		retval = self.cursor.fetchall()
 		
 		self.__Close()
 		

@@ -1,4 +1,5 @@
 import wx
+from system.WpDatabaseAPI import WpDatabaseAPI
 
 class WpEditorSettings( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
@@ -16,7 +17,13 @@ class WpEditorSettings( wx.Panel ):
 		self.mainsizer.Add( self.FontSetting() )
 		self.mainsizer.Add( self.StaticLine() )
 		
+		savebt = wx.Button( self, wx.ID_ANY, 'Save' )
+		self.mainsizer.Add( savebt )
+		
 		self.SetSizer( self.mainsizer, wx.EXPAND )
+		
+		## Bind Savebutton
+		self.Bind( wx.EVT_BUTTON, self.OnSaveSettings, id=savebt.GetId() )
 		
 		
 	def StaticLine( self ): 
@@ -60,17 +67,52 @@ class WpEditorSettings( wx.Panel ):
 		
 		fontsizesizer = wx.BoxSizer( wx.HORIZONTAL )
 		label = wx.StaticText( self, wx.ID_ANY, "Font size: " )
-		fontsizeinput = wx.TextCtrl( self, wx.ID_ANY, size=(100, -1) )
-		fontsizesizer.Add( label )
-		fontsizesizer.Add( fontsizeinput )
 		
-		fontfamilysizer = wx.BoxSizer( wx.HORIZONTAL )
+		fontsizes = ['9','10','11','12', '13','14','15','16','17','18','19','20']
+		
+		self.fontsizeinput = wx.Choice( self, -1, (100, 50), choices=fontsizes )
+		fontsizesizer.Add( label )
+		fontsizesizer.Add( self.fontsizeinput )
+		
+		fontfamilysizer = wx.BoxSizer( wx.VERTICAL )
 		fontfamilylabel = wx.StaticText( self, wx.ID_ANY, "Font family: " )
-		fontfamilyinput = wx.TextCtrl( self, wx.ID_ANY, size=(100, -1) )
+		
+		## Getting system fonts
+		enumerator = wx.FontEnumerator()
+		enumerator.EnumerateFacenames()
+		fontlist = enumerator.GetFacenames()
+		
+		## Font list control
+		self.fontlistctrl = wx.ListBox( self, wx.ID_ANY, choices=fontlist )
+		
+		## Demo text
+		self.demotext = wx.StaticText( self, wx.ID_ANY, "Fear of the D'Arc..." )
+		
 		fontfamilysizer.Add( fontfamilylabel )
-		fontfamilysizer.Add( fontfamilyinput )
+		fontfamilysizer.Add( self.fontlistctrl )
+		fontfamilysizer.Add( self.demotext )
 		
 		sizer.Add( fontsizesizer )
 		sizer.Add( fontfamilysizer )
-		return sizer
 		
+		## Testing font events
+		self.Bind( wx.EVT_LISTBOX, self.OnFontSelect, id=self.fontlistctrl.GetId() )
+		
+		return sizer
+
+	def OnFontSelect( self, event ):
+		face = self.fontlistctrl.GetStringSelection()
+		size = int( self.fontsizeinput.GetString( self.fontsizeinput.GetSelection() ) )
+	
+		font = wx.Font( size, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, face )
+		self.demotext.SetFont( font )
+		
+	def OnSaveSettings( self, event ):
+		db = WpDatabaseAPI()
+		
+		## Saving fonts
+		fontFace = self.fontlistctrl.GetStringSelection()
+		fontSize = int( self.fontsizeinput.GetString( self.fontsizeinput.GetSelection() ) )
+		
+		db.AddRegisterSetting( 'fontface', fontFace, 'editor' )
+		db.AddRegisterSetting( 'fontsize', fontSize, 'editor' )

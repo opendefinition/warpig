@@ -16,6 +16,7 @@ import re
 import wx
 
 from system.WpFileSystem import WpFileSystem
+from system.WpDatabaseAPI import WpDatabaseAPI
 
 class WpTextEditor( wx.stc.StyledTextCtrl ):
 	_curr_file_path = None
@@ -37,17 +38,32 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		self.SetEdgeMode( wx.stc.STC_EDGE_LINE )
 		
 		##
-		# Fonts
-		##
-		font = wx.Font(
-				11,						# Pointsize
-				wx.FONTFAMILY_SWISS,	# Family
-				wx.NORMAL,				# Style
-				wx.NORMAL,				# Weight
-				0,						# Underline
-				'Verdana',				# Face
-				wx.FONTENCODING_UTF8	# ENCODING
-			)
+		# Fonts - always load from database, if fonts isn't defined, go with the defaults
+		##	
+		db = WpDatabaseAPI()
+		
+		fontFaceResult = db.GetRegisterSetting( 'fontface' ,'editor' ) # to be refactored
+		fontSizeResult = db.GetRegisterSetting( 'fontsize' ,'editor' ) # to be refactored
+		
+		if ( len( fontFaceResult )+len(fontSizeResult) ) > 0:
+			face = fontFaceResult[0][1]
+			size = int( fontSizeResult[0][1] )
+		else:
+			face = 'Verdana'
+			size = 12
+			
+		font = wx.Font( 
+					size, 
+					wx.DEFAULT, 
+					wx.NORMAL, 
+					wx.NORMAL, 
+					False, 
+					face, 
+					wx.FONTENCODING_UTF8 
+				)
+	
+		## We must tell StyleSetSpec to use this face and size otherwise it won't get applied
+		self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (face, size))
 		
 		##
 		# Code folding

@@ -24,4 +24,6 @@ class WpDatabaseAPI( WpDatabase ):
 		Obtain register setting identified by key
 		"""
 		query = "SELECT key, value, module FROM systemregistry WHERE key='%s' AND module='%s';" % ( key, module )
-		return self.Select( query )
+		result = self.Select( query )
+		
+		return result
