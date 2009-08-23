@@ -1,4 +1,15 @@
-## Load config from database using borg pattern (see class WpConfigSystem)
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpConfigLoader
+# Desc: 
+# 	Load config from database using borg pattern (see class WpConfigSystem)
+#
+#---------------------------------------------------------------------------
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#---------------------------------------------------------------------------
 
 from system.WpDatabaseAPI import WpDatabaseAPI
 from system.WpConfigSystem import WpConfigSystem

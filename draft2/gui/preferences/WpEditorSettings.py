@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpEditorSettings
+# Desc: 
+# 	GUI dialog for managing editor settings
+#
+#---------------------------------------------------------------------------
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#---------------------------------------------------------------------------
+
 import wx
 from system.WpDatabaseAPI import WpDatabaseAPI
 from system.WpConfigSystem import WpConfigSystem

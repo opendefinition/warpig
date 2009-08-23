@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpDatabaseAPI
+# Desc: 
+# 	Database API for common database interaction
+#
+#---------------------------------------------------------------------------
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#---------------------------------------------------------------------------
+
 from system.WpDatabase import WpDatabase
 
 class WpDatabaseAPI( WpDatabase ):

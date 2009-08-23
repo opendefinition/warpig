@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*
+#---------------------------------------------------------------------------
+#
+# Class: WpDatabase
+# Desc: 
+# 	Database connection class
+#
+#---------------------------------------------------------------------------
+# Owner: Open Definition.
+# Author: Roger C.B. Johnsen.
+# License: Open Definiton General Lisence (ODGL). Available upon request.
+#---------------------------------------------------------------------------
+
+
 from sqlite3 import *
 
 class WpDatabase():
