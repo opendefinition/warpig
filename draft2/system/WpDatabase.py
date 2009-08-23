@@ -10,11 +10,8 @@ class WpDatabase():
 		@return Boolean status
 		"""
 		try:
-
 			self.connection = connect( self.dbName )
-
 			self.cursor = self.connection.cursor()
-			self.connection.row_factory = sqlite3.Row
 			
 			return True
 		except:
@@ -62,5 +59,9 @@ class WpDatabase():
 		self.__Close()
 		
 		return retval
+
+	def RunSqlScript( self, path ):
+		self.__Open()
+		self.connection.executescript(path)
 	
 		

@@ -13,8 +13,8 @@
 import sys
 import wx
 
-
 from gui.WpMainFrame import WpMainFrame
+from system.setup import RunSetup
 
 class WpWarPig( wx.App ):
 	"""
@@ -36,6 +36,9 @@ def main(argv):
 		if argv[1] == '--update':
 			# Update engine
 			print 'Running update engine (not implemented)'
+		if argv[1] == '--setup':
+			RunSetup()
+			
 	else:
 		# Boot
 		app = WpWarPig( 0 )

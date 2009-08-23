@@ -27,3 +27,9 @@ class WpDatabaseAPI( WpDatabase ):
 		result = self.Select( query )
 		
 		return result
+	
+	##---------------------------------------------------------------
+	## System Specific API Functions
+	##---------------------------------------------------------------
+	def RunScript( self, path ):
+		self.RunSqlScript( path )

@@ -10,3 +10,8 @@ CREATE TABLE systeminformation(
 	"key" VARCHAR(50) PRIMARY KEY NOT NULL,
 	"value" VARCHAR(50) DEFAULT NULL
 );
+
+-- DEFAULT EDITOR VALUES
+INSERT INTO systemregistry(key,value,module) VALUES ('fontface','Verdana','editor');
+INSERT INTO systemregistry(key,value,module) VALUES ('fontsize','12','editor');
+INSERT INTO systemregistry(key,value,module) VALUES ('textmargin','200','editor');

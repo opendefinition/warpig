@@ -44,7 +44,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		textMarginResult = db.GetRegisterSetting( 'textmargin', 'editor' )
 		
 		if len(textMarginResult) > 0:
-			textMarginWidth =  int(textMarginResult[0][1])
+			textMarginWidth =  int( textMarginResult[0][1] )
 		else:
 			textMarginWidth = 80;
 			
