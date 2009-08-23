@@ -15,6 +15,7 @@ import wx
 
 from gui.WpMainFrame import WpMainFrame
 from system.setup import RunSetup
+from system.WpConfigLoader import WpConfigLoader
 
 class WpWarPig( wx.App ):
 	"""
@@ -22,6 +23,9 @@ class WpWarPig( wx.App ):
 	"""
 	
 	def OnInit(self):
+		configuration = WpConfigLoader()
+		configuration.LoadConfig()
+
 		frame = WpMainFrame( None )
 		frame.Show()
 		self.SetTopWindow(frame)

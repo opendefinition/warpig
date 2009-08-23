@@ -1,9 +1,11 @@
 import wx
 from system.WpDatabaseAPI import WpDatabaseAPI
+from system.WpConfigSystem import WpConfigSystem
 
 class WpEditorSettings( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
 		wx.Panel.__init__( self, parent, *args, **kwargs )
+		self.configobj = WpConfigSystem()
 		self.Setup()
 		None
 		
@@ -113,10 +115,13 @@ class WpEditorSettings( wx.Panel ):
 		## Savin margin settings
 		textMarginValue = self.marginSizeInput.GetValue()
 		db.AddRegisterSetting( 'textmargin', textMarginValue, 'editor' )
+		self.configobj.settings['editor-textmargin'] = textMarginValue
 		
 		## Saving fonts
 		fontFace = self.fontlistctrl.GetStringSelection()
 		fontSize = int( self.fontsizeinput.GetString( self.fontsizeinput.GetSelection() ) )
 		
 		db.AddRegisterSetting( 'fontface', fontFace, 'editor' )
+		self.configobj.settings['editor-fontface'] = fontFace
 		db.AddRegisterSetting( 'fontsize', fontSize, 'editor' )
+		self.configobj.settings['editor-fontsize'] = int( fontSize )

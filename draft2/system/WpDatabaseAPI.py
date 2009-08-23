@@ -16,7 +16,7 @@ class WpDatabaseAPI( WpDatabase ):
 		@param Boolean status
 		"""
 		## TODO: Add validation to input parameters
-		query = "INSERT INTO systemregistry(key, value, module) VALUES('%s','%s','%s');" % ( key, value, module )
+		query = "UPDATE systemregistry SET value='%s' WHERE module='%s' AND key='%s';" % ( value, module, key )
 		return self.Insert( query )
 		
 	def GetRegisterSetting( self, key, module ):
@@ -24,6 +24,15 @@ class WpDatabaseAPI( WpDatabase ):
 		Obtain register setting identified by key
 		"""
 		query = "SELECT key, value, module FROM systemregistry WHERE key='%s' AND module='%s';" % ( key, module )
+		result = self.Select( query )
+		
+		return result
+		
+	def LoadRegistry(self):
+		"""
+		Obtain All Settings In Registry
+		"""
+		query = "SELECT key,value,module FROM systemregistry;"
 		result = self.Select( query )
 		
 		return result

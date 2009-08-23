@@ -16,16 +16,14 @@ import re
 import wx
 
 from system.WpFileSystem import WpFileSystem
-from system.WpDatabaseAPI import WpDatabaseAPI
+from system.WpConfigSystem import WpConfigSystem
 
 class WpTextEditor( wx.stc.StyledTextCtrl ):
 	_curr_file_path = None
 	
 	def __init__( self, parent ):
 		self.parent = parent
-		
-		## Database
-		db = WpDatabaseAPI()
+		self.configobj = WpConfigSystem()
 		
 		##
 		# We always construct parent with wx.TE_MULTILINE
@@ -39,31 +37,17 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		self.SetMarginWidth( 0, 35 ) 						# Margin for line numbering
 		self.SetEdgeColour( "#555753" )
 		
-		
 		## Text margin
-		textMarginResult = db.GetRegisterSetting( 'textmargin', 'editor' )
-		
-		if len(textMarginResult) > 0:
-			textMarginWidth =  int( textMarginResult[0][1] )
-		else:
-			textMarginWidth = 80;
-			
+		textMarginWidth = int( self.configobj.settings['editor-textmargin'] )
 		self.SetEdgeColumn( textMarginWidth )	# Text margin
 		self.SetEdgeMode( wx.stc.STC_EDGE_LINE )
 		
 		##
 		# Fonts
 		##
-		fontFaceResult = db.GetRegisterSetting( 'fontface' ,'editor' ) # to be refactored
-		fontSizeResult = db.GetRegisterSetting( 'fontsize' ,'editor' ) # to be refactored
+		size = int( self.configobj.settings['editor-fontsize'] )
+		face = self.configobj.settings['editor-fontface']
 		
-		if ( len( fontFaceResult )+len(fontSizeResult) ) > 0:
-			face = fontFaceResult[0][1]
-			size = int( fontSizeResult[0][1] )
-		else:
-			face = 'Verdana'
-			size = 12
-			
 		font = wx.Font( 
 					size, 
 					wx.DEFAULT, 
