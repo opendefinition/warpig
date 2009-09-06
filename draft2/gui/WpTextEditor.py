@@ -173,7 +173,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		##
 		# Default
 		##
-		self.StyleSetSpec( wx.stc.STC_P_DEFAULT, "fore:#000000,back:#232323" )
+		self.StyleSetSpec( wx.stc.STC_P_DEFAULT, "fore:#ffffff,back:#232323" )
 	
 		##
 		# Linenumbers
