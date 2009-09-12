@@ -112,28 +112,32 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=9999 )
 		self.Bind( wx.EVT_TREE_ITEM_MENU, self._OnTreeRightClick, id=wx.ID_ANY )
 		
-	##
+	#------------------------------------------------------------------
 	# Bindings
+	#------------------------------------------------------------------
+	
+	##
+	# Right clicking on a tree node or leaf
 	##
 	def _OnTreeRightClick( self, event ):
-		menu = wx.Menu()
+		mainMenu = wx.Menu()
 		
-		newmenu = wx.Menu()
-		newfile = wx.MenuItem( newmenu, wx.ID_ANY,"New file" )
-		newfolder = wx.MenuItem( newmenu, wx.ID_ANY,"New folder" )
-		newmenu.AppendItem( newfile )
-		newmenu.AppendItem( newfolder )
+		newMenu = wx.Menu()
+		newFile = wx.MenuItem(newMenu, wx.ID_ANY,"New file")
+		newFolder = wx.MenuItem(newMenu, wx.ID_ANY,"New folder")
+		newMenu.AppendItem(newFile)
+		newMenu.AppendItem(newFolder)
 		
-		delete = wx.MenuItem( menu, wx.ID_ANY,"Delete" )
-		refreshtree = wx.MenuItem( menu, wx.ID_ANY,"Refresh tree" )
+		delete = wx.MenuItem(mainMenu, wx.ID_ANY,"Delete")
+		refreshTree = wx.MenuItem(mainMenu, wx.ID_ANY,"Refresh tree")
 		
-		menu.AppendMenu( wx.ID_ANY, 'New', newmenu )
-		menu.AppendItem( delete )
-		menu.AppendSeparator()
-		menu.AppendItem( refreshtree )
+		mainMenu.AppendMenu(wx.ID_ANY, 'New', newMenu)
+		mainMenu.AppendItem(delete)
+		mainMenu.AppendSeparator()
+		mainMenu.AppendItem(refreshTree)
 		
-		self.PopupMenu(menu)
-		menu.Destroy()
+		self.PopupMenu(mainMenu)
+		mainMenu.Destroy()
 		
 	#----------------------------------------------------------------
 	# On selecting element (directory or file) inside treecontroller
