@@ -14,7 +14,8 @@ import os
 import wx
 
 from system.WpFileSystem import WpFileSystem
-from gui.WpProgressDialog import WpProgressDialog
+from gui.tree.WpProjectData import WpProjectData
+from gui.tree.WpElementData import WpElementData
 
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
@@ -42,33 +43,66 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		
 		self.AssignImageList( il )
 		
-		prjname = project[ 'project' ][ 'name' ]
-		treeroot = self.AddRoot( str( prjname ), 0, 1, wx.TreeItemData( prjname ) )
+		## Setup project information
+		projectInformation = WpProjectData()
+		projectInformation.setProjectName(str(project['project']['name']))
+		treeroot = self.AddRoot(
+							projectInformation.getProjectName(), 
+							0, 
+							1, 
+							wx.TreeItemData(projectInformation)
+						)
+						
 		self.SetItemHasChildren( treeroot, True )
 		
 		root = treeroot
 		ids = {root: treeroot}
 		
+		## Build projecttree by looping over current directory listing
 		for dir in project[ 'dir' ]:
 			dlist = WpFileSystem.ListDirectory( dir )
+		
+			## Prepare basic information for node
+			path = os.path.split(dir)[1]
+			subrootInformation = WpElementData()
+			subrootInformation.setCurrentDirectory(path)
 			
-			subroot = self.AppendItem( treeroot, os.path.split(dir)[1], 0, 1, wx.TreeItemData( None ) )
+			subroot = self.AppendItem(treeroot, path, 0, 1, wx.TreeItemData(subrootInformation))
 			self.SetItemHasChildren( subroot, True )
 			
 			ids = {dir: subroot}
 			
+			## Build directories and filenames
 			for( dirpath, dirnames, filenames ) in dlist[ 'files' ]:
 				for dirname in dirnames:
-					fullpath = os.path.join( dirpath, dirname )
-					ids[ fullpath ] = self.AppendItem( ids[ dirpath ], dirname, 0, 1, wx.TreeItemData( None ) )
+					directoryInformation = WpElementData()
+					directoryInformation.setCurrentDirectory(os.path.join( dirpath, dirname))
+					ids[directoryInformation.getCurrentDirectory()] = self.AppendItem( 
+															ids[dirpath], 
+															dirname, 
+															0, 
+															1, 
+															wx.TreeItemData(directoryInformation)
+														)
 					
-				for filename in sorted( filenames ):
-					data = {
-							'path': dirpath,
-							'fname': filename,
-							'fullpath': os.path.join( dirpath, filename )
-						}
-					self.AppendItem( ids[ dirpath ], filename, 2, 2, wx.TreeItemData( data ) )
+				for filename in sorted(filenames):
+					fileInformation = WpElementData()
+					fileInformation.setCurrentDirectory(dirpath)
+					fileInformation.setCurrentFilename(filename)
+					fileInformation.setCurrentFile(
+											os.path.join(
+												fileInformation.getCurrentDirectory(),
+												fileInformation.getCurrentFilename()
+											)
+										)
+					
+					self.AppendItem(
+							ids[fileInformation.getCurrentDirectory()],
+							fileInformation.getCurrentFilename(),
+							2,
+							2,
+							wx.TreeItemData(fileInformation)
+						)
 					
 		self.Parent.Parent.Parent.ResizeSash()
 		
@@ -101,16 +135,14 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		self.PopupMenu(menu)
 		menu.Destroy()
 		
-	#---------------------------------------------------------------
-	# On selecting file inside treecontroller
-	#---------------------------------------------------------------
+	#----------------------------------------------------------------
+	# On selecting element (directory or file) inside treecontroller
+	#----------------------------------------------------------------
 	def _OnSelChanged( self, event ):
-		filedata = self.GetPyData( event.GetItem() )
-		try:
-			self.Parent.rightpanel.notebook.AddDefaultPage( filedata[ 'fullpath' ] )
-		except TypeError:
-			##
-			# When this occur we are double clicking on a node
-			# without a path set. E.g. projectnode.
-			##
-			pass
+		nodedata = self.GetPyData(event.GetItem())
+		
+		## Can we open the file in our editor?
+		if nodedata.__class__.__name__ == 'WpElementData':
+			if nodedata.getCurrentFile() != None:
+				## Test passed, open file
+				self.Parent.rightpanel.notebook.AddDefaultPage(nodedata.getCurrentFile())
