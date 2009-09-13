@@ -34,7 +34,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		if( self.IsEmpty() == False ):
 			self.DeleteAllItems()
 		
-		ArtIDs = [ 'wx.ART_FOLDER', 'wx.ART_FOLDER_OPEN', 'wx.ART_NORMAL_FILE' ]
+		ArtIDs = [ 'wx.ART_FOLDER', 'wx.ART_FOLDER_OPEN', 'wx.ART_NORMAL_FILE', 'wx.ART_HELP_FOLDER' ]
 		
 		il = wx.ImageList( 16, 16 )
 		for items in ArtIDs:
@@ -48,8 +48,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		projectInformation.setProjectName(str(project['project']['name']))
 		treeroot = self.AddRoot(
 							projectInformation.getProjectName(), 
-							0, 
-							1, 
+							3, 
+							3, 
 							wx.TreeItemData(projectInformation)
 						)
 						
