@@ -63,20 +63,26 @@ class WpTreeCtrl( wx.TreeCtrl ):
 			dlist = WpFileSystem.ListDirectory( dir )
 		
 			## Prepare basic information for node
-			path = os.path.split(dir)[1]
+			pathTitle = os.path.split(dir)[1]
 			subrootInformation = WpElementData()
-			subrootInformation.setCurrentDirectory(path)
+			subrootInformation.setCurrentDirectory(dir)
 			
-			subroot = self.AppendItem(treeroot, path, 0, 1, wx.TreeItemData(subrootInformation))
+			subroot = self.AppendItem(treeroot, pathTitle, 0, 1, wx.TreeItemData(subrootInformation))
 			self.SetItemHasChildren( subroot, True )
 			
 			ids = {dir: subroot}
-			
 			## Build directories and filenames
 			for( dirpath, dirnames, filenames ) in dlist[ 'files' ]:
 				for dirname in dirnames:
 					directoryInformation = WpElementData()
 					directoryInformation.setCurrentDirectory(os.path.join( dirpath, dirname))
+					directoryInformation.setCurrentFile(
+												os.path.join(
+													subrootInformation.getCurrentDirectory(),
+													directoryInformation.getCurrentDirectory()
+												)
+											)
+											
 					ids[directoryInformation.getCurrentDirectory()] = self.AppendItem( 
 															ids[dirpath], 
 															dirname, 
@@ -148,5 +154,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		## Can we open the file in our editor?
 		if nodedata.__class__.__name__ == 'WpElementData':
 			if nodedata.getCurrentFile() != None:
-				## Test passed, open file
-				self.Parent.rightpanel.notebook.AddDefaultPage(nodedata.getCurrentFile())
+				## Is this a hidden folder? If so ,skip
+				if os.path.isdir(nodedata.getCurrentFile()) == False:
+					## Test passed, open file
+					self.Parent.rightpanel.notebook.AddDefaultPage(nodedata.getCurrentFile())
