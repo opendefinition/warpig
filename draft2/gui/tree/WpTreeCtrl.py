@@ -142,8 +142,47 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		mainMenu.AppendSeparator()
 		mainMenu.AppendItem(refreshTree)
 		
+		## Binding menu elements
+		self.Bind(wx.EVT_MENU, self._OnPopupNewFolder,id=newFolder.GetId())
+		
 		self.PopupMenu(mainMenu)
 		mainMenu.Destroy()
+		
+	def _OnPopupNewFolder(self, event):
+		## Get current selected element
+		currentElementData = self.GetPyData( self.GetSelection() )
+		
+		if currentElementData.__class__.__name__ != 'WpProjectData':
+			dialog = wx.TextEntryDialog(self,'', 'Foldername', '')
+	
+			if dialog.ShowModal() == wx.ID_OK:
+				folderName = dialog.GetValue()
+				newFolderPath = os.path.join(currentElementData.getCurrentDirectory(), folderName)
+		
+				## Does this folder already exist?
+				if os.path.isdir(newFolderPath) == False:
+					os.mkdir(newFolderPath)
+				
+					## Append folder to tree
+					nodeData = WpElementData()
+					nodeData.setCurrentDirectory(currentElementData.getCurrentDirectory)
+					nodeData.setCurrentFile(newFolderPath)
+				
+					selected = self.GetSelection()
+					if currentElementData.getCurrentFilename() != None:
+						selected = self.GetItemParent(selected)
+				
+					newItem = self.PrependItem(
+								selected,
+								folderName,
+								0,
+								1,
+								wx.TreeItemData(nodeData)
+							)
+					self.EnsureVisible(newItem)
+				else:
+					print "Debug message: Folder already exist!"
+			
 		
 	#----------------------------------------------------------------
 	# On selecting element (directory or file) inside treecontroller
