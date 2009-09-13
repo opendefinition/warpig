@@ -143,14 +143,51 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		mainMenu.AppendItem(refreshTree)
 		
 		## Binding menu elements
+		self.Bind(wx.EVT_MENU, self._OnPopupNewFile, id=newFile.GetId())
 		self.Bind(wx.EVT_MENU, self._OnPopupNewFolder,id=newFolder.GetId())
 		
 		self.PopupMenu(mainMenu)
 		mainMenu.Destroy()
 		
+	def _OnPopupNewFile(self, event):
+		## Get current selected element 
+		currentElementData = self.GetPyData(self.GetSelection())
+		
+		dialog = wx.TextEntryDialog(self, '', 'Filename', '')
+		
+		if dialog.ShowModal() == wx.ID_OK:
+			fileName = dialog.GetValue()
+			newFilePath = os.path.join(currentElementData.getCurrentDirectory(), fileName)
+			
+			if os.path.isfile(newFilePath) == False:
+				WpFileSystem.SaveToFile( '', newFilePath )
+				
+				## Adding new file to project tree
+				nodedata = WpElementData()
+				nodedata.setCurrentDirectory(currentElementData.getCurrentDirectory())
+				nodedata.setCurrentFilename(fileName)
+				nodedata.setCurrentFile(
+								os.path.join(nodedata.getCurrentDirectory(),fileName)
+							)
+							
+				selected = self.GetSelection()
+				
+				if currentElementData.getCurrentFilename()  != None:
+					selected = self.GetItemParent(selected)
+							
+				newFileItem = self.AppendItem(
+								selected,
+								fileName,
+								2,
+								2,
+								wx.TreeItemData(nodedata)
+							)
+							
+				self.EnsureVisible(newFileItem)
+		
 	def _OnPopupNewFolder(self, event):
 		## Get current selected element
-		currentElementData = self.GetPyData( self.GetSelection() )
+		currentElementData = self.GetPyData(self.GetSelection())
 		
 		if currentElementData.__class__.__name__ != 'WpProjectData':
 			dialog = wx.TextEntryDialog(self,'', 'Foldername', '')
@@ -165,7 +202,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 				
 					## Append folder to tree
 					nodeData = WpElementData()
-					nodeData.setCurrentDirectory(currentElementData.getCurrentDirectory)
+					nodeData.setCurrentDirectory(currentElementData.getCurrentDirectory())
 					nodeData.setCurrentFile(newFolderPath)
 				
 					selected = self.GetSelection()
