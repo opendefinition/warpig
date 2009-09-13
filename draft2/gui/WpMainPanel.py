@@ -16,9 +16,6 @@ import os
 import wx
 import wx.py as py
 
-from wx.html import HtmlWindow
-
-from gui.WpModeBar import WpModeBar
 from gui.WpSplitLeftPanel import WpSplitLeftPanel
 from gui.WpSplitRightPanel import WpSplitRightPanel
 
@@ -45,7 +42,6 @@ class WpMainPanel( wx.Panel ):
 		self.splitter.SetMinimumPaneSize( 1 )
 		self.rightsplit = WpSplitRightPanel( self.splitter )
 		self.leftsplit = WpSplitLeftPanel( self.splitter, self.rightsplit )
-		# self.splitter.SplitVertically( self.leftsplit, self.rightsplit )
 		self.splitter.SplitVertically( self.rightsplit, self.leftsplit )		
 		self.splitter.SetSashPosition( -1, True )
 		self.splitter.SetBorderSize( 0 )
@@ -84,21 +80,6 @@ class WpMainPanel( wx.Panel ):
 			
 		self.sashpos = sashpos
 	
-	#---------------------------------------------------------------
-	# Set up toolbar
-	#---------------------------------------------------------------
-	def _SetupToolbar( self ):
-		self.toolbar = wx.ToolBar( self, -1, style=wx.TB_VERTICAL )
-		self.toolbar.AddLabelTool( wx.ID_NEW, '', wx.Bitmap( './gui/icons/document-new.png' ) )
-		self.toolbar.AddLabelTool( wx.ID_OPEN, '', wx.Bitmap( './gui/icons/folder.png' ) )
-		self.toolbar.AddLabelTool( wx.ID_SAVE, '', wx.Bitmap( './gui/icons/media-floppy.png' ) )
-		self.toolbar.Realize()
-		
-		self.Bind( wx.EVT_MENU, self._OnToolBarNewPage, id=wx.ID_NEW )
-		self.Bind( wx.EVT_MENU, self._OnToolBarSavePage, id=wx.ID_SAVE )
-		self.Bind( wx.EVT_MENU, self._OnToolBarOpenPage, id=wx.ID_OPEN )
-		return self.toolbar
-		
 	#---------------------------------------------------------------
 	# Bindings
 	#---------------------------------------------------------------

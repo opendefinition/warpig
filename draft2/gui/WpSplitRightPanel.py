@@ -42,7 +42,7 @@ class WpSplitRightPanel( wx.Panel ):
 		# Button panel
 		##
 		self.alignment = bp.BP_ALIGN_LEFT
-		self.style = bp.BP_USE_GRADIENT
+		self.style = wx.NO_BORDER
 		self.buttonpanel = bp.ButtonPanel(self, -1, "", style=self.style, alignment=self.alignment)
 	
 		btn1 = bp.ButtonInfo( self.buttonpanel, 
