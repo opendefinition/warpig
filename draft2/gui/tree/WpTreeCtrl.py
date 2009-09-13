@@ -184,6 +184,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
 							)
 							
 				self.EnsureVisible(newFileItem)
+			else:
+				print "Debug message: File already exist!"
 		
 	def _OnPopupNewFolder(self, event):
 		## Get current selected element
