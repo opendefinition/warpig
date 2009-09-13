@@ -27,7 +27,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 	# @param string projectname
 	#---------------------------------------------------------------
 	def PopulateTree( self, filepath ):
-		self.SetIndent( 5 )
+		self.SetIndent(10)
 		project = WpFileSystem.LoadProjectFile( filepath )
 	
 		# Destroying all content if content is present
@@ -54,7 +54,9 @@ class WpTreeCtrl( wx.TreeCtrl ):
 						)
 						
 		self.SetItemHasChildren( treeroot, True )
-		
+		self.SetItemBold(treeroot)
+		self.SetItemBackgroundColour(treeroot, wx.Colour(162,181,205))
+
 		root = treeroot
 		ids = {root: treeroot}
 		
