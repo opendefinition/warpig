@@ -83,7 +83,7 @@ class WpEditorSettings( wx.Panel ):
 		fontSizes = ['9','10','11','12', '13','14','15','16','17','18','19','20']
 		fontSizeLabel = wx.StaticText( self, wx.ID_ANY, 'Font size' )
 		self.fontSizeSelect = wx.Choice( self, -1, (100, 50), choices=fontSizes )
-		
+
 		## Font family selector
 		fontFamilylabel = wx.StaticText( self, wx.ID_ANY, 'Font family' )
 		enumerator = wx.FontEnumerator()
@@ -91,7 +91,7 @@ class WpEditorSettings( wx.Panel ):
 		fontlist = enumerator.GetFacenames()
 		
 		self.fontListCtrl = wx.ListBox( self, wx.ID_ANY, choices=fontlist )
-				
+		
 		## Grouping
 		fontSizer.AddMany(
 			[
