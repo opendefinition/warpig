@@ -17,7 +17,7 @@ from gui.preferences.WpPreferenceTree import WpPreferenceTree
 class WpPreferences( wx.Dialog ):
 	def __init__( self ):
 		
-		wx.Dialog.__init__( self, None, wx.ID_ANY, 'WarPig Preferences', size=(600, 600) )
+		wx.Dialog.__init__( self, None, wx.ID_ANY, 'WarPig Preferences', size=(600, 500) )
 		
 		self.Setup()
 		self.Center()

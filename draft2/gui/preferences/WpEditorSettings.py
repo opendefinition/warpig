@@ -90,8 +90,17 @@ class WpEditorSettings( wx.Panel ):
 		enumerator.EnumerateFacenames()
 		fontlist = enumerator.GetFacenames()
 		
-		self.fontListCtrl = wx.ListBox( self, wx.ID_ANY, choices=fontlist )
+		self.fontListCtrl = wx.ListBox( self, wx.ID_ANY, choices=fontlist, style=wx.LB_SORT )
 		
+		## Making sure that any previous settings shows as defaults
+		configuration = WpConfigSystem()
+		
+		currentSize = self.configobj.settings['editor-fontsize']
+		self.fontSizeSelect.Select(fontSizes.index(currentSize))
+		
+		currentFontface = self.configobj.settings['editor-fontface']
+		self.fontListCtrl.Select( self.fontListCtrl.FindString(currentFontface) )
+
 		## Grouping
 		fontSizer.AddMany(
 			[
@@ -102,19 +111,32 @@ class WpEditorSettings( wx.Panel ):
 			]
 		) 
 		
-		## Demo text
+		## Font selection preview text
 		self.previewText = wx.StaticText( self, wx.ID_ANY, "Warpig Code Environment Text" )
 
 		## Font events
 		self.Bind( wx.EVT_CHOICE, self.OnFontSelect, id=self.fontSizeSelect.GetId() )
 		self.Bind( wx.EVT_LISTBOX, self.OnFontSelect, id=self.fontListCtrl.GetId() )
 		
+		## Be sure that the font preview text is updated
+		self.updateFontPreview()
+		
 		## Adding controllers to main sizer
 		sizer.Add( fontSizer )
 		sizer.Add( self.previewText )
 		return sizer
 
-	def OnFontSelect( self, event ):
+	def OnFontSelect( self, event ): 
+		"""
+		Font select event handler. This is just a  wrapper for 
+		internal function to populate the font preview text.
+		"""
+		self.updateFontPreview()
+		
+	def updateFontPreview(self):
+		"""
+		Internal helper function for setting the font preview text
+		"""
 		face = self.fontListCtrl.GetStringSelection()
 		size = int( self.fontSizeSelect.GetString( self.fontSizeSelect.GetSelection() ) )
 	
