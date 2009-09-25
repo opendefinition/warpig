@@ -164,8 +164,8 @@ class WpMainFrame( wx.Frame ):
 	#---------------------------------------------------------------
 	def _OnAbout( self, event ):
 		information = wx.AboutDialogInfo()
- 		information.SetName( 'WarPig Code Environment' )
- 		information.SetVersion( '0.01 - Alpha Public' )
+ 		information.SetName( 'Open Definition :: Warpig Code Environment' )
+ 		information.SetVersion( '0.02 - Alpha Public' )
   		information.SetDescription( 'A simple but yet powerfull code evironment written in Python.' )
   		information.SetCopyright('Open Definition(C)2009' )
   		information.SetWebSite( 'http://www.opendefinition.com' )

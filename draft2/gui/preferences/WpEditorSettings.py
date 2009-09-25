@@ -104,8 +104,8 @@ class WpEditorSettings( wx.Panel ):
 		## Grouping
 		fontSizer.AddMany(
 			[
-				( fontSizeLabel, 1, wx.EXPAND ),
 				( fontFamilylabel, 1, wx.EXPAND ),
+				( fontSizeLabel, 1, wx.EXPAND ),
 				( self.fontListCtrl, 1, wx.EXPAND ),
 				( self.fontSizeSelect, 0 )
 			]
