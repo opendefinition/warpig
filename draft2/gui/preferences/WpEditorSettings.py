@@ -38,7 +38,7 @@ class WpEditorSettings( wx.Panel ):
 		self.SetSizer( self.mainSizer, wx.EXPAND )
 		
 		## Bind Savebutton
-		self.Bind( wx.EVT_BUTTON, self.OnSaveSettings, id=self.saveBt.GetId() )
+		self.Bind( wx.EVT_BUTTON, self.__OnSaveSettings, id=self.saveBt.GetId() )
 		
 	def TabSetting( self ):
 		sizer = wx.BoxSizer( wx.HORIZONTAL )
@@ -107,7 +107,7 @@ class WpEditorSettings( wx.Panel ):
 				( fontSizeLabel, 1, wx.EXPAND ),
 				( fontFamilylabel, 1, wx.EXPAND ),
 				( self.fontListCtrl, 1, wx.EXPAND ),
-				( self.fontSizeSelect, 1, wx.EXPAND )
+				( self.fontSizeSelect, 0 )
 			]
 		) 
 		
@@ -115,8 +115,8 @@ class WpEditorSettings( wx.Panel ):
 		self.previewText = wx.StaticText( self, wx.ID_ANY, "Warpig Code Environment Text" )
 
 		## Font events
-		self.Bind( wx.EVT_CHOICE, self.OnFontSelect, id=self.fontSizeSelect.GetId() )
-		self.Bind( wx.EVT_LISTBOX, self.OnFontSelect, id=self.fontListCtrl.GetId() )
+		self.Bind( wx.EVT_CHOICE, self.__OnFontSelect, id=self.fontSizeSelect.GetId() )
+		self.Bind( wx.EVT_LISTBOX, self.__OnFontSelect, id=self.fontListCtrl.GetId() )
 		
 		## Be sure that the font preview text is updated
 		self.updateFontPreview()
@@ -125,14 +125,16 @@ class WpEditorSettings( wx.Panel ):
 		sizer.Add( fontSizer )
 		sizer.Add( self.previewText )
 		return sizer
-
-	def OnFontSelect( self, event ): 
-		"""
-		Font select event handler. This is just a  wrapper for 
-		internal function to populate the font preview text.
-		"""
-		self.updateFontPreview()
 		
+	# ----[ START : Event handlers ]---
+	def __OnFontSelect( self, event ): 
+		self.updateFontPreview()
+	
+	def __OnSaveSettings( self, event ):
+		self.saveSettings()	
+	#---[ END : Event handlers ]---
+	
+	#---[ START: Helper functons ]---
 	def updateFontPreview(self):
 		"""
 		Internal helper function for setting the font preview text
@@ -143,7 +145,10 @@ class WpEditorSettings( wx.Panel ):
 		font = wx.Font( size, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, face )
 		self.previewText.SetFont( font )
 		
-	def OnSaveSettings( self, event ):
+	def saveSettings(self):
+		"""
+		Save settings
+		"""
 		db = WpDatabaseAPI()
 		
 		## Savin margin settings
@@ -159,3 +164,4 @@ class WpEditorSettings( wx.Panel ):
 		self.configobj.settings['editor-fontface'] = fontFace
 		db.AddRegisterSetting( 'fontsize', fontSize, 'editor' )
 		self.configobj.settings['editor-fontsize'] = int( fontSize )
+	#---[ END: Helper functons ]---
