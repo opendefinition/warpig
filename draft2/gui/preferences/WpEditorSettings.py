@@ -95,12 +95,16 @@ class WpEditorSettings( wx.Panel ):
 		## Making sure that any previous settings shows as defaults
 		configuration = WpConfigSystem()
 		
-		currentSize = self.configobj.settings['editor-fontsize']
-		self.fontSizeSelect.Select(fontSizes.index(currentSize))
-		
-		currentFontface = self.configobj.settings['editor-fontface']
-		self.fontListCtrl.Select( self.fontListCtrl.FindString(currentFontface) )
-
+		try:
+			currentSize = str( self.configobj.settings['editor-fontsize'] )
+			currentFontface = str( self.configobj.settings['editor-fontface'] )
+	
+			self.fontSizeSelect.Select(fontSizes.index( currentSize ) )
+			self.fontListCtrl.Select( self.fontListCtrl.FindString(currentFontface) )
+		except ValueError:
+			## Silently supress any error messages
+			None
+			
 		## Grouping
 		fontSizer.AddMany(
 			[
