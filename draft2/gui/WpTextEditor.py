@@ -20,46 +20,47 @@ from system.WpConfigSystem import WpConfigSystem
 
 class WpTextEditor( wx.stc.StyledTextCtrl ):
 	_curr_file_path = None
-	
+
+        def applySettings(self):
+            """
+            Apply editor settings
+            """
+            self.editorFontFace = self.configobj.settings['editor-fontface']
+            self.editorFontSize = int(self.configobj.settings['editor-fontsize'])
+            self.editorTextMarginWidth = int(self.configobj.settings['editor-textmargin'])
+
 	def __init__( self, parent ):
 		self.parent = parent
-		self.configobj = WpConfigSystem()
+
+                ## Load configurations
+                self.configobj = WpConfigSystem()
+                self.applySettings()
 		
 		##
 		# We always construct parent with wx.TE_MULTILINE
 		##
 		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
 		
-		##
-		# Setup default styles
-		##
-		self.SetMarginType( 0, wx.stc.STC_MARGIN_NUMBER ) 	# Line numbering
-		self.SetMarginWidth( 0, 35 ) 						# Margin for line numbering
-		self.SetEdgeColour( "#555753" )
-		
 		## Text margin
-		textMarginWidth = int( self.configobj.settings['editor-textmargin'] )
-		self.SetEdgeColumn( textMarginWidth )	# Text margin
-		self.SetEdgeMode( wx.stc.STC_EDGE_LINE )
-		
-		##
-		# Fonts
-		##
-		size = int( self.configobj.settings['editor-fontsize'] )
-		face = self.configobj.settings['editor-fontface']
-		
-		font = wx.Font( 
-					size, 
-					wx.DEFAULT, 
-					wx.NORMAL, 
-					wx.NORMAL, 
-					False, 
-					face, 
-					wx.FONTENCODING_UTF8 
-				)
+		self.SetMarginType(0, wx.stc.STC_MARGIN_NUMBER )    # Line numbering
+		self.SetMarginWidth(0, 35)                          # Margin for line numbering
+		self.SetEdgeColour("#555753" )
+		self.SetEdgeColumn(self.editorTextMarginWidth)      # Text margin
+		self.SetEdgeMode(wx.stc.STC_EDGE_LINE)              # Text margin type
+	
+		## Fonts	
+		font = wx.Font(
+                            self.editorFontSize,
+                            wx.DEFAULT,
+                            wx.NORMAL,
+                            wx.NORMAL,
+                            False,
+                            self.editorFontFace,
+                            wx.FONTENCODING_UTF8
+                        )
 	
 		## We must tell StyleSetSpec to use this face and size otherwise it won't get applied
-		self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (face, size))
+		self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (self.editorFontFace, self.editorFontSize))
 		
 		##
 		# Code folding
