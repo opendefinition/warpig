@@ -25,22 +25,25 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
             """
             Apply editor settings
             """
-            self.editorFontFace = self.configobj.settings['editor-fontface']
-            self.editorFontSize = int(self.configobj.settings['editor-fontsize'])
-            self.editorTextMarginWidth = int(self.configobj.settings['editor-textmargin'])
-            self.editorTabSize = int(self.configobj.settings['editor-tabsize'])
-            self.editorUseTab = self.configobj.settings['editor-usetab']
+            self.editorFontFace         = self.configobj.settings['editor-fontface']
+            self.editorFontSize         = int(self.configobj.settings['editor-fontsize'])
+            self.editorTextMarginWidth  = int(self.configobj.settings['editor-textmargin'])
+            self.editorTabSize          = int(self.configobj.settings['editor-tabsize'])
+            self.editorUseTab           = int(self.configobj.settings['editor-usetab'])
 
         def setTabAndIndents(self):
+            """
+            Setup tabulator handling
+            """
             if self.editorUseTab == True:
-                 self.SetTabIndents(True)
-                 self.SetBackSpaceUnIndents(True)
-                 self.SetUseTabs(True)
-            else:
-                self.SetIndent(self.editorTabSize)		
                 self.SetBackSpaceUnIndents(True)
-                self.SetTabIndents(True)					# Tab key indents
-                self.SetTabWidth(self.editorTabSize)	# Proscribed tab size for wx
+                self.SetTabIndents(True)
+                self.SetUseTabs(True)
+            else:
+                self.SetBackSpaceUnIndents(True)
+                self.SetIndent(self.editorTabSize)		
+                self.SetTabIndents(False)
+                self.SetTabWidth(self.editorTabSize)
                 self.SetUseTabs(False)
 
 	def __init__( self, parent ):
