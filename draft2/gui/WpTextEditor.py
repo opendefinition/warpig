@@ -28,6 +28,20 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
             self.editorFontFace = self.configobj.settings['editor-fontface']
             self.editorFontSize = int(self.configobj.settings['editor-fontsize'])
             self.editorTextMarginWidth = int(self.configobj.settings['editor-textmargin'])
+            self.editorTabSize = int(self.configobj.settings['editor-tabsize'])
+            self.editorUseTab = self.configobj.settings['editor-usetab']
+
+        def setTabAndIndents(self):
+            if self.editorUseTab == True:
+                 self.SetTabIndents(True)
+                 self.SetBackSpaceUnIndents(True)
+                 self.SetUseTabs(True)
+            else:
+                self.SetIndent(self.editorTabSize)		
+                self.SetBackSpaceUnIndents(True)
+                self.SetTabIndents(True)					# Tab key indents
+                self.SetTabWidth(self.editorTabSize)	# Proscribed tab size for wx
+                self.SetUseTabs(False)
 
 	def __init__( self, parent ):
 		self.parent = parent
@@ -40,14 +54,16 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		# We always construct parent with wx.TE_MULTILINE
 		##
 		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
-		
 		## Text margin
 		self.SetMarginType(0, wx.stc.STC_MARGIN_NUMBER )    # Line numbering
 		self.SetMarginWidth(0, 35)                          # Margin for line numbering
 		self.SetEdgeColour("#555753" )
 		self.SetEdgeColumn(self.editorTextMarginWidth)      # Text margin
 		self.SetEdgeMode(wx.stc.STC_EDGE_LINE)              # Text margin type
-	
+		
+		## Tab Setup
+		self.setTabAndIndents()
+		
 		## Fonts	
 		font = wx.Font(
                             self.editorFontSize,

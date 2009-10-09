@@ -15,3 +15,5 @@ CREATE TABLE systeminformation(
 INSERT INTO systemregistry(key,value,module) VALUES ('fontface','Verdana','editor');
 INSERT INTO systemregistry(key,value,module) VALUES ('fontsize','12','editor');
 INSERT INTO systemregistry(key,value,module) VALUES ('textmargin','200','editor');
+INSERT INTO systemregistry(key,value,module) VALUES ('tabsize','4','editor');
+INSERT INTO systemregistry(key,value,module) VALUES ('usetab','1','editor');

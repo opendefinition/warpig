@@ -25,7 +25,7 @@ class WpEditorSettings( wx.Panel ):
 	def Setup( self ):
 		self.mainSizer = wx.FlexGridSizer( rows=4, cols=1, vgap=5, hgap=5 )
 		self.saveBt = wx.Button( self, wx.ID_ANY, 'Save' )
-		
+		self.mainSizer.AddSpacer(5)
 		self.mainSizer.AddMany(
 			[
 				( self.TabSetting(), 1, wx.EXPAND ),
@@ -48,19 +48,34 @@ class WpEditorSettings( wx.Panel ):
 		
 		## Text input
 		label = wx.StaticText( self, wx.ID_ANY, "Tabsize: " )
-		tabsizeinput = wx.TextCtrl( self, wx.ID_ANY, size=(100, -1) )
+		self.tabsizeinput = wx.TextCtrl( self, wx.ID_ANY, size=(100, -1) )
+		
+		self.tabsizeinput.SetValue( self.configobj.settings['editor-tabsize'])
 	
 		inputsizer.Add( label )
-		inputsizer.Add( tabsizeinput )
+		inputsizer.Add( self.tabsizeinput )
 		
 		## Checkbox
-		checkbox = wx.CheckBox( self, wx.ID_ANY, "Use tab" )
-		checkboxsizer.Add( checkbox )
+		self.checkbox = wx.CheckBox( self, wx.ID_ANY, "Use tab" )
+		checkboxsizer.Add( self.checkbox )
+		
+		if self.configobj.settings['editor-usetab'] == True:
+			self.checkbox.SetValue(True)
+		else:
+			self.checkbox.SetValue(False)
 		
 		sizer.Add( inputsizer )
 		sizer.Add( checkboxsizer )
 		
+		self.Bind(wx.EVT_CHECKBOX, self.onUseTabChecked,id=self.checkbox.GetId())
+		
 		return sizer
+		
+	def onUseTabChecked(self,event):
+		if self.tabsizeinput.IsEnabled() == True:
+			self.tabsizeinput.Disable()
+		else:
+			self.tabsizeinput.Enable()
 		
 	def MarginSetting( self ):
 		marginsizer = wx.BoxSizer( wx.HORIZONTAL )
@@ -155,7 +170,16 @@ class WpEditorSettings( wx.Panel ):
 		"""
 		db = WpDatabaseAPI()
 		
-		## Savin margin settings
+		## Saving tab size
+		tabSize = self.tabsizeinput.GetValue()
+		db.AddRegisterSetting('tabsize', tabSize, 'editor')
+		self.configobj.settings['editor-tabsize'] = tabSize
+		
+		useTab = self.checkbox.IsChecked()
+		db.AddRegisterSetting('usetab',useTab,'editor')
+		self.configobj.settings['editor-usetab'] = useTab
+		
+		## Saving margin settings
 		textMarginValue = self.marginSizeInput.GetValue()
 		db.AddRegisterSetting( 'textmargin', textMarginValue, 'editor' )
 		self.configobj.settings['editor-textmargin'] = textMarginValue
