@@ -58,11 +58,14 @@ class WpEditorSettings( wx.Panel ):
 		## Checkbox
 		self.checkbox = wx.CheckBox( self, wx.ID_ANY, "Use tab" )
 		checkboxsizer.Add( self.checkbox )
-		
-		if self.configobj.settings['editor-usetab'] == True:
-			self.checkbox.SetValue(True)
+                
+                usetabulator = int(self.configobj.settings['editor-usetab'])
+                if usetabulator == True:
+			self.checkbox.SetValue(True)    # Set to checked state
+                        self.tabsizeinput.Disable()     # Disable user input
 		else:
-			self.checkbox.SetValue(False)
+			self.checkbox.SetValue(False)   # Set to unchecked state
+                        self.tabsizeinput.Enable()      # Enable user input
 		
 		sizer.Add( inputsizer )
 		sizer.Add( checkboxsizer )
@@ -171,25 +174,20 @@ class WpEditorSettings( wx.Panel ):
 		db = WpDatabaseAPI()
 		
 		## Saving tab size
-		tabSize = self.tabsizeinput.GetValue()
-		db.AddRegisterSetting('tabsize', tabSize, 'editor')
-		self.configobj.settings['editor-tabsize'] = tabSize
-		
-		useTab = self.checkbox.IsChecked()
-		db.AddRegisterSetting('usetab',useTab,'editor')
-		self.configobj.settings['editor-usetab'] = useTab
+		self.configobj.settings['editor-tabsize'] = self.tabsizeinput.GetValue()
+		db.AddRegisterSetting('tabsize', self.configobj.settings['editor-tabsize'], 'editor')
+
+                # Saving if tab is to be used
+                self.configobj.settings['editor-usetab'] = 1 if self.checkbox.IsChecked() == True else 0
+		db.AddRegisterSetting('usetab', self.configobj.settings['editor-usetab'], 'editor')
 		
 		## Saving margin settings
-		textMarginValue = self.marginSizeInput.GetValue()
-		db.AddRegisterSetting( 'textmargin', textMarginValue, 'editor' )
-		self.configobj.settings['editor-textmargin'] = textMarginValue
-		
+		self.configobj.settings['editor-textmargin'] = self.marginSizeInput.GetValue()
+		db.AddRegisterSetting( 'textmargin', self.configobj.settings['editor-textmargin'], 'editor' )
+
 		## Saving fonts
-		fontFace = self.fontListCtrl.GetStringSelection()
-		fontSize = int( self.fontSizeSelect.GetString( self.fontSizeSelect.GetSelection() ) )
-		
-		db.AddRegisterSetting( 'fontface', fontFace, 'editor' )
-		self.configobj.settings['editor-fontface'] = fontFace
-		db.AddRegisterSetting( 'fontsize', fontSize, 'editor' )
-		self.configobj.settings['editor-fontsize'] = int( fontSize )
+		self.configobj.settings['editor-fontface'] = self.fontListCtrl.GetStringSelection()
+		self.configobj.settings['editor-fontsize'] = int( self.fontSizeSelect.GetString( self.fontSizeSelect.GetSelection() ) )
+		db.AddRegisterSetting( 'fontface', self.configobj.settings['editor-fontface'], 'editor' )
+		db.AddRegisterSetting( 'fontsize', self.configobj.settings['editor-fontsize'], 'editor' )
 	#---[ END: Helper functons ]---
