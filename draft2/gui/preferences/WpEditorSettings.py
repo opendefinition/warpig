@@ -28,10 +28,11 @@ class WpEditorSettings( wx.Panel ):
 		self.mainSizer.AddSpacer(5)
 		self.mainSizer.AddMany(
 			[
-				( self.TabSetting(), 1, wx.EXPAND ),
-				( self.MarginSetting(), 1, wx.EXPAND ),
-				( self.FontSetting(), 1, wx.EXPAND ),
-				( self.saveBt, 1, wx.EXPAND )
+				(self.TabSetting(), 1, wx.EXPAND),
+				(self.MarginSetting(), 1, wx.EXPAND),
+				(self.FontSetting(), 1, wx.EXPAND),
+                                (self.FoldingSetting(), 1, wx.EXPAND),
+				(self.saveBt, 1, wx.EXPAND )
 			]
 		) 
 		
@@ -91,6 +92,25 @@ class WpEditorSettings( wx.Panel ):
 		marginsizer.Add( self.marginSizeInput )
 		
 		return marginsizer
+
+        def FoldingSetting(self):
+                # Sizers
+                sizer = wx.BoxSizer(wx.VERTICAL)
+            
+                # Checkbox
+                self.codeFoldCheckbox = wx.CheckBox(self, wx.ID_ANY, "Fold code")
+
+                foldCode = int(self.configobj.settings['editor-foldcode'])
+                
+                if foldCode == True:
+			self.codeFoldCheckbox.SetValue(True)    # Set to checked state
+		else:
+			self.codeFoldCheckbox.SetValue(False)   # Set to unchecked state
+        
+                sizer.Add(self.codeFoldCheckbox)
+                
+                return sizer
+
 		
 	def FontSetting( self ):
 		## Sizers
@@ -184,6 +204,10 @@ class WpEditorSettings( wx.Panel ):
 		## Saving margin settings
 		self.configobj.settings['editor-textmargin'] = self.marginSizeInput.GetValue()
 		db.AddRegisterSetting( 'textmargin', self.configobj.settings['editor-textmargin'], 'editor' )
+
+                ## Saving code folding
+                self.configobj.settings['editor-foldcode'] = 1 if self.codeFoldCheckbox.IsChecked() == True else 0
+		db.AddRegisterSetting('foldcode', self.configobj.settings['editor-foldcode'], 'editor')
 
 		## Saving fonts
 		self.configobj.settings['editor-fontface'] = self.fontListCtrl.GetStringSelection()
