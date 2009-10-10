@@ -138,11 +138,13 @@ class WpFileSystem:
 	#---------------------------------------------------------------
 	@staticmethod
 	def SaveToFile( content, filename, mode='w' ):
-		file = open( filename, mode )
-		file.write( content )
-		file.close()
-		
-		return True
+                if filename != None:
+                    file = open( filename, mode )
+                    file.write( content )
+                    file.close()
+                    return True
+                else:
+                    return False
 		
 	#---------------------------------------------------------------
 	# Read from file
