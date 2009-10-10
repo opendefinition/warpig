@@ -20,6 +20,18 @@ class WpNoteBook( fnb.FlatNotebook ):
 	def __init__( self, parent ):
 		self.parent = parent
 		fnb.FlatNotebook.__init__( self, parent, wx.ID_ANY, style=wx.EXPAND )
+                self.Setup()
+
+        def Setup(self):
+                ## Active tab color
+                self.SetActiveTabColour('#99CC00')
+
+                ## Image list for this notebook
+                imagelist = wx.ImageList(16,16)
+		imagelist.Add(wx.Bitmap("./gui/icons/emblem-system.png", wx.BITMAP_TYPE_PNG))
+                imagelist.Add(wx.Bitmap("./gui/icons/text-x-generic.png", wx.BITMAP_TYPE_PNG))
+
+                self.SetImageList(imagelist)
 
 	#---------------------------------------------------------------
 	# Add text editor to page
@@ -40,7 +52,7 @@ class WpNoteBook( fnb.FlatNotebook ):
 	# @param string filepath <conditional>
 	#---------------------------------------------------------------
 	def AddDefaultPage( self, filepath=None ):
-		title = '< empty >'
+		title = ' : empty'
 		
 		##
 		# Testing if the file is already open
@@ -99,7 +111,7 @@ class WpNoteBook( fnb.FlatNotebook ):
 				print "We should not be in here right now"
 				# self.GetPage( 0 ).EmptyUndoBuffer()
 			else:
-				self.AddPage( self._AddTextEditor( filepath ), title, True )
+				self.AddPage( self._AddTextEditor( filepath ), title, True, 1 )
 	
 			##
 			# Thawing
