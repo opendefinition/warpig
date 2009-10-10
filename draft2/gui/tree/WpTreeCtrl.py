@@ -19,7 +19,7 @@ from gui.tree.WpElementData import WpElementData
 
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
-		wx.TreeCtrl.__init__( self, parent, wx.ID_ANY, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND )
+		wx.TreeCtrl.__init__( self, parent, wx.ID_ANY, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
 		
 	def PopulateTree( self, filepath ):
 		"""
