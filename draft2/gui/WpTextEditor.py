@@ -31,6 +31,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
             self.editorTextMarginWidth  = int(self.configobj.settings['editor-textmargin'])
             self.editorTabSize          = int(self.configobj.settings['editor-tabsize'])
             self.editorUseTab           = int(self.configobj.settings['editor-usetab'])
+            self.editorCodeFold         = int(self.configobj.settings['editor-foldcode'])
 
         def setTabAndIndents(self):
             """
@@ -51,58 +52,59 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                 """
                 Setup code folding
                 """
-                self.fold_symbols = 2
-                self.SetProperty("fold", "1") ## What is this???
-                self.SetMarginType(2, stc.STC_MARGIN_SYMBOL)
-                self.SetMarginMask(2, stc.STC_MASK_FOLDERS)
-                
-                self.SetMarginSensitive(2, True)
-                self.SetMarginWidth(2, 12)
-                self.SetFoldMarginHiColour(True, "#99cc00")
-                self.SetFoldMarginColour(True, "336699")
+                if self.editorCodeFold == True:
+                    self.fold_symbols = 2
+                    self.SetProperty("fold", "1") ## What is this???
+                    self.SetMarginType(2, stc.STC_MARGIN_SYMBOL)
+                    self.SetMarginMask(2, stc.STC_MASK_FOLDERS)
+
+                    self.SetMarginSensitive(2, True)
+                    self.SetMarginWidth(2, 12)
+                    self.SetFoldMarginHiColour(True, "#99cc00")
+                    self.SetFoldMarginColour(True, "336699")
 
 
-                if self.fold_symbols == 0:
-                    # Arrow pointing right for contracted folders, arrow pointing down for expanded
-                    self.MarkerDefine( stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_ARROWDOWN,    "black", "black" )
-                    self.MarkerDefine( stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_ARROW,        "black", "black" )
-                    self.MarkerDefine( stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_EMPTY,        "black", "black" )
-                    self.MarkerDefine( stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_EMPTY,        "black", "black" )
-                    self.MarkerDefine( stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_EMPTY,        "white", "black" )
-                    self.MarkerDefine( stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_EMPTY,        "white", "black" )
-                    self.MarkerDefine( stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_EMPTY,        "white", "black" )
-                elif self.fold_symbols == 1:
-                    # Plus for contracted folders, minus for expanded
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_MINUS, "white", "black")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_PLUS,  "white", "black")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_EMPTY, "white", "black")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_EMPTY, "white", "black")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_EMPTY, "white", "black")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_EMPTY, "white", "black")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_EMPTY, "white", "black")
+                    if self.fold_symbols == 0:
+                        # Arrow pointing right for contracted folders, arrow pointing down for expanded
+                        self.MarkerDefine( stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_ARROWDOWN,    "black", "black" )
+                        self.MarkerDefine( stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_ARROW,        "black", "black" )
+                        self.MarkerDefine( stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_EMPTY,        "black", "black" )
+                        self.MarkerDefine( stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_EMPTY,        "black", "black" )
+                        self.MarkerDefine( stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_EMPTY,        "white", "black" )
+                        self.MarkerDefine( stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_EMPTY,        "white", "black" )
+                        self.MarkerDefine( stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_EMPTY,        "white", "black" )
+                    elif self.fold_symbols == 1:
+                        # Plus for contracted folders, minus for expanded
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_MINUS, "white", "black")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_PLUS,  "white", "black")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_EMPTY, "white", "black")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_EMPTY, "white", "black")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_EMPTY, "white", "black")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_EMPTY, "white", "black")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_EMPTY, "white", "black")
 
-                elif self.fold_symbols == 2:
-                    # Like a flattened tree control using circular headers and curved joins
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_CIRCLEMINUS,          "white", "#404040")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_CIRCLEPLUS,           "white", "#404040")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_VLINE,                "white", "#404040")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_LCORNERCURVE,         "white", "#404040")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_CIRCLEPLUSCONNECTED,  "white", "#404040")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_CIRCLEMINUSCONNECTED, "white", "#404040")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_TCORNERCURVE,         "white", "#404040")
+                    elif self.fold_symbols == 2:
+                        # Like a flattened tree control using circular headers and curved joins
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_CIRCLEMINUS,          "white", "#404040")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_CIRCLEPLUS,           "white", "#404040")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_VLINE,                "white", "#404040")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_LCORNERCURVE,         "white", "#404040")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_CIRCLEPLUSCONNECTED,  "white", "#404040")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_CIRCLEMINUSCONNECTED, "white", "#404040")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_TCORNERCURVE,         "white", "#404040")
 
-                elif self.fold_symbols == 3:
-                    # Like a flattened tree control using square headers
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_BOXMINUS,          "white", "#808080")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_BOXPLUS,           "white", "#808080")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_VLINE,             "white", "#808080")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_LCORNER,           "white", "#808080")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_BOXPLUSCONNECTED,  "white", "#808080")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_BOXMINUSCONNECTED, "white", "#808080")
-                    self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_TCORNER,           "white", "#808080")
+                    elif self.fold_symbols == 3:
+                        # Like a flattened tree control using square headers
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_BOXMINUS,          "white", "#808080")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_BOXPLUS,           "white", "#808080")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERSUB,     stc.STC_MARK_VLINE,             "white", "#808080")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERTAIL,    stc.STC_MARK_LCORNER,           "white", "#808080")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_BOXPLUSCONNECTED,  "white", "#808080")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_BOXMINUSCONNECTED, "white", "#808080")
+                        self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_TCORNER,           "white", "#808080")
 
-                self.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
-                self.Bind(stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
+                    self.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
+                    self.Bind(stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         
         def OnUpdateUI(self, evt):
             # check for matching braces
