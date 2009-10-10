@@ -106,8 +106,22 @@ class WpEditorSettings( wx.Panel ):
 			self.codeFoldCheckbox.SetValue(True)    # Set to checked state
 		else:
 			self.codeFoldCheckbox.SetValue(False)   # Set to unchecked state
-        
+            
+                # Fold style
+                styles = [
+                        'Arrows',
+                        'Plus and minus',
+                        'Circular Flattened Tree',
+                        'Square Flattened Tree'
+                    ]
+                self.foldCodeStyleSelect = wx.ComboBox(self, wx.ID_ANY, style=wx.CB_DROPDOWN | wx.CB_READONLY | wx.CB_SORT, choices=styles)
+
+                # Preselect folding style
+                preselectedStyle = styles[ int(self.configobj.settings['editor-foldcodestyle']) ]
+                self.foldCodeStyleSelect.SetStringSelection(preselectedStyle)
+
                 sizer.Add(self.codeFoldCheckbox)
+                sizer.Add(self.foldCodeStyleSelect)
                 
                 return sizer
 
@@ -208,6 +222,10 @@ class WpEditorSettings( wx.Panel ):
                 ## Saving code folding
                 self.configobj.settings['editor-foldcode'] = 1 if self.codeFoldCheckbox.IsChecked() == True else 0
 		db.AddRegisterSetting('foldcode', self.configobj.settings['editor-foldcode'], 'editor')
+
+                ## Saving code folding style
+                self.configobj.settings['editor-foldcodestyle'] = self.foldCodeStyleSelect.GetCurrentSelection()
+		db.AddRegisterSetting('foldcodestyle', self.configobj.settings['editor-foldcodestyle'], 'editor')
 
 		## Saving fonts
 		self.configobj.settings['editor-fontface'] = self.fontListCtrl.GetStringSelection()
