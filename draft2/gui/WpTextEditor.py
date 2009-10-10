@@ -61,8 +61,8 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 
                     self.SetMarginSensitive(2, True)
                     self.SetMarginWidth(2, 12)
-                    self.SetFoldMarginHiColour(True, "#99cc00")
-                    self.SetFoldMarginColour(True, "336699")
+                    self.SetFoldMarginHiColour(True, "#232323")
+                    self.SetFoldMarginColour(True, "#232323")
 
 
                     if self.fold_symbols == 0:
