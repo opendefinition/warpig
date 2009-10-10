@@ -22,6 +22,52 @@ from system.WpConfigSystem import WpConfigSystem
 class WpTextEditor( wx.stc.StyledTextCtrl ):
 	_curr_file_path = None
 
+        def __init__( self, parent ):
+		self.parent = parent
+
+                ## Load configurations
+                self.configobj = WpConfigSystem()
+                self.applySettings()
+
+		##
+		# We always construct parent with wx.TE_MULTILINE
+		##
+		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
+		## Text margin
+		self.SetMarginType(0, wx.stc.STC_MARGIN_NUMBER )    # Line numbering
+		self.SetMarginWidth(0, 35)                          # Margin for line numbering
+		self.SetEdgeColour("#555753" )
+		self.SetEdgeColumn(self.editorTextMarginWidth)      # Text margin
+		self.SetEdgeMode(wx.stc.STC_EDGE_LINE)              # Text margin type
+
+		## Tab Setup
+		self.setTabAndIndents()
+		## Code folding
+                self.setCodeFolding()
+
+
+		## Fonts
+		font = wx.Font(
+                            self.editorFontSize,
+                            wx.DEFAULT,
+                            wx.NORMAL,
+                            wx.NORMAL,
+                            False,
+                            self.editorFontFace,
+                            wx.FONTENCODING_UTF8
+                        )
+
+		## We must tell StyleSetSpec to use this face and size otherwise it won't get applied
+		self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (self.editorFontFace, self.editorFontSize))
+
+		self.StyleSetFont( 0, font )
+		self.SetDefaultLexer()
+		self.SetFocus()
+
+		self.Bind( wx.EVT_KEY_DOWN, self._OnKeyDown )
+		self.Bind( wx.stc.EVT_STC_SAVEPOINTREACHED, self._OnSavePointReached )
+		self.Bind( wx.stc.EVT_STC_CHANGE, self._OnTextChange )
+
         def applySettings(self):
             """
             Apply editor settings
@@ -233,56 +279,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                     line = line + 1
 
             return line
-
-
-
-	def __init__( self, parent ):
-		self.parent = parent
-
-                ## Load configurations
-                self.configobj = WpConfigSystem()
-                self.applySettings()
-		
-		##
-		# We always construct parent with wx.TE_MULTILINE
-		##
-		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
-		## Text margin
-		self.SetMarginType(0, wx.stc.STC_MARGIN_NUMBER )    # Line numbering
-		self.SetMarginWidth(0, 35)                          # Margin for line numbering
-		self.SetEdgeColour("#555753" )
-		self.SetEdgeColumn(self.editorTextMarginWidth)      # Text margin
-		self.SetEdgeMode(wx.stc.STC_EDGE_LINE)              # Text margin type
-		
-		## Tab Setup
-		self.setTabAndIndents()
-		## Code folding
-                self.setCodeFolding()
-
-
-		## Fonts	
-		font = wx.Font(
-                            self.editorFontSize,
-                            wx.DEFAULT,
-                            wx.NORMAL,
-                            wx.NORMAL,
-                            False,
-                            self.editorFontFace,
-                            wx.FONTENCODING_UTF8
-                        )
-	
-		## We must tell StyleSetSpec to use this face and size otherwise it won't get applied
-		self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (self.editorFontFace, self.editorFontSize))
-		
-		self.StyleSetFont( 0, font )
-		self.SetDefaultLexer()
-		self.SetFocus()
-		
-		self.Bind( wx.EVT_KEY_DOWN, self._OnKeyDown )
-		# self.Bind( wx.stc.EVT_STC_SAVEPOINTREACHED, self._OnSavePointReached )
-		# self.Bind( wx.stc.EVT_STC_CHANGE, self._OnTextChange )
-		
-		
+			
 	#---------------------------------------------------------------
 	# Get filepath defined for this instance of WpTextEditor
 	# @return self
