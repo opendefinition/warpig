@@ -65,7 +65,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                     self.SetFoldMarginColour(True, "336699")
 
 
-                    if self.fold_symbols == 1:
+                    if self.fold_symbols == 0:
                         # Arrow pointing right for contracted folders, arrow pointing down for expanded
                         self.MarkerDefine( stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_ARROWDOWN,    "black", "black" )
                         self.MarkerDefine( stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_ARROW,        "black", "black" )
@@ -74,7 +74,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                         self.MarkerDefine( stc.STC_MARKNUM_FOLDEREND,     stc.STC_MARK_EMPTY,        "white", "black" )
                         self.MarkerDefine( stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_EMPTY,        "white", "black" )
                         self.MarkerDefine( stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_EMPTY,        "white", "black" )
-                    elif self.fold_symbols == 2:
+                    elif self.fold_symbols == 1:
                         # Plus for contracted folders, minus for expanded
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_MINUS, "white", "black")
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_PLUS,  "white", "black")
@@ -84,7 +84,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_EMPTY, "white", "black")
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_EMPTY, "white", "black")
 
-                    elif self.fold_symbols == 3:
+                    elif self.fold_symbols == 2:
                         # Like a flattened tree control using circular headers and curved joins
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_CIRCLEMINUS,          "white", "#404040")
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_CIRCLEPLUS,           "white", "#404040")
@@ -94,7 +94,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPENMID, stc.STC_MARK_CIRCLEMINUSCONNECTED, "white", "#404040")
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDERMIDTAIL, stc.STC_MARK_TCORNERCURVE,         "white", "#404040")
 
-                    elif self.fold_symbols == 4:
+                    elif self.fold_symbols == 3:
                         # Like a flattened tree control using square headers
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDEROPEN,    stc.STC_MARK_BOXMINUS,          "white", "#808080")
                         self.MarkerDefine(stc.STC_MARKNUM_FOLDER,        stc.STC_MARK_BOXPLUS,           "white", "#808080")
