@@ -45,6 +45,8 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		## Code folding
                 self.setCodeFolding()
 
+                ## Active tab color
+                self.parent.SetActiveTabColour('#99CC00')
 
 		## Fonts
 		font = wx.Font(
@@ -435,13 +437,15 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	# Add ' * ' to tab title if text is modified
 	#---------------------------------------------------------------
 	def _OnTextChange( self, event ):
-		tabheading = self.Parent.GetPageText( self.Parent.GetSelection() )
-		dirtyfilter = re.compile( ' \* ' )
+                tabheading = self.Parent.GetPageText( self.Parent.GetSelection() )
+
+
+                dirtyfilter = re.compile( ' \* ' )
 		
 		if( dirtyfilter.search( tabheading ) == None ):
 			tabheading += ( ' * ' )
 			self.Parent.SetPageText( self.Parent.GetSelection(), tabheading )
-		
+                
 	#---------------------------------------------------------------
 	# Resetting title of tab
 	#---------------------------------------------------------------
