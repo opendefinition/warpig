@@ -47,12 +47,12 @@ class WpNewProject( wx.Dialog ):
 		prjfilesizer =wx.BoxSizer( wx.HORIZONTAL )
 		
 		self.filelist = wx.ListCtrl( mainpanel, 
-								-1,
-								style=wx.BORDER_SUNKEN 
-									| wx.LC_REPORT
-									| wx.LC_VRULES
-									| wx.LC_HRULES
-								)
+                                                -1,
+                                                style=wx.BORDER_SUNKEN
+                                                        | wx.LC_REPORT
+                                                        | wx.LC_VRULES
+                                                        | wx.LC_HRULES
+                                            )
 		
 		self.filelist.InsertColumn( 0, 'Path' )
 		self.filelist.SetColumnWidth( 0, 1000 )
@@ -63,19 +63,19 @@ class WpNewProject( wx.Dialog ):
 		imagerem = wx.Image( "./gui/icons/list-remove.png", wx.BITMAP_TYPE_PNG ).ConvertToBitmap()
 		
 		addfilebutton = wx.BitmapButton( mainpanel,
-										11, 
-										bitmap=imageadd, 
-										pos=(10,20), 
-										size=(imageadd.GetWidth(), imageadd.GetHeight() ),
-										style=wx.NO_BORDER
-										)
+                                                    wx.ID_ANY,
+                                                    bitmap=imageadd,
+                                                    pos=(10,20),
+                                                    size=(imageadd.GetWidth(), imageadd.GetHeight() ),
+                                                    #style=wx.NO_BORDER
+                                                )
 		remfilebutton = wx.BitmapButton( mainpanel,
-										12, 
-										bitmap=imagerem, 
-										pos=(10,20), 
-										size=(imagerem.GetWidth(), imagerem.GetHeight() ),
-										style=wx.NO_BORDER
-										)
+                                                    wx.ID_ANY,
+                                                    bitmap=imagerem,
+                                                    pos=(10,20),
+                                                    size=(imagerem.GetWidth(), imagerem.GetHeight() )
+                                                    #style=wx.NO_BORDER
+                                                )
 		
 		fileactionsizer.Add( addfilebutton )
 		fileactionsizer.Add( remfilebutton )
@@ -88,8 +88,8 @@ class WpNewProject( wx.Dialog ):
 		##
 		buttonsizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		savebutton = buttons.ThemedGenButton( mainpanel, 13, 'Save' ) 
-		cancelbutton = buttons.ThemedGenButton( mainpanel, 14, 'Cancel' )
+		savebutton = buttons.ThemedGenButton( mainpanel, wx.ID_ANY, 'Save' )
+		cancelbutton = buttons.ThemedGenButton( mainpanel, wx.ID_ANY, 'Cancel' )
 		
 		buttonsizer.Add( cancelbutton, 0, wx.EXPAND | wx.ALL, 5 )
 		buttonsizer.Add( savebutton, 1, wx.EXPAND | wx.ALL, 5 )
@@ -118,10 +118,10 @@ class WpNewProject( wx.Dialog ):
 		##
 		# Bindings
 		##
-		self.Bind( wx.EVT_BUTTON, self._onAssociateFiles, id=11)
-		self.Bind( wx.EVT_BUTTON, self._onRemovingFilesFromProject, id=12)
-		self.Bind( wx.EVT_BUTTON, self._onSave, id=13 )
-		self.Bind( wx.EVT_BUTTON, self._onCancel, id=14 )
+		self.Bind( wx.EVT_BUTTON, self._onAssociateFiles, id=addfilebutton.GetId())
+		self.Bind( wx.EVT_BUTTON, self._onRemovingFilesFromProject, id=remfilebutton.GetId())
+		self.Bind( wx.EVT_BUTTON, self._onSave, id=savebutton.GetId() )
+		self.Bind( wx.EVT_BUTTON, self._onCancel, id=cancelbutton.GetId() )
 
 		self.Center()
 	

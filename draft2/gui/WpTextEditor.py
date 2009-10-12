@@ -319,7 +319,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	# Set lexer for this editor instance
 	#---------------------------------------------------------------	
 	def SetDefaultLexer( self ):
-		# self.SetLexer( wx.stc.STC_LEX_PYTHON )
+		self.SetLexer( wx.stc.STC_LEX_RUBY )
 		self.SetLexerLanguage( 'python' )
 	
 		keys = keyword.kwlist[ : ]
