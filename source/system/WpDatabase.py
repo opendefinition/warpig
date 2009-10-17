@@ -59,7 +59,7 @@ class WpDatabase():
 		finally:
 			self.__Close()
 			
-		return retval
+		return self.cursor.lastrowid
 		
 	def Select( self, querystring ):
 		retval = False

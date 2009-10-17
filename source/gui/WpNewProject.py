@@ -18,6 +18,9 @@ import os
 from wx.lib.agw.multidirdialog import MultiDirDialog
 from system.WpFileSystem import WpFileSystem
 
+from system.WpDatabaseAPI import WpDatabaseAPI
+from system.WpProject import WpProject
+
 class WpNewProject( wx.Dialog ):
 	def __init__( self, treectrl ):
 		self._treectrl = treectrl
@@ -184,7 +187,7 @@ class WpNewProject( wx.Dialog ):
 	#---------------------------------------------------------------
 	def _onSave( self, event ):
 		self.Close()
-		path = './projects/' + "/" + self.prjnameinput .GetValue() + ".wpf"
+		path = './projects/' + "/" + self.prjnameinput.GetValue() + ".wpf"
 		
 		##
 		# Get all paths that belongs to this project
@@ -197,3 +200,24 @@ class WpNewProject( wx.Dialog ):
 		
 		projectfile = WpFileSystem.SaveProjectFile( path, dir )
 		self._treectrl.treectrl.PopulateTree( projectfile )
+
+
+                """
+                TESTING:START
+                """
+                db = WpDatabaseAPI()
+                project = WpProject()
+
+                project.SetTitle(self.prjnameinput.GetValue())
+
+                numberOfPaths = self.filelist.GetItemCount()
+
+		for index in range( 0, numberOfPaths ):
+                    project.AddPath(self.filelist.GetItem( index, 0 ).GetText())
+
+                # Saving this project
+                db.AddProject(project)
+
+                """
+                TESTING:END
+                """

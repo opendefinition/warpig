@@ -26,7 +26,6 @@ CREATE TABLE projectincludes(
     PRIMARY KEY ("id")
 );
 
-
 ;-- DEFAULT EDITOR VALUES
 INSERT INTO systemregistry(key,value,module) VALUES ('fontface','Verdana','editor');
 INSERT INTO systemregistry(key,value,module) VALUES ('fontsize','12','editor');
