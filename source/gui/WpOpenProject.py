@@ -71,7 +71,7 @@ class WpOpenProject( wx.Dialog ):
             panel = wx.Panel(self, wx.ID_ANY)
             panelsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-            savebutton = wx.Button(panel, wx.ID_SAVE)
+            savebutton = wx.Button(panel, wx.ID_OPEN)
             cancelbutton = wx.Button(panel, wx.ID_CANCEL)
 
             panelsizer.Add(savebutton)
@@ -79,4 +79,20 @@ class WpOpenProject( wx.Dialog ):
 
             panel.SetSizer(panelsizer)
 
+            self.Bind(wx.EVT_BUTTON, self.onOpen, id=savebutton.GetId())
+
             return panel
+
+        ##----------------------------------------------------------------------
+        ## Bindings
+        ##----------------------------------------------------------------------
+
+        def onOpen(self, event):
+            projectid = int(self.projectlist.GetItemData(self.projectlist.GetFirstSelected()))
+
+            db = WpDatabaseAPI()
+            project = db.GetProject(projectid)
+
+            # Populate the tree
+            self._treectrl.treectrl.PopulateTree(project)
+            self.Destroy()

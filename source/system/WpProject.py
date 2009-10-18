@@ -42,3 +42,15 @@ class WpProject:
             Get associated project file paths
             """
             return self.paths
+
+        def SetDateCreated(self, date):
+            """
+            Set which date this project was created on
+            """
+            self.datecreated = str(date)
+
+        def GetDateCreated(self):
+            """
+            Get which date this project was created on
+            """
+            return self.datecreated

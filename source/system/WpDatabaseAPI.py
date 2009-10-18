@@ -87,9 +87,25 @@ class WpDatabaseAPI( WpDatabase ):
                 
             return structure
 
+        def GetProject(self, projectid):
+            project = WpProject()
+
+            projectquery = "SElECT * FROM projects WHERE id=%i" % (int(projectid))
+            projectinfo = self.Select(projectquery)
+
+            for info in projectinfo:
+                project.SetId(info[0])
+                project.SetTitle(info[1])
+                project.SetDateCreated(info[2])
 
 
+            includesquery = "SELECT path FROM projectincludes WHERE projectid=%i" % (int(projectid))
+            includes = self.Select(includesquery)
 
+            for include in includes:
+                project.AddPath(include[0])
+
+            return project
 
 	##---------------------------------------------------------------
 	## System Specific API Functions
