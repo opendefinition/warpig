@@ -187,6 +187,8 @@ class WpNewProject( wx.Dialog ):
 	#---------------------------------------------------------------
 	def _onSave( self, event ):
 		self.Close()
+
+                """
 		path = './projects/' + "/" + self.prjnameinput.GetValue() + ".wpf"
 		
 		##
@@ -200,7 +202,7 @@ class WpNewProject( wx.Dialog ):
 		
 		projectfile = WpFileSystem.SaveProjectFile( path, dir )
 		self._treectrl.treectrl.PopulateTree( projectfile )
-
+                """
 
                 """
                 TESTING:START
@@ -217,6 +219,9 @@ class WpNewProject( wx.Dialog ):
 
                 # Saving this project
                 db.AddProject(project)
+
+                # Populate projecttree
+                self._treectrl.treectrl.PopulateTree(project)
 
                 """
                 TESTING:END
