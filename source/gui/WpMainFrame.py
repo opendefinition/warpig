@@ -206,7 +206,6 @@ class WpMainFrame( wx.Frame ):
 	def _OnOpenProject( self, event ):
                 window = WpOpenProject(self.mainpanel.leftsplit)
                 window.ShowModal()
-                window.Destroy()
 
 	def _OnPreferences( self, event ):
 		preferences = WpPreferences()

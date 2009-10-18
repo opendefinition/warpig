@@ -80,6 +80,7 @@ class WpOpenProject( wx.Dialog ):
             panel.SetSizer(panelsizer)
 
             self.Bind(wx.EVT_BUTTON, self.onOpen, id=savebutton.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onCancel, id=cancelbutton.GetId())
 
             return panel
 
@@ -95,4 +96,7 @@ class WpOpenProject( wx.Dialog ):
 
             # Populate the tree
             self._treectrl.treectrl.PopulateTree(project)
+            self.Destroy()
+
+        def onCancel(self, event):
             self.Destroy()
