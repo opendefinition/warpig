@@ -16,6 +16,7 @@ import wx
 import wx.stc as stc
 from gui.WpMainPanel import WpMainPanel
 from gui.WpNewProject import WpNewProject
+from gui.WpOpenProject import WpOpenProject
 from gui.preferences.WpPreferences import WpPreferences
 
 from system.WpFileSystem import WpFileSystem
@@ -203,15 +204,10 @@ class WpMainFrame( wx.Frame ):
 	# Handle 'on open project' event
 	#---------------------------------------------------------------
 	def _OnOpenProject( self, event ):
-		filter = 'WarPig Project File (*.wpf)|*.wpf'
-		dialog = wx.FileDialog( None, 'Open Project', wildcard=filter, style=wx.OPEN )
-		
-		if( dialog.ShowModal() == wx.ID_OK ):
-			path = dialog.GetPath()
-			self.mainpanel.leftsplit.treectrl.PopulateTree( path )
-	
-		dialog.Destroy()
-		
+                window = WpOpenProject(self.mainpanel.leftsplit)
+                window.ShowModal()
+                window.Destroy()
+
 	def _OnPreferences( self, event ):
 		preferences = WpPreferences()
 		preferences.ShowModal()
