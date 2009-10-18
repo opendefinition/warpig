@@ -3,7 +3,7 @@ class WpProject:
             self.id     = None
             self.title  = None
             self.datecreated = None
-
+            self.description = None
             self.paths = []
 
         def SetId(self, id):
@@ -34,7 +34,7 @@ class WpProject:
             """
             Add associated project file path
             """
-            self.paths.append(path)
+            self.paths.append(str(path))
             self.paths.sort()
 
         def GetPaths(self):
@@ -53,4 +53,16 @@ class WpProject:
             """
             Get which date this project was created on
             """
-            return self.datecreated
+            return str(self.datecreated)
+
+        def SetDescription(self, description):
+            """
+            Set decription for this project
+            """
+            self.description = str(description)
+
+        def GetDescription(self):
+            """
+            Get description for this project
+            """
+            return str(self.description)

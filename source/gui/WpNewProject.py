@@ -15,6 +15,8 @@ import wx
 import wx.lib.buttons as buttons
 import os
 
+from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
+
 from wx.lib.agw.multidirdialog import MultiDirDialog
 from system.WpFileSystem import WpFileSystem
 
@@ -43,6 +45,17 @@ class WpNewProject( wx.Dialog ):
 		
 		prjnamesizer.Add( prjnamelabel, 0, wx.EXPAND | wx.ALL, 5 )
 		prjnamesizer.Add( self.prjnameinput , 1, wx.EXPAND | wx.ALL, 5 )
+                self.Fit()
+
+                ##
+                # Project description
+                ##
+                prjdescsizer = wx.BoxSizer( wx.VERTICAL )
+                prjdesclabel = wx.StaticText( mainpanel, -1, 'Description' )
+                self.prjdescfield = ExpandoTextCtrl( mainpanel, wx.ID_ANY )
+                prjdescsizer.Add(prjdesclabel, 0, wx.EXPAND | wx.ALL, 5)
+                prjdescsizer.Add(self.prjdescfield, 1, wx.EXPAND | wx.ALL, 5)
+                self.Bind(EVT_ETC_LAYOUT_NEEDED, self.OnRefit, id=self.prjdescfield.GetId())
 		
 		##
 		# Controls for adding files to project
@@ -103,6 +116,7 @@ class WpNewProject( wx.Dialog ):
 		panelsizer.AddMany(
 			[
 				( prjnamesizer, 1, wx.EXPAND ),
+                                ( prjdescsizer, 1, wx.EXPAND ),
 				( prjfilesizer, 1, wx.EXPAND ),
 				( buttonsizer, 1, wx.EXPAND )
 			]
@@ -127,7 +141,10 @@ class WpNewProject( wx.Dialog ):
 		self.Bind( wx.EVT_BUTTON, self._onCancel, id=cancelbutton.GetId() )
 
 		self.Center()
-	
+
+        def OnRefit(self, event):
+            self.Fit()
+
 	#---------------------------------------------------------------
 	# On adding files to project
 	#---------------------------------------------------------------
@@ -192,6 +209,7 @@ class WpNewProject( wx.Dialog ):
                 project = WpProject()
 
                 project.SetTitle(self.prjnameinput.GetValue())
+                project.SetDescription(self.prjdescfield.GetValue())
 
                 numberOfPaths = self.filelist.GetItemCount()
 

@@ -61,7 +61,7 @@ class WpDatabaseAPI( WpDatabase ):
             Input project instance of WpProject.
             """
             ## TODO: Add better checks here
-            projectInsert = "INSERT INTO projects('title') VALUES('%s');" % (project.GetTitle())
+            projectInsert = "INSERT INTO projects('title','description') VALUES('%s', '%s');" % (project.GetTitle(), project.GetDescription())
             projectId = self.Insert(projectInsert)
 
             for path in project.GetPaths():
@@ -74,13 +74,14 @@ class WpDatabaseAPI( WpDatabase ):
             """
             Get a list of projects containing their title and id
             """
-            query = "SELECT id, title FROM projects ORDER BY title;"
+            query = "SELECT id, title, description FROM projects ORDER BY title;"
 
             structure = []
             for entry in self.Select(query):
                 info = {
                             'id': entry[0],
-                            'title': entry[1]
+                            'title': entry[1],
+                            'description': entry[2]
                         }
 
                 structure.append(info)
@@ -94,9 +95,11 @@ class WpDatabaseAPI( WpDatabase ):
             projectinfo = self.Select(projectquery)
 
             for info in projectinfo:
+                print info
                 project.SetId(info[0])
                 project.SetTitle(info[1])
-                project.SetDateCreated(info[2])
+                project.SetDescription(info[2])
+                project.SetDateCreated(info[3])
 
 
             includesquery = "SELECT path FROM projectincludes WHERE projectid=%i" % (int(projectid))

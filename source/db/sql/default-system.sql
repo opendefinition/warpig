@@ -15,6 +15,7 @@ CREATE TABLE systeminformation(
 CREATE TABLE projects(
     "id" INTEGER PRIMARY KEY,
     "title" VARCHAR(100) NOT NULL,
+    "description" TEXT DEFAULT NULL,
     "datecreated" DATETIME DEFAULT current_timestamp
 );
 
