@@ -48,11 +48,23 @@ class WpOpenProject( wx.Dialog ):
 
             self.projectlist.InsertColumn(0, 'Project')
             self.projectlist.SetColumnWidth(0, 1000)
-            
+
+            ## Populate the list
+            for project in self.__GetProjectList():
+                item = wx.ListItem()
+                item.SetText(project['title'])
+                item.SetData(project['id'])
+
+                self.projectlist.InsertItem(item)
+
             panelsizer.Add(self.projectlist, 1, wx.EXPAND)
             panel.SetSizer(panelsizer, wx.EXPAND)
 
             return panel
+
+        def __GetProjectList(self):
+            db = WpDatabaseAPI()
+            return db.GetProjectList()
             
 
         def Buttons(self):

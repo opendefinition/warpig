@@ -70,6 +70,27 @@ class WpDatabaseAPI( WpDatabase ):
 
             return True
 
+        def GetProjectList(self):
+            """
+            Get a list of projects containing their title and id
+            """
+            query = "SELECT id, title FROM projects ORDER BY title;"
+
+            structure = []
+            for entry in self.Select(query):
+                info = {
+                            'id': entry[0],
+                            'title': entry[1]
+                        }
+
+                structure.append(info)
+                
+            return structure
+
+
+
+
+
 	##---------------------------------------------------------------
 	## System Specific API Functions
 	##---------------------------------------------------------------
