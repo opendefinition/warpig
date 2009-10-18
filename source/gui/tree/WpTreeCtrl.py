@@ -16,19 +16,19 @@ import wx
 from system.WpFileSystem import WpFileSystem
 from gui.tree.WpProjectData import WpProjectData
 from gui.tree.WpElementData import WpElementData
+from system.WpProject import WpProject
 
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
 		wx.TreeCtrl.__init__( self, parent, wx.ID_ANY, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
 		
-	def PopulateTree( self, filepath ):
+	def PopulateTree( self, projectobj ):
 		"""
 		Build and populate this instance of the projecttree
-		@param String Filepath
+		@param Object WpProject
 		"""
 		self.SetIndent(10)
-		project = WpFileSystem.LoadProjectFile( filepath )
-	
+
 		# Destroying all content if content is present
 		if( self.IsEmpty() == False ):
 			self.DeleteAllItems()
@@ -44,15 +44,16 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		
 		## Setup project information
 		projectInformation = WpProjectData()
-		projectInformation.setProjectName(str(project['project']['name']))
-		treeroot = self.AddRoot(
-							projectInformation.getProjectName(), 
-							3, 
-							3, 
-							wx.TreeItemData(projectInformation)
-						)
+		projectInformation.setProjectName(projectobj.GetTitle())
+
+                treeroot = self.AddRoot(
+                                    projectInformation.getProjectName(),
+                                    3,
+                                    3,
+                                    wx.TreeItemData(projectInformation)
+				)
 						
-		self.SetItemHasChildren( treeroot, True )
+		self.SetItemHasChildren(treeroot,True)
 		self.SetItemBold(treeroot)
 		self.SetItemBackgroundColour(treeroot, wx.Colour(162,181,205))
 
@@ -60,7 +61,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		ids = {root: treeroot}
 		
 		## Build projecttree by looping over current directory listing
-		for dir in project[ 'dir' ]:
+		for dir in projectobj.GetPaths():
 			dlist = WpFileSystem.ListDirectory( dir )
 		
 			## Prepare basic information for node
@@ -78,38 +79,38 @@ class WpTreeCtrl( wx.TreeCtrl ):
 					directoryInformation = WpElementData()
 					directoryInformation.setCurrentDirectory(os.path.join( dirpath, dirname))
 					directoryInformation.setCurrentFile(
-												os.path.join(
-													subrootInformation.getCurrentDirectory(),
-													directoryInformation.getCurrentDirectory()
-												)
-											)
+								os.path.join(
+									subrootInformation.getCurrentDirectory(),
+                                                                        directoryInformation.getCurrentDirectory()
+                                                                    )
+                                                            )
 											
 					ids[directoryInformation.getCurrentDirectory()] = self.AppendItem( 
-															ids[dirpath], 
-															dirname, 
-															0, 
-															1, 
-															wx.TreeItemData(directoryInformation)
-														)
+												ids[dirpath], 
+												dirname, 
+												0, 
+												1, 
+												wx.TreeItemData(directoryInformation)
+                                                                                            )
 					
 				for filename in sorted(filenames):
 					fileInformation = WpElementData()
 					fileInformation.setCurrentDirectory(dirpath)
 					fileInformation.setCurrentFilename(filename)
 					fileInformation.setCurrentFile(
-											os.path.join(
-												fileInformation.getCurrentDirectory(),
-												fileInformation.getCurrentFilename()
-											)
-										)
+								os.path.join(
+								fileInformation.getCurrentDirectory(),
+								fileInformation.getCurrentFilename()
+               						)
+						)
 					
 					self.AppendItem(
-							ids[fileInformation.getCurrentDirectory()],
-							fileInformation.getCurrentFilename(),
-							2,
-							2,
-							wx.TreeItemData(fileInformation)
-						)
+						ids[fileInformation.getCurrentDirectory()],
+						fileInformation.getCurrentFilename(),
+						2,
+						2,
+						wx.TreeItemData(fileInformation)
+					)
 					
 		self.Parent.Parent.Parent.ResizeSash()
 		
