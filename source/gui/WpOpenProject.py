@@ -43,7 +43,7 @@ class WpOpenProject( wx.Dialog ):
             
             self.projectlist = wx.ListCtrl(
                                     panel, wx.ID_ANY,
-                                    style=wx.BORDER_SUNKEN | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES
+                                    style=wx.BORDER_SUNKEN | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES | wx.LC_SINGLE_SEL
                                 )
 
             self.projectlist.InsertColumn(0, 'Project')
