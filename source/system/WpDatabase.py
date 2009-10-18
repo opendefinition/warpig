@@ -74,6 +74,12 @@ class WpDatabase():
 		
 		return retval
 
+        def Delete( self, querystring ):
+                self.__Open()
+                self.cursor.execute( querystring )
+                self.connection.commit()
+                self.__Close()
+
 	def RunSqlScript( self, path ):
 		self.__Open()
 		self.connection.executescript(path)

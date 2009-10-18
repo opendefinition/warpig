@@ -107,6 +107,13 @@ class WpDatabaseAPI( WpDatabase ):
 
             return project
 
+        def DeleteProject(self, id):
+            deleteProject = "DELETE FROM projects WHERE id=%i;" % (id)
+            deleteIncludes = "DELETE FROM projectincludes WHERE projectid=%i;" % (id)
+
+            self.Delete(deleteProject)
+            self.Delete(deleteIncludes)
+
 	##---------------------------------------------------------------
 	## System Specific API Functions
 	##---------------------------------------------------------------

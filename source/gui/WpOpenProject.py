@@ -73,14 +73,17 @@ class WpOpenProject( wx.Dialog ):
 
             savebutton = wx.Button(panel, wx.ID_OPEN)
             cancelbutton = wx.Button(panel, wx.ID_CANCEL)
+            deletebutton = wx.Button(panel, wx.ID_DELETE)
 
             panelsizer.Add(savebutton)
+            panelsizer.Add(deletebutton)
             panelsizer.Add(cancelbutton)
 
             panel.SetSizer(panelsizer)
 
             self.Bind(wx.EVT_BUTTON, self.onOpen, id=savebutton.GetId())
             self.Bind(wx.EVT_BUTTON, self.onCancel, id=cancelbutton.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onDelete, id=deletebutton.GetId())
 
             return panel
 
@@ -99,4 +102,11 @@ class WpOpenProject( wx.Dialog ):
             self.Destroy()
 
         def onCancel(self, event):
+            self.Destroy()
+
+        def onDelete(self, event):
+            projectid = int(self.projectlist.GetItemData(self.projectlist.GetFirstSelected()))
+
+            db = WpDatabaseAPI()
+            db.DeleteProject(projectid)
             self.Destroy()
