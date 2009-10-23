@@ -75,9 +75,9 @@ class WpOpenProject( wx.Dialog ):
             cancelbutton = buttons.ThemedGenButton(panel, wx.ID_CANCEL, 'Cancel')
             deletebutton = buttons.ThemedGenButton(panel, wx.ID_DELETE, 'Delete')
 
-            panelsizer.Add(openbutton)
-            panelsizer.Add(deletebutton)
+            panelsizer.Add(deletebutton, 0, wx.RIGHT, 2)
             panelsizer.Add(cancelbutton)
+            panelsizer.Add(openbutton, 1, wx.EXPAND | wx.RIGHT, 2)
 
             panel.SetSizer(panelsizer)
 

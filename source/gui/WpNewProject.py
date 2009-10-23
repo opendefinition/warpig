@@ -32,7 +32,7 @@ class WpNewProject( wx.Dialog ):
 		##
 		# Main Panel
 		##
-		mainpanel = wx.Panel(self, -1, size=(500,500), style=wx.EXPAND )
+		mainpanel = wx.Panel(self, -1, size=(500,300), style=wx.EXPAND )
 		mainsizer = wx.BoxSizer( wx.VERTICAL )
 		panelsizer = wx.FlexGridSizer( 3, 1, 0, 0 )
 		
@@ -47,16 +47,17 @@ class WpNewProject( wx.Dialog ):
 		prjnamesizer.Add( self.prjnameinput , 1, wx.EXPAND | wx.ALL, 5 )
                 self.Fit()
 
+                """ This will be re added when this dialog is rewritten as a wizard
                 ##
                 # Project description
                 ##
                 prjdescsizer = wx.BoxSizer( wx.VERTICAL )
                 prjdesclabel = wx.StaticText( mainpanel, -1, 'Description' )
-                self.prjdescfield = ExpandoTextCtrl( mainpanel, wx.ID_ANY )
+                self.prjdescfield = wx.TextCtrl( mainpanel, wx.ID_ANY, style=wx.TE_MULTILINE )
+
                 prjdescsizer.Add(prjdesclabel, 0, wx.EXPAND | wx.ALL, 5)
-                prjdescsizer.Add(self.prjdescfield, 1, wx.EXPAND | wx.ALL, 5)
-                self.Bind(EVT_ETC_LAYOUT_NEEDED, self.OnRefit, id=self.prjdescfield.GetId())
-		
+                prjdescsizer.Add(self.prjdescfield, 0, wx.EXPAND | wx.ALL, 5)
+                """
 		##
 		# Controls for adding files to project
 		##
@@ -93,8 +94,8 @@ class WpNewProject( wx.Dialog ):
                                                     #style=wx.NO_BORDER
                                                 )
 		
-		fileactionsizer.Add( addfilebutton )
-		fileactionsizer.Add( remfilebutton )
+		fileactionsizer.Add( addfilebutton, 0, wx.RIGHT | wx.TOP, 5 )
+		fileactionsizer.Add( remfilebutton, 0, wx.RIGHT | wx.TOP, 5, 1 )
 	
 		prjfilesizer.Add( self.filelist, 1, wx.EXPAND | wx.ALL, 5 )
 		prjfilesizer.Add( fileactionsizer )
@@ -116,7 +117,7 @@ class WpNewProject( wx.Dialog ):
 		panelsizer.AddMany(
 			[
 				( prjnamesizer, 1, wx.EXPAND ),
-                                ( prjdescsizer, 1, wx.EXPAND ),
+                                #( prjdescsizer, 1, wx.EXPAND ),
 				( prjfilesizer, 1, wx.EXPAND ),
 				( buttonsizer, 1, wx.EXPAND )
 			]
@@ -141,9 +142,6 @@ class WpNewProject( wx.Dialog ):
 		self.Bind( wx.EVT_BUTTON, self._onCancel, id=cancelbutton.GetId() )
 
 		self.Center()
-
-        def OnRefit(self, event):
-            self.Fit()
 
 	#---------------------------------------------------------------
 	# On adding files to project
