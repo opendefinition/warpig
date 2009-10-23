@@ -27,8 +27,8 @@ class WpOpenProject( wx.Dialog ):
             mainsizer = wx.FlexGridSizer(2,1, vgap=5, hgap=5)
             mainsizer.AddMany(
                 [
-                    (self.ProjectList(), 1, wx.EXPAND),
-                    (self.Buttons(), 1, wx.EXPAND)
+                    (self.ProjectList(), 1, wx.EXPAND | wx.ALL, 5),
+                    (self.Buttons(), 1, wx.EXPAND | wx.ALL, 15)
                 ]
             )
 
@@ -43,7 +43,7 @@ class WpOpenProject( wx.Dialog ):
             
             self.projectlist = wx.ListCtrl(
                                     panel, wx.ID_ANY,
-                                    style=wx.BORDER_SUNKEN | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES | wx.LC_SINGLE_SEL
+                                    style=wx.BORDER_SUNKEN | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES | wx.LC_SINGLE_SEL | wx.LC_NO_HEADER
                                 )
 
             self.projectlist.InsertColumn(0, 'Project')
@@ -71,17 +71,17 @@ class WpOpenProject( wx.Dialog ):
             panel = wx.Panel(self, wx.ID_ANY)
             panelsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-            savebutton = wx.Button(panel, wx.ID_OPEN)
-            cancelbutton = wx.Button(panel, wx.ID_CANCEL)
-            deletebutton = wx.Button(panel, wx.ID_DELETE)
+            openbutton = buttons.ThemedGenButton(panel, wx.ID_OPEN, 'Open')
+            cancelbutton = buttons.ThemedGenButton(panel, wx.ID_CANCEL, 'Cancel')
+            deletebutton = buttons.ThemedGenButton(panel, wx.ID_DELETE, 'Delete')
 
-            panelsizer.Add(savebutton)
+            panelsizer.Add(openbutton)
             panelsizer.Add(deletebutton)
             panelsizer.Add(cancelbutton)
 
             panel.SetSizer(panelsizer)
 
-            self.Bind(wx.EVT_BUTTON, self.onOpen, id=savebutton.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onOpen, id=openbutton.GetId())
             self.Bind(wx.EVT_BUTTON, self.onCancel, id=cancelbutton.GetId())
             self.Bind(wx.EVT_BUTTON, self.onDelete, id=deletebutton.GetId())
 

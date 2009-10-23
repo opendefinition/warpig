@@ -95,7 +95,6 @@ class WpDatabaseAPI( WpDatabase ):
             projectinfo = self.Select(projectquery)
 
             for info in projectinfo:
-                print info
                 project.SetId(info[0])
                 project.SetTitle(info[1])
                 project.SetDescription(info[2])
