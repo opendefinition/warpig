@@ -92,21 +92,42 @@ class WpOpenProject( wx.Dialog ):
         ##----------------------------------------------------------------------
 
         def onOpen(self, event):
-            projectid = int(self.projectlist.GetItemData(self.projectlist.GetFirstSelected()))
+            projectid = self.__getItemDataForSelectedElement()
 
-            db = WpDatabaseAPI()
-            project = db.GetProject(projectid)
+            if projectid != None:
+                db = WpDatabaseAPI()
+                project = db.GetProject(projectid)
 
-            # Populate the tree
-            self._treectrl.treectrl.PopulateTree(project)
-            self.Destroy()
+                # Populate the tree
+                self._treectrl.treectrl.PopulateTree(project)
+                self.Destroy()
 
         def onCancel(self, event):
             self.Destroy()
 
         def onDelete(self, event):
-            projectid = int(self.projectlist.GetItemData(self.projectlist.GetFirstSelected()))
+            projectid = self.__getItemDataForSelectedElement()
 
-            db = WpDatabaseAPI()
-            db.DeleteProject(projectid)
-            self.Destroy()
+            if projectid != None:
+                db = WpDatabaseAPI()
+                db.DeleteProject(projectid)
+
+                self.projectlist.DeleteItem(self.__getSelectedItem())
+
+
+        def __getItemDataForSelectedElement(self):
+            """
+            Get itemdata for current selected project
+            Return None if none selected
+            """
+            try:
+                data = int(self.projectlist.GetItemData(self.projectlist.GetFirstSelected()))
+                return data
+            except:
+                return None
+
+        def __getSelectedItem(self):
+            """
+            Get selected project
+            """
+            return self.projectlist.GetFirstSelected()
