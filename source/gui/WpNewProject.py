@@ -207,7 +207,7 @@ class WpNewProject( wx.Dialog ):
                 project = WpProject()
 
                 project.SetTitle(self.prjnameinput.GetValue())
-                project.SetDescription(self.prjdescfield.GetValue())
+                # project.SetDescription(self.prjdescfield.GetValue())
 
                 numberOfPaths = self.filelist.GetItemCount()
 
