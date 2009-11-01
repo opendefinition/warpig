@@ -44,7 +44,6 @@ class WpPreferences( wx.Dialog ):
 		##
 		# Sewing it all together
 		##
-		##
 		self.panelsizer.Add( self.preferencetree, 1, wx.EXPAND )
 		self.mainsizer.Add( self.panelsizer, 1, wx.EXPAND )
 		self.SetSizer( self.mainsizer, wx.EXPAND )

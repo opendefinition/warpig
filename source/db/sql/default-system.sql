@@ -35,3 +35,5 @@ INSERT INTO systemregistry(key,value,module) VALUES ('tabsize','4','editor');
 INSERT INTO systemregistry(key,value,module) VALUES ('usetab','1','editor');
 INSERT INTO systemregistry(key,value,module) VALUES ('foldcode','1','editor');
 INSERT INTO systemregistry(key,value,module) VALUES ('foldcodestyle','1','editor');
+INSERT INTO systemregistry(key,value,module) VALUES ('prefixexclude','^\.|^\~','projecttree');
+INSERT INTO systemregistry(key,value,module) VALUES ('suffixexclude','.pyc|.swp|.tmp','projecttree');

@@ -51,7 +51,7 @@ class WpEditorSettings( wx.Panel ):
 		label = wx.StaticText( self, wx.ID_ANY, "Tabsize: " )
 		self.tabsizeinput = wx.TextCtrl( self, wx.ID_ANY, size=(100, -1) )
 		
-		self.tabsizeinput.SetValue( self.configobj.settings['editor-tabsize'])
+		self.tabsizeinput.SetValue(self.configobj.settings['editor-tabsize'])
 	
 		inputsizer.Add( label )
 		inputsizer.Add( self.tabsizeinput )

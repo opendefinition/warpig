@@ -12,21 +12,34 @@
 
 import os
 import wx
+import re
 
 from system.WpFileSystem import WpFileSystem
 from gui.tree.WpProjectData import WpProjectData
 from gui.tree.WpElementData import WpElementData
 from system.WpProject import WpProject
 
+from system.WpDatabaseAPI import WpDatabaseAPI
+from system.WpConfigSystem import WpConfigSystem
+
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
 		wx.TreeCtrl.__init__( self, parent, wx.ID_ANY, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
+                self.configobj = WpConfigSystem()
 		
 	def PopulateTree( self, projectobj ):
 		"""
 		Build and populate this instance of the projecttree
 		@param Object WpProject
 		"""
+                ## Get configuration for this tree
+                self.excludeprefix = self.configobj.settings['projecttree-prefixexclude']
+                self.excludesuffix = self.configobj.settings['projecttree-suffixexclude']
+
+                ## File and folder exclusions
+                criteriasuffix = re.compile(self.excludesuffix)
+                criteriaprefix = re.compile(self.excludeprefix)
+
 		self.SetIndent(10)
 
 		# Destroying all content if content is present
@@ -75,42 +88,46 @@ class WpTreeCtrl( wx.TreeCtrl ):
 			ids = {dir: subroot}
 			## Build directories and filenames
 			for( dirpath, dirnames, filenames ) in dlist[ 'files' ]:
-				for dirname in dirnames:
-					directoryInformation = WpElementData()
-					directoryInformation.setCurrentDirectory(os.path.join( dirpath, dirname))
-					directoryInformation.setCurrentFile(
-								os.path.join(
-									subrootInformation.getCurrentDirectory(),
-                                                                        directoryInformation.getCurrentDirectory()
-                                                                    )
+                            for dirname in dirnames:
+                                directoryInformation = WpElementData()
+                                directoryInformation.setCurrentDirectory(os.path.join( dirpath, dirname))
+                                directoryInformation.setCurrentFile(
+                                                        os.path.join(
+                                                                subrootInformation.getCurrentDirectory(),
+                                                                directoryInformation.getCurrentDirectory()
                                                             )
-											
-					ids[directoryInformation.getCurrentDirectory()] = self.AppendItem( 
-												ids[dirpath], 
-												dirname, 
-												0, 
-												1, 
-												wx.TreeItemData(directoryInformation)
-                                                                                            )
-					
-				for filename in sorted(filenames):
-					fileInformation = WpElementData()
-					fileInformation.setCurrentDirectory(dirpath)
-					fileInformation.setCurrentFilename(filename)
-					fileInformation.setCurrentFile(
-								os.path.join(
-								fileInformation.getCurrentDirectory(),
-								fileInformation.getCurrentFilename()
-               						)
-						)
-					
-					self.AppendItem(
-						ids[fileInformation.getCurrentDirectory()],
-						fileInformation.getCurrentFilename(),
-						2,
-						2,
-						wx.TreeItemData(fileInformation)
-					)
+                                                    )
+
+                                ids[directoryInformation.getCurrentDirectory()] = self.AppendItem(
+                                                                                        ids[dirpath],
+                                                                                        dirname,
+                                                                                        0,
+                                                                                        1,
+                                                                                        wx.TreeItemData(directoryInformation)
+                                                                                    )
+
+                            for filename in sorted(filenames):
+                                ## Exclude files
+                                if re.search(criteriasuffix, filename) or re.search(criteriaprefix, filename):
+                                    continue
+
+                                fileInformation = WpElementData()
+                                fileInformation.setCurrentDirectory(dirpath)
+                                fileInformation.setCurrentFilename(filename)
+                                fileInformation.setCurrentFile(
+                                                        os.path.join(
+                                                        fileInformation.getCurrentDirectory(),
+                                                        fileInformation.getCurrentFilename()
+                                                )
+                                        )
+
+                                self.AppendItem(
+                                        ids[fileInformation.getCurrentDirectory()],
+                                        fileInformation.getCurrentFilename(),
+                                        2,
+                                        2,
+                                        wx.TreeItemData(fileInformation)
+                                )
 					
 		self.Parent.Parent.Parent.ResizeSash()
 		
