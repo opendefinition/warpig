@@ -10,6 +10,7 @@
 # License: Open Definiton General Lisence (ODGL). Available upon request.
 #---------------------------------------------------------------------------
 
+import sqlite3
 import sys
 import wx
 
@@ -23,12 +24,18 @@ class WpWarPig( wx.App ):
 	"""
 	
 	def OnInit(self):
-		configuration = WpConfigLoader()
-		configuration.LoadConfig()
+		configloaded = False
+		try:
+			configuration = WpConfigLoader()
+			configuration.LoadConfig()
+			configloaded = True
+		except sqlite3.OperationalError:
+			print "Warpig System Error: missing configuration database\nplease run 'warpig.py --setup'"
 
-		frame = WpMainFrame( None )
-		frame.Show()
-		self.SetTopWindow(frame)
+		if configloaded:
+			frame = WpMainFrame( None )
+			frame.Show()
+			self.SetTopWindow(frame)
 		
 		return True
 

@@ -15,33 +15,41 @@ def RunSetup():
 	## If the database is already present, delete it
 	print "\t#1. Removing old database:",
 	
+	removed_database_status = False
 	if( os.path.isfile( databaseName ) ):
 		os.remove( databaseName )
-		print True
+		removed_database_status = True
+		print removed_database_status
 	else:
-		print False
+		print removed_database_status
 		
 	## Creating database
 	print "\t#2. Created database:",
-	
+	created_database_status = False
 	try:
 		connection = sqlite3.connect( databaseName )
-		print True
+		created_database_status = True
+		print created_database_status
 	except:
-		print False
+		print created_database_status
 		
 	## Populate database
 	print "\t#3. Populating database: ",
-	
+	populate_database_status = False
 	try:
 		file = open( setupScript, 'r' )
 		script = file.read()
 		file.close()
 	
 		connection.executescript( script )
-		print True
+		created_database_status = True
+		print created_database_status
 	except:
-		print False
+		print created_database_status
 		
 	## Finished
-	print "Warpig Coding Environment has been installed. Go forth and enjoy!";
+	
+	if (removed_database_status and created_database_status and created_database_status):
+		print "Warpig Coding Environment has been installed. Go forth and enjoy!";
+	else:
+		print "Installation failed. Please check filepermissions and Sqlite3 access in folder /db"
