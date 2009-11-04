@@ -43,8 +43,10 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		self.SetIndent(10)
 
 		# Destroying all content if content is present
+		alreadyopened = False
 		if( self.IsEmpty() == False ):
 			self.DeleteAllItems()
+			alreadyopened = True
 		
 		ArtIDs = [ 'wx.ART_FOLDER', 'wx.ART_FOLDER_OPEN', 'wx.ART_NORMAL_FILE', 'wx.ART_HELP_FOLDER' ]
 		
@@ -129,7 +131,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                         wx.TreeItemData(fileInformation)
                                 )
 					
-		self.Parent.Parent.Parent.ResizeSash()
+		if not alreadyopened:
+			self.Parent.Parent.Parent.ResizeSash()
 		
 		self.SetupBindings()
 		
