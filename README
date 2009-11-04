@@ -1,18 +1,18 @@
-+---------------------------------------------------------------------------+
-	Release name: Warpig CE
-	Fullname: Warpig Code Environment
-+---------------------------------------------------------------------------+
-
-	Projectstart:	Janury 10th, 2009. 
-	Lead developer: Roger C.B. Johnsen
-	Contact: 	johnsen@opendefinition.com
-	Organization: 	Open Definition
-	WWW: 		http://www.opendefinition.com
-	License:	TBD.
-
-	About:
-
-	Warpig CE is a tool for programmers. It is not an IDE per se,
-	but rather a coding environment.
-
-+---------------------------------------------------------------------------+
+##-----------------------------------------------------------------------------------
+Warpig Code Environment
+##-----------------------------------------------------------------------------------
+Projectstart:	Janury 10th, 2009. 
+Lead developer: 	Roger C.B. Johnsen
+Contact:		johnsen@opendefinition.com
+Organization: 	Open Definition
+WWW: 		http://www.opendefinition.com
+License:	TBD.
+##-----------------------------------------------------------------------------------
+About
+A generic script editor written in Python
+##-----------------------------------------------------------------------------------
+Usage:
+	Setup:	python warpig.py --setup
+	Reset:	python warpig.py --reset
+	Run:		python warpig.py
+##-----------------------------------------------------------------------------------
