@@ -60,4 +60,11 @@ class WpProjectsSettings(wx.Panel):
         self.SetSizer(self.mainSizer, wx.EXPAND)
 
         ## Bind Savebutton
-        #self.Bind( wx.EVT_BUTTON, self.__OnSaveSettings, id=self.saveBt.GetId() )
+        self.Bind(wx.EVT_BUTTON, self.OnSave, id=self.saveBt.GetId())
+
+    def OnSave(self, event):
+        db = WpDatabaseAPI()
+        self.configobj.settings['projecttree-prefixexclude'] = self.prefixBox.GetValue()
+        self.configobj.settings['projecttree-suffixexclude'] = self.suffixBox.GetValue()
+        db.AddRegisterSetting( 'prefixexclude', self.configobj.settings['projecttree-prefixexclude'], 'projecttree' )
+        db.AddRegisterSetting( 'suffixexclude', self.configobj.settings['projecttree-suffixexclude'], 'projecttree' )
