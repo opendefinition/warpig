@@ -15,11 +15,11 @@ import wx.lib.buttons as buttons
 
 from system.WpDatabaseAPI import WpDatabaseAPI
 from system.WpProject import WpProject
+from gui.guid.guid import *
 
 class WpOpenProject( wx.Dialog ):
-	def __init__(self, treectrl):
-            self._treectrl = treectrl
-            wx.Dialog.__init__( self, None, wx.ID_ANY, 'Open Project', size=(500, 300) )
+	def __init__(self):
+            wx.Dialog.__init__(self, None, CONST_WIDGET_PROJECT_OPEN, 'Open Project', size=(500, 300))
             self.Center()
             self.Setup()
                 
@@ -38,11 +38,11 @@ class WpOpenProject( wx.Dialog ):
             self.SetSizer(mainsizer, wx.EXPAND)
 
         def ProjectList(self):
-            panel = wx.Panel(self, wx.ID_ANY)
+            panel = wx.Panel(self, CONST_WIDGET_PROJECT_PANEL)
             panelsizer = wx.BoxSizer(wx.VERTICAL)
             
             self.projectlist = wx.ListCtrl(
-                                    panel, wx.ID_ANY,
+                                    panel, CONST_WIDGET_PROJECT_LIST,
                                     style=wx.BORDER_SUNKEN | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES | wx.LC_SINGLE_SEL | wx.LC_NO_HEADER
                                 )
 
@@ -65,15 +65,14 @@ class WpOpenProject( wx.Dialog ):
         def __GetProjectList(self):
             db = WpDatabaseAPI()
             return db.GetProjectList()
-            
 
         def Buttons(self):
-            panel = wx.Panel(self, wx.ID_ANY)
+            panel = wx.Panel(self, CONST_WIDGET_PROJECT_LIST_PANEL)
             panelsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-            openbutton = buttons.ThemedGenButton(panel, wx.ID_OPEN, 'Open')
-            cancelbutton = buttons.ThemedGenButton(panel, wx.ID_CANCEL, 'Cancel')
-            deletebutton = buttons.ThemedGenButton(panel, wx.ID_DELETE, 'Delete')
+            openbutton = buttons.ThemedGenButton(panel, CONST_WIDGET_PROJECT_BUTTON_OPEN, 'Open')
+            cancelbutton = buttons.ThemedGenButton(panel, CONST_WIDGET_PROJECT_BUTTON_CANCEL, 'Cancel')
+            deletebutton = buttons.ThemedGenButton(panel, CONST_WIDGET_PROJECT_BUTTON_DELETE, 'Delete')
 
             panelsizer.Add(deletebutton, 0, wx.RIGHT, 2)
             panelsizer.Add(cancelbutton)
@@ -81,9 +80,9 @@ class WpOpenProject( wx.Dialog ):
 
             panel.SetSizer(panelsizer)
 
-            self.Bind(wx.EVT_BUTTON, self.onOpen, id=openbutton.GetId())
-            self.Bind(wx.EVT_BUTTON, self.onCancel, id=cancelbutton.GetId())
-            self.Bind(wx.EVT_BUTTON, self.onDelete, id=deletebutton.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onOpen, id=CONST_WIDGET_PROJECT_BUTTON_OPEN)
+            self.Bind(wx.EVT_BUTTON, self.onCancel, id=CONST_WIDGET_PROJECT_BUTTON_CANCEL)
+            self.Bind(wx.EVT_BUTTON, self.onDelete, id=CONST_WIDGET_PROJECT_BUTTON_DELETE)
 
             return panel
 

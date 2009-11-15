@@ -18,13 +18,14 @@ from system.WpFileSystem import WpFileSystem
 from gui.tree.WpProjectData import WpProjectData
 from gui.tree.WpElementData import WpElementData
 from system.WpProject import WpProject
+from gui.guid.guid import *
 
 from system.WpDatabaseAPI import WpDatabaseAPI
 from system.WpConfigSystem import WpConfigSystem
 
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
-		wx.TreeCtrl.__init__( self, parent, wx.ID_ANY, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
+		wx.TreeCtrl.__init__( self, parent, CONST_WIDGET_PROJECT_TREE, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
                 self.configobj = WpConfigSystem()
 		
 	def PopulateTree( self, projectobj ):
@@ -140,7 +141,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		"""
 		Setup the various bindings for this instance of the projecttree
 		"""
-		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=self.GetId() )
+		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=CONST_WIDGET_PROJECT_TREE )
 		self.Bind( wx.EVT_TREE_ITEM_MENU, self._OnTreeRightClick, id=wx.ID_ANY )
 		self.Bind( wx.EVT_TREE_ITEM_ACTIVATED, self._OnDoubleClick, id=wx.ID_ANY )
 		

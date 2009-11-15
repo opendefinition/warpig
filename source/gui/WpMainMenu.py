@@ -172,5 +172,5 @@ class WpMainMenu(wx.MenuBar):
     ## Disply open project dialog
     ##--------------------------------------------------------------------------
     def __onOpenProject(self, event):
-        window = WpOpenProject(self)
+        window = WpOpenProject()
         window.ShowModal()
