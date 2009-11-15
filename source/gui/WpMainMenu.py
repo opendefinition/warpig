@@ -17,6 +17,7 @@ import wx
 from gui.WpNewProject import WpNewProject
 from gui.WpOpenProject import WpOpenProject
 from gui.preferences.WpPreferences import WpPreferences
+from gui.guid.guid import *
 
 class WpMainMenu(wx.MenuBar):
     def __init__(self, parentFrame):
@@ -36,13 +37,13 @@ class WpMainMenu(wx.MenuBar):
     def __setupFileMenu(self):
         fileMenu = wx.Menu()
 
-        openProject = wx.MenuItem(fileMenu, wx.ID_ANY, '&Open Project', 'Open project')
-        newProject  = wx.MenuItem(fileMenu, wx.ID_ANY, '&New Project', 'Create new project')
-	saveFileAs  = wx.MenuItem(fileMenu, wx.ID_ANY, '&Save File As', 'Save current file as...')
-        openFile    = wx.MenuItem(fileMenu, wx.ID_ANY, '&Open File', 'Open file')
-        saveFile    = wx.MenuItem(fileMenu, wx.ID_ANY, '&Save File', 'Save current file')
-        newFile     = wx.MenuItem(fileMenu, wx.ID_ANY, '&New File', 'Create empty document')
-	exit        = wx.MenuItem(fileMenu, wx.ID_ANY, '&Exit', 'Exit')
+        openProject = wx.MenuItem(fileMenu, CONST_MENU_PROJECT_OPEN, '&Open Project', 'Open project')
+        newProject  = wx.MenuItem(fileMenu, CONST_MENU_PROJECT_NEW, '&New Project', 'Create new project')
+	saveFileAs  = wx.MenuItem(fileMenu, CONST_MENU_FILE_SAVE_AS, '&Save File As', 'Save current file as...')
+        openFile    = wx.MenuItem(fileMenu, CONST_MENU_FILE_OPEN, '&Open File', 'Open file')
+        saveFile    = wx.MenuItem(fileMenu, CONST_MENU_FILE_SAVE, '&Save File', 'Save current file')
+        newFile     = wx.MenuItem(fileMenu, CONST_MENU_FILE_NEW, '&New File', 'Create empty document')
+	exit        = wx.MenuItem(fileMenu, CONST_MENU_EXIT, '&Exit', 'Exit')
 
         fileMenu.AppendItem(newProject)
         fileMenu.AppendItem(openProject)
@@ -53,17 +54,15 @@ class WpMainMenu(wx.MenuBar):
         fileMenu.AppendItem(saveFileAs)
         fileMenu.AppendSeparator()
         fileMenu.AppendItem(exit)
-
-        """
-        self.parentFrame.Bind(wx.EVT_MENU, self.__onExit, id=exit.GetId())
-	self.parentFrame.Bind(wx.EVT_MENU, self.__onNewProject, id=newProject.GetId())
-	self.parentFrame.Bind(wx.EVT_MENU, self.__onOpenProject, id=openProject.GetId())
+        
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onExit, id=CONST_MENU_EXIT)
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onNewProject, id=CONST_MENU_PROJECT_NEW)
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onOpenProject, id=CONST_MENU_PROJECT_OPEN)
 
         ## @TODO: Fix this mangling of references
-        self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel._OnToolBarOpenPage, id=openFile.GetId())
-	self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel._OnToolBarNewPage, id=newFile.GetId())
-	self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel._OnToolBarSavePage, id=saveFile.GetId())
-        """
+        ## self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel.__onToolBarOpenFile, id=openFile.GetId())
+	## self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel.__onToolBarNewFile, id=newFile.GetId())
+	## self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel.__onToolBarSaveFile, id=saveFile.GetId())
         
         return fileMenu
 
@@ -72,11 +71,8 @@ class WpMainMenu(wx.MenuBar):
         Setup the edit menu
         """
         editMenu = wx.Menu()
-
-        preferences = wx.MenuItem(editMenu, wx.ID_ANY, '&Preferences', 'Edit application preferences')
-
-        # self.parentFrame.Bind(wx.EVT_MENU, self.__onPreferences, id=preferences.GetId())
-
+        preferences = wx.MenuItem(editMenu, CONST_MENU_PREFERENCES, '&Preferences', 'Edit application preferences')
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onPreferences, id=CONST_MENU_PREFERENCES)
 	editMenu.AppendSeparator()
 	editMenu.AppendItem(preferences)
 
@@ -105,7 +101,7 @@ class WpMainMenu(wx.MenuBar):
         seekHelp = wx.MenuItem(helpMenu, wx.ID_ANY, '&Help', 'Seek help')
         requestFeature = wx.MenuItem(helpMenu, wx.ID_ANY, 'Request feature', 'Request feature')
         reportBug = wx.MenuItem(helpMenu, wx.ID_ANY, 'Report bug', 'Submit bug')
-        about = wx.MenuItem(helpMenu, wx.ID_ANY, '&About', 'About')
+        about = wx.MenuItem(helpMenu, CONST_MENU_ABOUT, '&About', 'About')
 
         helpMenu.AppendItem(seekHelp)
         helpMenu.AppendSeparator()
@@ -114,7 +110,7 @@ class WpMainMenu(wx.MenuBar):
         helpMenu.AppendSeparator()
         helpMenu.AppendItem(about)
 
-        # self.parentFrame.Bind(wx.EVT_MENU, self.__onAbout, id=about.GetId())
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onAbout, id=CONST_MENU_ABOUT)
         
         return helpMenu
 
@@ -122,10 +118,11 @@ class WpMainMenu(wx.MenuBar):
     ## Bind functions
     ##--------------------------------------------------------------------------
 
+
+    ##--------------------------------------------------------------------------
+    ## Display about dialog
+    ##--------------------------------------------------------------------------
     def __onAbout(self, event):
-        """
-        Populates an about dialog and displays it
-        """
         information = wx.AboutDialogInfo()
 
         information.SetName('Open Definition :: Warpig Code Environment')
@@ -137,10 +134,10 @@ class WpMainMenu(wx.MenuBar):
 
         wx.AboutBox( information )
 
+    ##--------------------------------------------------------------------------
+    ## Display on exit dialog
+    ##--------------------------------------------------------------------------
     def __onExit(self, event):
-        """
-        On exit event
-        """
         dialog = wx.MessageDialog(
                             None,
                             'Are you sure to want to quit?',
@@ -156,31 +153,24 @@ class WpMainMenu(wx.MenuBar):
         else:
             dialog.Destroy()
 
+    ##--------------------------------------------------------------------------
+    ## Display the preference menu
+    ##--------------------------------------------------------------------------
     def __onPreferences(self, event):
-        """
-        Display the preference menu
-        """
         preferences = WpPreferences()
 	preferences.ShowModal()
 
-    def __onNewProject( self, event ):
-        """
-        Display new project dialog window
-        """
-
-        None
-        """
-  	window = WpNewProject(self.parentFrame.mainpanel.leftsplit)
+    ##--------------------------------------------------------------------------
+    ## Display new project dialog window
+    ##--------------------------------------------------------------------------
+    def __onNewProject(self, event):
+  	window = WpNewProject(self)
 	window.ShowModal()
 	window.Destroy()
-        """
 
-    def __onOpenProject( self, event ):
-        """
-        Display open project dialog window
-        """
-        None
-        """
-        window = WpOpenProject(self.parentFrame.mainpanel.leftsplit)
+    ##--------------------------------------------------------------------------
+    ## Disply open project dialog
+    ##--------------------------------------------------------------------------
+    def __onOpenProject(self, event):
+        window = WpOpenProject(self)
         window.ShowModal()
-        """
