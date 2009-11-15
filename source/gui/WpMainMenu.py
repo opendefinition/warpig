@@ -54,6 +54,7 @@ class WpMainMenu(wx.MenuBar):
         fileMenu.AppendSeparator()
         fileMenu.AppendItem(exit)
 
+        """
         self.parentFrame.Bind(wx.EVT_MENU, self.__onExit, id=exit.GetId())
 	self.parentFrame.Bind(wx.EVT_MENU, self.__onNewProject, id=newProject.GetId())
 	self.parentFrame.Bind(wx.EVT_MENU, self.__onOpenProject, id=openProject.GetId())
@@ -62,7 +63,8 @@ class WpMainMenu(wx.MenuBar):
         self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel._OnToolBarOpenPage, id=openFile.GetId())
 	self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel._OnToolBarNewPage, id=newFile.GetId())
 	self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel._OnToolBarSavePage, id=saveFile.GetId())
-
+        """
+        
         return fileMenu
 
     def __setupEditMenu(self):
@@ -73,7 +75,7 @@ class WpMainMenu(wx.MenuBar):
 
         preferences = wx.MenuItem(editMenu, wx.ID_ANY, '&Preferences', 'Edit application preferences')
 
-        self.parentFrame.Bind(wx.EVT_MENU, self.__onPreferences, id=preferences.GetId())
+        # self.parentFrame.Bind(wx.EVT_MENU, self.__onPreferences, id=preferences.GetId())
 
 	editMenu.AppendSeparator()
 	editMenu.AppendItem(preferences)
@@ -112,7 +114,7 @@ class WpMainMenu(wx.MenuBar):
         helpMenu.AppendSeparator()
         helpMenu.AppendItem(about)
 
-        self.parentFrame.Bind(wx.EVT_MENU, self.__onAbout, id=about.GetId())
+        # self.parentFrame.Bind(wx.EVT_MENU, self.__onAbout, id=about.GetId())
         
         return helpMenu
 
@@ -165,13 +167,20 @@ class WpMainMenu(wx.MenuBar):
         """
         Display new project dialog window
         """
+
+        None
+        """
   	window = WpNewProject(self.parentFrame.mainpanel.leftsplit)
 	window.ShowModal()
 	window.Destroy()
+        """
 
     def __onOpenProject( self, event ):
         """
         Display open project dialog window
         """
+        None
+        """
         window = WpOpenProject(self.parentFrame.mainpanel.leftsplit)
         window.ShowModal()
+        """
