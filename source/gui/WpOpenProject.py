@@ -17,6 +17,11 @@ from system.WpDatabaseAPI import WpDatabaseAPI
 from system.WpProject import WpProject
 from gui.guid.guid import *
 
+
+# Interprocess communications
+from wx.lib.pubsub import Publisher as pub
+
+
 class WpOpenProject( wx.Dialog ):
 	def __init__(self):
             wx.Dialog.__init__(self, None, CONST_WIDGET_PROJECT_OPEN, 'Open Project', size=(500, 300))
@@ -98,7 +103,9 @@ class WpOpenProject( wx.Dialog ):
                 project = db.GetProject(projectid)
 
                 # Populate the tree
-                self._treectrl.treectrl.PopulateTree(project)
+                pub.sendMessage('projecttree.populate', project)
+
+                # self._treectrl.treectrl.PopulateTree(project)
                 self.Destroy()
 
         def onCancel(self, event):

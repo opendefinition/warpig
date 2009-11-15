@@ -23,10 +23,17 @@ from gui.guid.guid import *
 from system.WpDatabaseAPI import WpDatabaseAPI
 from system.WpConfigSystem import WpConfigSystem
 
+# Interprocess communications
+from wx.lib.pubsub import Publisher as pub
+
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
 		wx.TreeCtrl.__init__( self, parent, CONST_WIDGET_PROJECT_TREE, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
                 self.configobj = WpConfigSystem()
+                pub.subscribe(self.populateSubscriber, 'projecttree.populate')
+
+        def populateSubscriber(self, message):
+            self.PopulateTree(message.data)
 		
 	def PopulateTree( self, projectobj ):
 		"""
@@ -132,8 +139,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                         wx.TreeItemData(fileInformation)
                                 )
 					
-		if not alreadyopened:
-			self.Parent.Parent.Parent.ResizeSash()
+		#if not alreadyopened:
+		#	self.Parent.Parent.Parent.ResizeSash()
 		
 		self.SetupBindings()
 		
