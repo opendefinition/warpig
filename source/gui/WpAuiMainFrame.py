@@ -27,10 +27,21 @@ class WpAuiMainFrame(wx.Frame):
         ## Menubar
 	self.SetMenuBar(WpMainMenu(self))
 
+        mainbuttonpanel = MainButtonPanel(self)
+
+
         self.__manager = wx.aui.AuiManager(self)
-        self.__manager.AddPane(MainButtonPanel(self), wx.TOP)
+
+        ## Adding main button toolbar
+        self.__manager.AddPane(
+                mainbuttonpanel,
+                wx.aui.AuiPaneInfo()
+                    .CaptionVisible(False)
+                    .Top()
+                    .Gripper(False)
+            )
         self.__manager.AddPane(self.notebook, wx.CENTER)
-        self.__manager.AddPane(self.projecttree, wx.RIGHT)
+        self.__manager.AddPane(self.projecttree, wx.RIGHT, 'Project')
         self.__manager.Update()
         self.notebook.AddDefaultPage()
 
