@@ -40,7 +40,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                 pub.subscribe(self.refreshSubscriber, 'editor.refresh')
 
         def refreshSubscriber(self, message):
-            print "kukk"
             self.applySettings()
             self.Refresh()
 
