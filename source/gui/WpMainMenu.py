@@ -31,6 +31,8 @@ class WpMainMenu(wx.MenuBar):
 	self.Append(self.__setupPigletMenu(), '&Piglets')
 	self.Append(self.__setupHelpMenu(), '&Help')
 
+        pub.subscribe(self.openFileSubscriber, 'mainmenu.openfile')
+
     ##--------------------------------------------------------------------------
     ## Menu structures
     ##--------------------------------------------------------------------------
@@ -188,12 +190,7 @@ class WpMainMenu(wx.MenuBar):
     ## Disply open file dialog
     ##--------------------------------------------------------------------------
     def __onOpenFile(self, event):
-        dialog = wx.FileDialog ( None, style = wx.OPEN )
-
-        if dialog.ShowModal() == wx.ID_OK:
-            pub.sendMessage('notebook.addpage', dialog.GetPath())
-
-        dialog.Destroy()
+        self.__OpenPage()
 
     ##--------------------------------------------------------------------------
     ## Save file
@@ -203,4 +200,17 @@ class WpMainMenu(wx.MenuBar):
 
         if( type( focus ).__name__ == 'WpTextEditor' ):
             focus.SaveFile()
+
+    def openFileSubscriber(self, message):
+        self.__OpenPage()
+
+
+    def __OpenPage(self):
+        dialog = wx.FileDialog ( None, style = wx.OPEN )
+
+        if dialog.ShowModal() == wx.ID_OK:
+            pub.sendMessage('notebook.addpage', dialog.GetPath())
+
+        dialog.Destroy()
+        
 

@@ -10,6 +10,8 @@ All messages follows this format:
 ==Current available messages==
 
 Message:                Description
+mainmenu.openfile       # When a page is to be opened in notebook
 notebook.addpage        # When a page is to be added to the notebook
 projecttree.populate    # When projecttree is to be populated
+
 

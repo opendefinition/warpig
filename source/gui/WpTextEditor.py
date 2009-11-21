@@ -12,9 +12,9 @@
 
 import keyword
 import os
-import re 
 import wx
 import wx.stc as stc
+from wx.lib.pubsub import Publisher as pub
 
 from system.WpFileSystem import WpFileSystem
 from system.WpConfigSystem import WpConfigSystem
@@ -464,14 +464,14 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			# Add new page with editor to current notebook instance
 			##
 			if( key == 78 or key == 110 ):
-				self.parent.AddDefaultPage()
+				pub.sendMessage('notebook.addpage')
 				return
 				
 			##
 			# Open file
 			## 
 			if( key == 79 or key == 111 ):
-				self.Parent.Parent.Parent.Parent.OpenPage() # :)
+				pub.sendMessage('mainmenu.openfile')
 				return
 				
 			##
