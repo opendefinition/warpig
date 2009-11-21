@@ -25,41 +25,11 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
         def __init__( self, parent ):
 		self.parent = parent
 
-                ## Load configurations
-                self.configobj = WpConfigSystem()
+		## We always construct parent with wx.TE_MULTILINE
+		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
+
                 self.applySettings()
 
-		##
-		# We always construct parent with wx.TE_MULTILINE
-		##
-		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
-		## Text margin
-		self.SetMarginType(0, wx.stc.STC_MARGIN_NUMBER )    # Line numbering
-		self.SetMarginWidth(0, 35)                          # Margin for line numbering
-		self.SetEdgeColour("#555753" )
-		self.SetEdgeColumn(self.editorTextMarginWidth)      # Text margin
-		self.SetEdgeMode(wx.stc.STC_EDGE_LINE)              # Text margin type
-
-		## Tab Setup
-		self.setTabAndIndents()
-		## Code folding
-                self.setCodeFolding()
-
-		## Fonts
-		font = wx.Font(
-                            self.editorFontSize,
-                            wx.DEFAULT,
-                            wx.NORMAL,
-                            wx.NORMAL,
-                            False,
-                            self.editorFontFace,
-                            wx.FONTENCODING_UTF8
-                        )
-
-		## We must tell StyleSetSpec to use this face and size otherwise it won't get applied
-		self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (self.editorFontFace, self.editorFontSize))
-
-		self.StyleSetFont( 0, font )
 		self.SetDefaultLexer()
 		self.SetFocus()
 
@@ -67,10 +37,22 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		self.Bind( wx.stc.EVT_STC_SAVEPOINTREACHED, self._OnSavePointReached )
 		self.Bind( wx.stc.EVT_STC_CHANGE, self._OnTextChange )
 
+                pub.subscribe(self.refreshSubscriber, 'editor.refresh')
+
+        def refreshSubscriber(self, message):
+            print "kukk"
+            self.applySettings()
+            self.Refresh()
+
         def applySettings(self):
             """
             Apply editor settings
             """
+            ## Load configurations
+            self.configobj = WpConfigSystem()
+            
+
+            ## Load settings from cache
             self.editorFontFace         = self.configobj.settings['editor-fontface']
             self.editorFontSize         = int(self.configobj.settings['editor-fontsize'])
             self.editorTextMarginWidth  = int(self.configobj.settings['editor-textmargin'])
@@ -78,6 +60,34 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
             self.editorUseTab           = int(self.configobj.settings['editor-usetab'])
             self.editorCodeFold         = int(self.configobj.settings['editor-foldcode'])
             self.editorCodeFoldStyle    = int(self.configobj.settings['editor-foldcodestyle'])
+
+            ## Apply settings
+            self.font = wx.Font(
+                        self.editorFontSize,
+                        wx.DEFAULT,
+                        wx.NORMAL,
+                        wx.NORMAL,
+                        False,
+                        self.editorFontFace,
+                        wx.FONTENCODING_UTF8
+                    )
+            
+            ## Tab Setup
+            self.setTabAndIndents()
+            ## Code folding
+            self.setCodeFolding()
+
+            ## Text margin
+            self.SetMarginType(0, wx.stc.STC_MARGIN_NUMBER )    # Line numbering
+            self.SetMarginWidth(0, 35)                          # Margin for line numbering
+            self.SetEdgeColour("#555753" )
+            self.SetEdgeMode(wx.stc.STC_EDGE_LINE)              # Text margin type
+            self.SetEdgeColumn(self.editorTextMarginWidth)      # Text margin
+
+            ## We must tell StyleSetSpec to use this face and size otherwise it won't get applied
+            self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (self.editorFontFace, self.editorFontSize))
+
+            self.StyleSetFont( 0, self.font )
 
         def setTabAndIndents(self):
             """

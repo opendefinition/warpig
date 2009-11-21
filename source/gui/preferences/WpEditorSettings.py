@@ -14,13 +14,13 @@
 import wx
 from system.WpDatabaseAPI import WpDatabaseAPI
 from system.WpConfigSystem import WpConfigSystem
+from wx.lib.pubsub import Publisher as pub
 
 class WpEditorSettings( wx.Panel ):
 	def __init__( self, parent, *args, **kwargs ):
 		wx.Panel.__init__( self, parent, *args, **kwargs )
 		self.configobj = WpConfigSystem()
 		self.Setup()
-		None
 		
 	def Setup( self ):
 		self.mainSizer = wx.FlexGridSizer( rows=4, cols=1, vgap=5, hgap=5 )
@@ -232,4 +232,7 @@ class WpEditorSettings( wx.Panel ):
 		self.configobj.settings['editor-fontsize'] = int( self.fontSizeSelect.GetString( self.fontSizeSelect.GetSelection() ) )
 		db.AddRegisterSetting( 'fontface', self.configobj.settings['editor-fontface'], 'editor' )
 		db.AddRegisterSetting( 'fontsize', self.configobj.settings['editor-fontsize'], 'editor' )
+
+                ## Notify the editor to refrsh
+                pub.sendMessage('editor.refresh', True)
 	#---[ END: Helper functons ]---
