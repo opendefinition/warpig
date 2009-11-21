@@ -18,6 +18,7 @@ from gui.WpNewProject import WpNewProject
 from gui.WpOpenProject import WpOpenProject
 from gui.preferences.WpPreferences import WpPreferences
 from gui.guid.guid import *
+from wx.lib.pubsub import Publisher as pub
 
 class WpMainMenu(wx.MenuBar):
     def __init__(self, parentFrame):
@@ -58,12 +59,14 @@ class WpMainMenu(wx.MenuBar):
         self.parentFrame.Bind(wx.EVT_MENU, self.__onExit, id=CONST_MENU_EXIT)
         self.parentFrame.Bind(wx.EVT_MENU, self.__onNewProject, id=CONST_MENU_PROJECT_NEW)
         self.parentFrame.Bind(wx.EVT_MENU, self.__onOpenProject, id=CONST_MENU_PROJECT_OPEN)
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onOpenFile, id=CONST_MENU_FILE_OPEN)
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onNewFile, id=CONST_MENU_FILE_NEW)
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onSaveFile, id=CONST_MENU_FILE_SAVE)
+    
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onOpenFile, id=CONST_WIDGET_BUTTON_OPEN)
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onNewFile, id=CONST_WIDGET_BUTTON_NEW)
+        self.parentFrame.Bind(wx.EVT_MENU, self.__onSaveFile, id=CONST_WIDGET_BUTTON_SAVE)
 
-        ## @TODO: Fix this mangling of references
-        ## self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel.__onToolBarOpenFile, id=openFile.GetId())
-	## self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel.__onToolBarNewFile, id=newFile.GetId())
-	## self.parentFrame.Bind(wx.EVT_MENU, self.parentFrame.mainpanel.__onToolBarSaveFile, id=saveFile.GetId())
-        
         return fileMenu
 
     def __setupEditMenu(self):
@@ -174,3 +177,30 @@ class WpMainMenu(wx.MenuBar):
     def __onOpenProject(self, event):
         window = WpOpenProject()
         window.ShowModal()
+
+    ##--------------------------------------------------------------------------
+    ## Add a new page to notebook
+    ##--------------------------------------------------------------------------
+    def __onNewFile(self, event):
+        pub.sendMessage('notebook.addpage')
+
+    ##--------------------------------------------------------------------------
+    ## Disply open file dialog
+    ##--------------------------------------------------------------------------
+    def __onOpenFile(self, event):
+        dialog = wx.FileDialog ( None, style = wx.OPEN )
+
+        if dialog.ShowModal() == wx.ID_OK:
+            pub.sendMessage('notebook.addpage', dialog.GetPath())
+
+        dialog.Destroy()
+
+    ##--------------------------------------------------------------------------
+    ## Save file
+    ##--------------------------------------------------------------------------
+    def __onSaveFile(self, event):
+        focus = self.FindFocus()
+
+        if( type( focus ).__name__ == 'WpTextEditor' ):
+            focus.SaveFile()
+

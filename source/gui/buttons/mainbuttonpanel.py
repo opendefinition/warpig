@@ -14,37 +14,3 @@ class MainButtonPanel(aui.AuiToolBar):
         self.AddSimpleTool(CONST_WIDGET_BUTTON_SAVE, "Save", wx.Bitmap("./gui/icons/media-floppy.png"))
 
         self.Realize()
-
-    ##--------------------------------------------------------------------------
-    ## Event Handlers
-    ##--------------------------------------------------------------------------
-
-    def __onToolBarNewFile(self, event):
-
-        None
-        ##self.rightsplit.notebook.AddDefaultPage()
-
-    def __onToolBarSaveFile(self, event):
-        None
-        """
-        focus = self.FindFocus()
-
-        if( type( focus ).__name__ == 'WpTextEditor' ):
-            focus.SaveFile()
-
-        """
-
-    def __onToolBarOpenFile(self, event):
-        ## self.OpenPage()
-        None
-
-    def openFile(self):
-        None
-        """
-        dialog = wx.FileDialog ( None, style = wx.OPEN )
-
-        if dialog.ShowModal() == wx.ID_OK:
-            self.rightsplit.notebook.AddDefaultPage( dialog.GetPath() )
-
-        dialog.Destroy()
-        """
