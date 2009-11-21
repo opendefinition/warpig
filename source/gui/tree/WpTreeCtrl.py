@@ -295,4 +295,3 @@ class WpTreeCtrl( wx.TreeCtrl ):
                     if os.path.isdir(nodedata.getCurrentFile()) == False:
                         ## Test passed, open file
                         pub.sendMessage('notebook.addpage', nodedata.getCurrentFile())
-                        # self.Parent.rightpanel.notebook.AddDefaultPage(nodedata.getCurrentFile())
