@@ -79,8 +79,8 @@ class WpMainMenu(wx.MenuBar):
         preferences = wx.MenuItem(editMenu, CONST_MENU_PREFERENCES, '&Preferences', 'Edit application preferences')
         self.parentFrame.Bind(wx.EVT_MENU, self.__onPreferences, id=CONST_MENU_PREFERENCES)
 	editMenu.AppendSeparator()
-	editMenu.AppendItem(preferences)
-
+        editMenu.AppendItem(preferences)
+        
         return editMenu
 
     def __setupViewMenu(self):
@@ -162,8 +162,10 @@ class WpMainMenu(wx.MenuBar):
     ## Display the preference menu
     ##--------------------------------------------------------------------------
     def __onPreferences(self, event):
-        preferences = WpPreferences()
-	preferences.ShowModal()
+        pub.sendMessage('mainframe.showpane', 'settings')
+        # self._mgr.GetPane("tree_content").Show(event.GetId() == ID_TreeContent)
+        # preferences = WpPreferences()
+	# preferences.ShowModal()
 
     ##--------------------------------------------------------------------------
     ## Display new project dialog window
