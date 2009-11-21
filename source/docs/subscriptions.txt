@@ -1,0 +1,15 @@
+=Subscription Model=
+
+Warpig utilizes a subscription model to communicate
+between widgets and functions. This is done through
+the wx.lib.pubsub Publisher library.
+
+All messages follows this format:
+<modulename>.<event>
+
+==Current available messages==
+
+Message:                Description
+notebook.addpage        # When a page is to be added to the notebook
+projecttree.populate    # When projecttree is to be populated
+

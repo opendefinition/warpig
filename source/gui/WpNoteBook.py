@@ -14,13 +14,18 @@ import os
 import wx
 import wx.lib.flatnotebook as fnb
 
-from gui.WpTextEditor import WpTextEditor 
+from gui.WpTextEditor import WpTextEditor
+from wx.lib.pubsub import Publisher as pub
 
 class WpNoteBook( fnb.FlatNotebook ):
 	def __init__( self, parent ):
 		self.parent = parent
 		fnb.FlatNotebook.__init__( self, parent, wx.ID_ANY, style=wx.EXPAND )
                 self.Setup()
+                pub.subscribe(self.addPageSubscriber, 'notebook.addpage')
+
+        def addPageSubscriber(self, message):
+            self.AddDefaultPage(message.data)
 
         def Setup(self):
                 ## Active tab color

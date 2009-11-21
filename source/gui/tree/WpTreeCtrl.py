@@ -280,18 +280,19 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		self.Expand(node)
 		
 	def _OnDoubleClick(self,event):
-		"""
-		On double click event handler.
-		
-		Note: This function will open a text file in the editor, if the tests below
-		passes. 
-		"""
-		nodedata = self.GetPyData(event.GetItem())
-		
-		## Can we open the file in our editor?
-		if nodedata.__class__.__name__ == 'WpElementData':
-			if nodedata.getCurrentFile() != None:
-				## Is this a hidden folder? If so ,skip
-				if os.path.isdir(nodedata.getCurrentFile()) == False:
-					## Test passed, open file
-					self.Parent.rightpanel.notebook.AddDefaultPage(nodedata.getCurrentFile())
+            """
+            On double click event handler.
+
+            Note: This function will open a text file in the editor, if the tests below
+            passes.
+            """
+            nodedata = self.GetPyData(event.GetItem())
+
+            ## Can we open the file in our editor?
+            if nodedata.__class__.__name__ == 'WpElementData':
+                if nodedata.getCurrentFile() != None:
+                    ## Is this a hidden folder? If so ,skip
+                    if os.path.isdir(nodedata.getCurrentFile()) == False:
+                        ## Test passed, open file
+                        pub.sendMessage('notebook.addpage', nodedata.getCurrentFile())
+                        # self.Parent.rightpanel.notebook.AddDefaultPage(nodedata.getCurrentFile())
