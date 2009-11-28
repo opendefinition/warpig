@@ -442,16 +442,24 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	#---------------------------------------------------------------
 	# Add ' * ' to tab title if text is modified
 	#---------------------------------------------------------------
-	def _OnTextChange( self, event ):
+	def _OnTextChange(self, event):
                 currentIndex = self.parent.GetPageIndex(self.parent.GetCurrentPage())
-                self.parent.SetPageImage(currentIndex, 0)
+                title = self.parent.GetPageText(currentIndex)
+
+                if title[-2:] != ' *':
+                    newtitle = title + ' *'
+                    self.parent.SetPageText(currentIndex, newtitle)
     
 	#---------------------------------------------------------------
 	# Resetting title of tab
 	#---------------------------------------------------------------
-	def _OnSavePointReached( self, event ):
+	def _OnSavePointReached(self, event):
                 currentIndex = self.parent.GetPageIndex(self.parent.GetCurrentPage())
-                self.parent.SetPageImage(currentIndex, 1)
+                title = self.parent.GetPageText(currentIndex)
+
+                if title[-2:] == ' *':
+                    newtitle = title[0:-2]
+                    self.parent.SetPageText(currentIndex, newtitle)
 
 	#---------------------------------------------------------------
 	# Handle key events
