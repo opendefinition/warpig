@@ -9,10 +9,10 @@ All messages follows this format:
 
 ==Current available messages==
 
-Message:                Description
-mainframe.showpane      # When a request to show a pane has been sent
-mainmenu.openfile       # When a page is to be opened in notebook
-notebook.addpage        # When a page is to be added to the notebook
-projecttree.populate    # When projecttree is to be populated
-
+Message:                    Description
+mainframe.setpanecaption    # When a request for pane caption has been sent
+mainframe.showpane          # When a request to show a pane has been sent
+mainmenu.openfile           # When a page is to be opened in notebook
+notebook.addpage            # When a page is to be added to the notebook
+projecttree.populate        # When projecttree is to be populated
 

@@ -27,6 +27,7 @@ class WpAuiMainFrame(wx.Frame):
 	self.Show( True )
 
         pub.subscribe(self.__showPaneSubscriber, 'mainframe.showpane')
+        pub.subscribe(self.__setPaneCaption, 'mainframe.setpanetitle')
 
     def __setup(self):
         ## Menubar
@@ -46,7 +47,16 @@ class WpAuiMainFrame(wx.Frame):
                     .Gripper(False)
             )
         self.__manager.AddPane(self.notebook, wx.CENTER)
-        self.__manager.AddPane(self.projecttree, wx.RIGHT, 'Project')
+        self.__manager.AddPane(
+                            self.projecttree,
+                            wx.aui.AuiPaneInfo()
+                                .Name("project")
+                                .Caption("Project tree")
+                                .Right()
+                                .BottomDockable(False)
+                                .TopDockable(False)
+                        )
+
         self.__manager.AddPane(
                             self.preferences,
                             wx.aui.AuiPaneInfo()
@@ -69,4 +79,13 @@ class WpAuiMainFrame(wx.Frame):
 
     def __showPaneSubscriber(self, message):
         self.__manager.GetPane(message.data).Show()
+        self.__manager.Update()
+
+    def __setPaneCaption(self, message):
+        pane_name = message.data['pane']
+        caption = message.data['caption']
+
+        pane = self.__manager.GetPane(pane_name)
+        pane.Caption('Project: ' + str(caption))
+
         self.__manager.Update()

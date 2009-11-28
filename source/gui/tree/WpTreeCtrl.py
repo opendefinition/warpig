@@ -75,7 +75,10 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                     3,
                                     wx.TreeItemData(projectInformation)
 				)
-						
+
+                ## Set project tree pane text to project name
+                pub.sendMessage('mainframe.setpanetitle', {'pane': 'project', 'caption': projectInformation.getProjectName()})
+	
 		self.SetItemHasChildren(treeroot,True)
 		self.SetItemBold(treeroot)
 		self.SetItemBackgroundColour(treeroot, wx.Colour(162,181,205))
