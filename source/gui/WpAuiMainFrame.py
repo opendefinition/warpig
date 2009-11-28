@@ -73,7 +73,7 @@ class WpAuiMainFrame(wx.Frame):
 
     def OnClose(self, event):
         # deinitialize the frame manager
-        self._mgr.UnInit()
+        self.__manger.UnInit()
         # delete the frame
         self.Destroy()
 
