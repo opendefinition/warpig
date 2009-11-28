@@ -98,12 +98,3 @@ class WpNoteBook(aui.AuiNotebook):
             
         else:
             self.SetSelection(page_index)
-        """
-
-            if( numpages > 0 and self.GetPage( 0 ).GetFilePath() == None and len( self.GetPage( 0 ).GetText() ) == 0 and filepath != None):
-                title = os.path.split( filepath )[ 1 ]
-                self.SetPageText( 0, title )
-                self.GetPage( 0 ).SetFilePath( filepath )
-                print "We should not be in here right now"
-            
-        """
