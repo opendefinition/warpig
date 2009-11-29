@@ -35,7 +35,6 @@ class WpAuiMainFrame(wx.Frame):
 
         mainbuttonpanel = MainButtonPanel(self)
 
-
         self.__manager = wx.aui.AuiManager(self)
 
         ## Adding main button toolbar
@@ -45,8 +44,20 @@ class WpAuiMainFrame(wx.Frame):
                     .CaptionVisible(False)
                     .Top()
                     .Gripper(False)
-            )
-        self.__manager.AddPane(self.notebook, wx.CENTER)
+                        )
+
+        self.__manager.AddPane(
+                            self.notebook,
+                            wx.aui.AuiPaneInfo()
+                                .Name("notebook")
+                                .Caption("Notebook")
+                                .CaptionVisible(False)
+                                .CloseButton(False)
+                                .MaximizeButton(False)
+                                .MinimizeButton(False)
+                                .Center()
+                        )
+
         self.__manager.AddPane(
                             self.projecttree,
                             wx.aui.AuiPaneInfo()
