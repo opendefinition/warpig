@@ -8,8 +8,6 @@ from gui.WpNoteBook import WpNoteBook
 from gui.preferences.WpPreferences import WpPreferences
 from gui.buttons.mainbuttonpanel import MainButtonPanel
 
-
-
 class WpAuiMainFrame(wx.Frame):
     
     def __init__(self, parent):

@@ -19,6 +19,9 @@ from gui.WpOpenProject import WpOpenProject
 from gui.preferences.WpPreferences import WpPreferences
 from gui.guid.guid import *
 from wx.lib.pubsub import Publisher as pub
+import sys
+
+from system.WpPigletLoader import WpPigletLoader
 
 class WpMainMenu(wx.MenuBar):
     def __init__(self, parentFrame):
@@ -94,8 +97,33 @@ class WpMainMenu(wx.MenuBar):
         """
         Setup the piglet menu
         """
+        piglets = WpPigletLoader.load()
+        self.piglet_list = {}
+        
         pigletMenu = wx.Menu()
+
+        for piglet in piglets:
+            import_path = "from piglets.%s.%s import %s" % (piglet['module'], piglet['module'], piglet['classname'])
+            exec(import_path)
+            
+            # Add current piglet to menu
+            piglet_entry = wx.MenuItem(pigletMenu, wx.ID_ANY, piglet['name'], piglet['description'])
+            pigletMenu.AppendItem(piglet_entry)
+
+            # Make a reference to piglets classname for instantiating
+            self.piglet_list[piglet_entry.GetId()] = {'classname': piglet['classname'], 'module': piglet['module']}
+
+            # Bind current piglet
+
+            self.parentFrame.Bind(wx.EVT_MENU, self.__onRunPiglet, id=piglet_entry.GetId())
+
         return pigletMenu
+
+    def __onRunPiglet(self, event):
+        piglet = self.piglet_list[event.GetId()]
+        module = 'piglets' + "." + piglet['module'] + "." + piglet['module']
+        instance = getattr(sys.modules[module], piglet['classname'])()
+        instance.run()
 
     def __setupHelpMenu(self):
         """
