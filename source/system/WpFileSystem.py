@@ -12,6 +12,7 @@
 
 import os
 import re
+import shutil
 import yaml
 
 class WpFileSystem:
@@ -69,3 +70,14 @@ class WpFileSystem:
 		file.close()
 		
 		return retval
+
+        #--------------------------------------------------------------
+        # Delete file or directory
+        # @param string path
+        #--------------------------------------------------------------
+        @staticmethod
+        def DeleteFromDisk( path ):
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+            else:
+                os.remove(path)

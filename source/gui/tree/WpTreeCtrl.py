@@ -182,7 +182,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		
 		## Binding menu elements
 		self.Bind(wx.EVT_MENU, self._OnPopupNewFile, id=newFile.GetId())
-		self.Bind(wx.EVT_MENU, self._OnPopupNewFolder,id=newFolder.GetId())
+		self.Bind(wx.EVT_MENU, self._OnPopupNewFolder, id=newFolder.GetId())
+                self.Bind(wx.EVT_MENU, self._OnPopupDelete, id=delete.GetId())
 		
 		self.PopupMenu(mainMenu)
 		mainMenu.Destroy()
@@ -271,7 +272,27 @@ class WpTreeCtrl( wx.TreeCtrl ):
 					else:
 						print "Debug message: Folder already exist!"
 			
-	def _OnSelChanged( self, event ):
+	def _OnPopupDelete(self, event):
+            """
+            Delete selected file or folder
+            """
+            selection = self.GetSelections()
+            
+            dialog = wx.MessageDialog(None, 'Are you sure?', 'Delete', wx.YES_NO | wx.NO_DEFAULT | wx.ICON_ERROR)
+            result = dialog.ShowModal()
+
+            if result == wx.ID_YES:
+                deletion_list = []
+
+                for item in selection:
+                    itemdata = self.GetPyData(item)
+                    deletion_list.append(itemdata.getCurrentFile())
+                    self.Delete(item)
+
+                for item in deletion_list:
+                    WpFileSystem.DeleteFromDisk(item)
+
+        def _OnSelChanged( self, event ):
 		"""
 		On selection change event handler. Occurs when we have clicked on
 		a node inside the treecontroller.
