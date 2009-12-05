@@ -1,6 +1,7 @@
 import wx
 import time
 import wx.lib.buttons as buttons
+import  wx.gizmos as gizmos
 
 class StopwatchGui(wx.Dialog):
     def __init__(self):
@@ -22,7 +23,14 @@ class StopwatchGui(wx.Dialog):
         mainpanel_sizer = wx.BoxSizer(wx.VERTICAL)
 
         # Time field
-        self.time_field = wx.StaticText(self.mainpanel, wx.ID_ANY, '00:00:00')
+        self.time_field = gizmos.LEDNumberCtrl(
+                                self.mainpanel, 
+                                wx.ID_ANY, 
+                                (25,175), 
+                                (280, 50),
+                                gizmos.LED_ALIGN_CENTER
+                            )# wx.StaticText(self.mainpanel, wx.ID_ANY, '00:00:00')
+                            
         timefield_sizer = wx.BoxSizer(wx.VERTICAL)
         timefield_sizer.Add(self.time_field)
 
@@ -76,7 +84,7 @@ class StopwatchGui(wx.Dialog):
 
     def __onTimer(self, event):
         self.counter += 1
-        self.time_field.SetLabel(str(self.millisecondsToTime()))
+        self.time_field.SetValue(str(self.millisecondsToTime()))
 
     def __onRecord(self, event):
         item = wx.ListItem()
