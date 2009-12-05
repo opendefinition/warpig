@@ -74,7 +74,6 @@ class WpAuiMainFrame(wx.Frame):
                                 .Dockable(False)
                                 .Float()
                                 .Hide()
-                                .Center()
                                 .MinimizeButton(True))
 
         self.__manager.Update()
