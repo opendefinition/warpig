@@ -19,7 +19,7 @@ class StopwatchGui(wx.Dialog):
         self.mainsizer = wx.BoxSizer( wx.VERTICAL )
 
         # Panel
-        self.mainpanel = wx.Panel( self, -1, size=( sizeHeight, sizeWidth ) )
+        self.mainpanel = wx.Panel( self, -1, size=(sizeHeight, sizeWidth))
         mainpanel_sizer = wx.BoxSizer(wx.VERTICAL)
 
         # Time field
@@ -27,7 +27,7 @@ class StopwatchGui(wx.Dialog):
                                 self.mainpanel, 
                                 wx.ID_ANY, 
                                 (25,175), 
-                                (280, 50),
+                                (sizeWidth, 50),
                                 gizmos.LED_ALIGN_CENTER
                             )# wx.StaticText(self.mainpanel, wx.ID_ANY, '00:00:00')
                             
@@ -57,7 +57,7 @@ class StopwatchGui(wx.Dialog):
         button_sizer.Add(self.start_stop_button)
         button_sizer.Add(self.record_button)
 
-        mainpanel_sizer.Add(timefield_sizer, 1, wx.EXPAND)
+        mainpanel_sizer.Add(timefield_sizer, 0, wx.EXPAND)
         mainpanel_sizer.Add(button_sizer, 0, wx.EXPAND)
         mainpanel_sizer.Add(timelist_sizer, 1, wx.EXPAND)
 
@@ -92,8 +92,6 @@ class StopwatchGui(wx.Dialog):
         self.timelist.InsertItem(item)
 
     def millisecondsToTime(self):
-        milli = self.counter
-        milli %= 1000
         seconds = self.counter/1000
         minutes = seconds/60
         seconds %= 60
@@ -101,7 +99,7 @@ class StopwatchGui(wx.Dialog):
         hours = minutes/60
         minutes %= 60
 
-        return "%02d:%02d:%03d" % (minutes, seconds, milli)
+        return "%02d-%02d-%02d" % (hours, minutes, seconds)
 
 class Stopwatch:
     def run(self):
