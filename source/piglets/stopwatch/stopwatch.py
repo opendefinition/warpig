@@ -1,5 +1,6 @@
 import wx
 import time
+import wx.lib.buttons as buttons
 
 class StopwatchGui(wx.Dialog):
     def __init__(self):
@@ -18,7 +19,7 @@ class StopwatchGui(wx.Dialog):
 
         # Panel
         self.mainpanel = wx.Panel( self, -1, size=( sizeHeight, sizeWidth ) )
-        mainpanel_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        mainpanel_sizer = wx.BoxSizer(wx.VERTICAL)
 
         # Time field
         self.time_field = wx.StaticText(self.mainpanel, wx.ID_ANY, '00:00:00')
@@ -28,22 +29,36 @@ class StopwatchGui(wx.Dialog):
         # Stopwatch
         self.stopwatch = wx.Timer(self)
 
+        # Recorded time list
+        self.timelist = wx.ListCtrl(
+                            self.mainpanel,
+                            wx.ID_ANY,
+                            style=wx.BORDER_SUNKEN | wx.LC_REPORT | wx.LC_VRULES | wx.LC_HRULES | wx.LC_SINGLE_SEL
+                        )
+
+        self.timelist.InsertColumn(0, 'Time', 0, 295)
+        timelist_sizer = wx.BoxSizer(wx.VERTICAL)
+        timelist_sizer.Add(self.timelist, 1, wx.EXPAND)
+
         # Buttons
-        self.record_button = wx.Button(self.mainpanel, wx.ID_ANY, 'Record')
-        self.start_stop_button = wx.ToggleButton(self.mainpanel, wx.ID_ANY, 'Start')
+        #self.record_button = wx.Button(self.mainpanel, wx.ID_ANY, 'Record')
+        self.record_button = buttons.ThemedGenButton(self.mainpanel, wx.ID_ANY, 'Record')
+        self.start_stop_button = buttons.ThemedGenToggleButton(self.mainpanel, wx.ID_ANY, 'Start')
+        self.start_stop_button.SetSize(self.record_button.GetSizer())
         button_sizer = wx.BoxSizer(wx.HORIZONTAL)
         button_sizer.Add(self.start_stop_button)
         button_sizer.Add(self.record_button)
 
         mainpanel_sizer.Add(timefield_sizer, 1, wx.EXPAND)
         mainpanel_sizer.Add(button_sizer, 0, wx.EXPAND)
+        mainpanel_sizer.Add(timelist_sizer, 1, wx.EXPAND)
 
         # Sewing it all together
         self.mainsizer.Add(mainpanel_sizer, 1, wx.EXPAND)
         self.SetSizer(self.mainsizer, wx.EXPAND)
 
         # Bindings
-        self.Bind(wx.EVT_TOGGLEBUTTON, self.__onToggleButton, id=self.start_stop_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self.__onToggleButton, id=self.start_stop_button.GetId())
         self.Bind(wx.EVT_TIMER, self.__onTimer, self.stopwatch)
         self.Bind(wx.EVT_BUTTON, self.__onRecord, id=self.record_button.GetId())
 
@@ -64,7 +79,9 @@ class StopwatchGui(wx.Dialog):
         self.time_field.SetLabel(str(self.millisecondsToTime()))
 
     def __onRecord(self, event):
-        print self.millisecondsToTime()
+        item = wx.ListItem()
+        item.SetText(self.millisecondsToTime())
+        self.timelist.InsertItem(item)
 
     def millisecondsToTime(self):
         milli = self.counter
