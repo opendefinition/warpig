@@ -68,6 +68,7 @@ class WpAuiMainFrame(wx.Frame):
                                 .Hide()
                                 .BottomDockable(False)
                                 .TopDockable(False)
+                                .MinSize((200,200))
                         )
 
         self.__manager.AddPane(
