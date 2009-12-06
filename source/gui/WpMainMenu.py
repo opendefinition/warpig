@@ -199,6 +199,7 @@ class WpMainMenu(wx.MenuBar):
     ##--------------------------------------------------------------------------
     def __onNewProject(self, event):
   	window = WpNewProject(self)
+        window.Center()
 	window.ShowModal()
 	window.Destroy()
 

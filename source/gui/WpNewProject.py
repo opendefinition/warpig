@@ -151,7 +151,7 @@ class WpNewProject( wx.Dialog ):
                 basepath = '/Users'
 
         dialog = wx.lib.agw.multidirdialog.MultiDirDialog( None, 'New Project', 'Associate folders', defaultPath=basepath )
-
+        dialog.Center()
         if dialog.ShowModal() == wx.ID_OK:
             paths = dialog.GetPaths()
 
