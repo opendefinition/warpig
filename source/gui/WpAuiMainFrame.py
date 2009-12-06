@@ -35,6 +35,9 @@ class WpAuiMainFrame(wx.Frame):
 
         self.__manager = wx.aui.AuiManager(self)
 
+        ## We always need a statusbar
+        self.CreateStatusBar()
+
         ## Adding main button toolbar
         self.__manager.AddPane(
                 mainbuttonpanel,
