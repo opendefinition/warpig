@@ -61,26 +61,6 @@ class WpMainPanel( wx.Panel ):
 		self.SetSizer( mainsizer )		
 	
 	#---------------------------------------------------------------
-	# Handle 'on doubleclick' on sash
-	#---------------------------------------------------------------
-	def _OnSplitterDblClk( self, event ):
-		self.ResizeSash()
-	
-	#---------------------------------------------------------------
-	# Handling resizing of sash
-	#---------------------------------------------------------------
-	def ResizeSash( self ):
-		windowsize = self.splitter.GetSize()[0]
-		sashpos = self.splitter.GetSashPosition()
-			
-		if self.sashpos == None or self.sashpos < sashpos:
-			self.splitter.SetSashPosition( (windowsize-200), True )
-		else:
-			self.splitter.SetSashPosition( -1, True )
-			
-		self.sashpos = sashpos
-	
-	#---------------------------------------------------------------
 	# Bindings
 	#---------------------------------------------------------------
    	

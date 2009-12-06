@@ -49,17 +49,6 @@ class WpNewProject( wx.Dialog ):
         prjnamesizer.Add( self.prjnameinput , 1, wx.EXPAND | wx.ALL, 5 )
         self.Fit()
 
-        """ This will be re added when this dialog is rewritten as a wizard
-        ##
-        # Project description
-        ##
-        prjdescsizer = wx.BoxSizer( wx.VERTICAL )
-        prjdesclabel = wx.StaticText( mainpanel, -1, 'Description' )
-        self.prjdescfield = wx.TextCtrl( mainpanel, wx.ID_ANY, style=wx.TE_MULTILINE )
-
-        prjdescsizer.Add(prjdesclabel, 0, wx.EXPAND | wx.ALL, 5)
-        prjdescsizer.Add(self.prjdescfield, 0, wx.EXPAND | wx.ALL, 5)
-        """
         ##
         # Controls for adding files to project
         ##
