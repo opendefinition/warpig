@@ -233,6 +233,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
 								)
 								
 					self.EnsureVisible(newFileItem)
+                                        self.Unselect()
+                                        self.SelectItem(newFileItem)
 				else:
                                         dialog = wx.MessageDialog(None, 'File already exists', 'Warning', wx.OK | wx.ICON_QUESTION)
                                         if dialog.ShowModal() == wx.ID_OK:
@@ -276,6 +278,8 @@ class WpTreeCtrl( wx.TreeCtrl ):
 									wx.TreeItemData(nodeData)
 								)
 						self.EnsureVisible(newItem)
+                                                self.Unselect()
+                                                self.SelectItem(newItem)
 					else:
 						dialog = wx.MessageDialog(None, 'Folder already exists', 'Warning', wx.OK | wx.ICON_QUESTION)
                                                 if dialog.ShowModal() == wx.ID_OK:
