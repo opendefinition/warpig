@@ -30,6 +30,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
 		wx.TreeCtrl.__init__( self, parent, CONST_WIDGET_PROJECT_TREE, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
                 self.configobj = WpConfigSystem()
+                self.project = None
                 pub.subscribe(self.populateSubscriber, 'projecttree.populate')
 
         def populateSubscriber(self, message):
@@ -40,6 +41,9 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		Build and populate this instance of the projecttree
 		@param Object WpProject
 		"""
+
+                self.project = projectobj
+
                 ## Get configuration for this tree
                 self.excludeprefix = self.configobj.settings['projecttree-prefixexclude']
                 self.excludesuffix = self.configobj.settings['projecttree-suffixexclude']
@@ -67,7 +71,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		
 		## Setup project information
 		projectInformation = WpProjectData()
-		projectInformation.setProjectName(projectobj.GetTitle())
+		projectInformation.setProjectName(self.project.GetTitle())
 
                 treeroot = self.AddRoot(
                                     projectInformation.getProjectName(),
@@ -87,7 +91,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		ids = {root: treeroot}
 		
 		## Build projecttree by looping over current directory listing
-		for dir in projectobj.GetPaths():
+		for dir in self.project.GetPaths():
 			dlist = WpFileSystem.ListDirectory( dir )
 		
 			## Prepare basic information for node
@@ -298,8 +302,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
             """
             Refresh/reload the project tree
             """
-
-            None
+            self.PopulateTree(self.project)
 
         def _OnSelChanged(self, event):
 		"""
