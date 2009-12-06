@@ -21,7 +21,7 @@ from wx.lib.pubsub import Publisher as pub
 class WpNoteBook(aui.AuiNotebook):
     def __init__(self, parent):
         self.parent = parent
-        aui.AuiNotebook.__init__(self, parent, wx.ID_ANY, style=wx.EXPAND )
+        aui.AuiNotebook.__init__(self, parent, wx.ID_ANY, style=wx.EXPAND | aui.AUI_NB_CLOSE_ON_ACTIVE_TAB)
 
         ## Theme support
         arts = [
