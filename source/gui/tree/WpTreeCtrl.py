@@ -147,6 +147,9 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                 )
 		
 		self.SetupBindings()
+
+                ## Show the project tree
+                pub.sendMessage('mainframe.showpane', 'project')
 		
 	def SetupBindings( self ):
 		"""

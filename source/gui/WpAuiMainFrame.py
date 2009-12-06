@@ -65,6 +65,7 @@ class WpAuiMainFrame(wx.Frame):
                                 .Name("project")
                                 .Caption("Project tree")
                                 .Right()
+                                .Hide()
                                 .BottomDockable(False)
                                 .TopDockable(False)
                         )
