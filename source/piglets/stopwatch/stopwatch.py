@@ -6,6 +6,12 @@ import  wx.gizmos as gizmos
 class StopwatchGui(wx.Dialog):
     def __init__(self):
         wx.Dialog.__init__(self, None, wx.ID_ANY, 'Warpig Stopwatch', size=(300, 300))
+
+        # Time fields
+        self.hours = 0
+        self.minuts = 0
+        self.seconds = 0
+
         self.__Setup()
         self.counter = 0
         self.Center()
@@ -29,7 +35,7 @@ class StopwatchGui(wx.Dialog):
                                 (25,175), 
                                 (sizeWidth, 50),
                                 gizmos.LED_ALIGN_CENTER
-                            )# wx.StaticText(self.mainpanel, wx.ID_ANY, '00:00:00')
+                            )
                             
         timefield_sizer = wx.BoxSizer(wx.VERTICAL)
         timefield_sizer.Add(self.time_field)
@@ -80,26 +86,34 @@ class StopwatchGui(wx.Dialog):
             self.start_stop_button.SetLabel('Start')
             self.stopwatch.Stop()
             self.time_field.SetLabel(str(self.millisecondsToTime()))
-            self.counter = 0
+
+            # Resetting time values
+            self.hours      = 0
+            self.minutes    = 0
+            self.seconds    = 0
+            self.counter    = 0
 
     def __onTimer(self, event):
         self.counter += 1
-        self.time_field.SetValue(str(self.millisecondsToTime()))
+        self.time_field.SetValue(str(self.millisecondsToTime(True)))
 
     def __onRecord(self, event):
         item = wx.ListItem()
         item.SetText(self.millisecondsToTime())
         self.timelist.InsertItem(item)
 
-    def millisecondsToTime(self):
-        seconds = self.counter/1000
-        minutes = seconds/60
-        seconds %= 60
+    def millisecondsToTime(self, clockoutput=False):
+        self.seconds = self.counter/1000
+        self.minutes = self.seconds/60
+        self.seconds %= 60
 
-        hours = minutes/60
-        minutes %= 60
+        self.hours = self.minutes/60
+        self.minutes %= 60
 
-        return "%02d-%02d-%02d" % (hours, minutes, seconds)
+        if clockoutput:
+            return "%02d-%02d-%02d" % (self.hours, self.minutes, self.seconds)
+        else:
+            return "%02d:%02d:%02d" % (self.hours, self.minutes, self.seconds)
 
 class Stopwatch:
     def run(self):
