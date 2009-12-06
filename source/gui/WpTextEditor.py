@@ -35,7 +35,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 
 		self.Bind( wx.EVT_KEY_DOWN, self._OnKeyDown )
 		self.Bind( wx.stc.EVT_STC_SAVEPOINTREACHED, self._OnSavePointReached )
-		self.Bind( wx.stc.EVT_STC_CHANGE, self._OnTextChange )
+		self.Bind( wx.stc.EVT_STC_CHARADDED, self._OnTextChange )
 
                 pub.subscribe(self.refreshSubscriber, 'editor.refresh')
 
