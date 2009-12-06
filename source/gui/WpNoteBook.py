@@ -33,7 +33,7 @@ class WpNoteBook(aui.AuiNotebook):
                 aui.ChromeTabArt
             ]
 
-        art = arts[3]()
+        art = arts[0]()
         self.SetArtProvider(art)
 
         ## Subscribe to add page event message
