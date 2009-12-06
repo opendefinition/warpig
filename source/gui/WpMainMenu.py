@@ -29,7 +29,6 @@ class WpMainMenu(wx.MenuBar):
         self.parentFrame = parentFrame
         self.Append(self.__setupFileMenu(), '&File')
         self.Append(self.__setupEditMenu(), '&Edit')
-        self.Append(self.__setupEditMenu(), '&Edit')
 	self.Append(self.__setupViewMenu(), '&View')
 	self.Append(self.__setupPigletMenu(), '&Piglets')
 	self.Append(self.__setupHelpMenu(), '&Help')
