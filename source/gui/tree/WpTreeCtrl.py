@@ -229,7 +229,9 @@ class WpTreeCtrl( wx.TreeCtrl ):
 								
 					self.EnsureVisible(newFileItem)
 				else:
-					print "Debug message: File already exist!"
+                                        dialog = wx.MessageDialog(None, 'File already exists', 'Warning', wx.OK | wx.ICON_QUESTION)
+                                        if dialog.ShowModal() == wx.ID_OK:
+                                                dialog.Destroy()
 		
 	def _OnPopupNewFolder(self, event):
 		"""
@@ -270,7 +272,9 @@ class WpTreeCtrl( wx.TreeCtrl ):
 								)
 						self.EnsureVisible(newItem)
 					else:
-						print "Debug message: Folder already exist!"
+						dialog = wx.MessageDialog(None, 'Folder already exists', 'Warning', wx.OK | wx.ICON_QUESTION)
+                                                if dialog.ShowModal() == wx.ID_OK:
+                                                    dialog.Destroy()
 			
 	def _OnPopupDelete(self, event):
             """
