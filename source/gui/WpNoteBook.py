@@ -86,13 +86,7 @@ class WpNoteBook(aui.AuiNotebook):
 
             self.Freeze() ## Prevent flickering
             page_bmp = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_OTHER, wx.Size(16, 16))
-
-            if page_count > 0 and self.GetPage(0).GetFilePath() == None and len(self.GetPage(0).GetText()) == 0 and file_path != None:
-                page_title = os.path.split(file_path)[1]
-                self.SetPageText(0, page_title)
-                self.GetPage(0).SetFilePath(file_path)
-            else:
-                self.AddPage(self._AddTextEditor(file_path), page_title, True, page_bmp)
+            self.AddPage(self._AddTextEditor(file_path), page_title, True, page_bmp)
 
             self.Thaw() ## Get back to normal state
             
