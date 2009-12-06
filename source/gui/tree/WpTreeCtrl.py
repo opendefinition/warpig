@@ -141,9 +141,6 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                         2,
                                         wx.TreeItemData(fileInformation)
                                 )
-					
-		#if not alreadyopened:
-		#	self.Parent.Parent.Parent.ResizeSash()
 		
 		self.SetupBindings()
 		
@@ -184,6 +181,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		self.Bind(wx.EVT_MENU, self._OnPopupNewFile, id=newFile.GetId())
 		self.Bind(wx.EVT_MENU, self._OnPopupNewFolder, id=newFolder.GetId())
                 self.Bind(wx.EVT_MENU, self._OnPopupDelete, id=delete.GetId())
+                self.Bind(wx.EVT_MENU, self._OnPopupRefreshTree, id=refreshTree.GetId())
 		
 		self.PopupMenu(mainMenu)
 		mainMenu.Destroy()
@@ -296,7 +294,14 @@ class WpTreeCtrl( wx.TreeCtrl ):
                 for item in deletion_list:
                     WpFileSystem.DeleteFromDisk(item)
 
-        def _OnSelChanged( self, event ):
+        def _OnPopupRefreshTree(self, event):
+            """
+            Refresh/reload the project tree
+            """
+
+            None
+
+        def _OnSelChanged(self, event):
 		"""
 		On selection change event handler. Occurs when we have clicked on
 		a node inside the treecontroller.
