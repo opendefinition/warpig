@@ -165,7 +165,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 	
 	def _OnTreeRightClick( self, event ):
 		"""
-		Popup event handler for contect menu on right click
+		Popup event handler for context menu on right click
 		inside the projecttree.
 		"""
 		mainMenu = wx.Menu()
@@ -257,14 +257,14 @@ class WpTreeCtrl( wx.TreeCtrl ):
 				if dialog.ShowModal() == wx.ID_OK:
 					folderName = dialog.GetValue()
 					newFolderPath = os.path.join(currentElementData.getCurrentDirectory(), folderName)
-			
+                             
 					## Does this folder already exist?
 					if os.path.isdir(newFolderPath) == False:
 						os.mkdir(newFolderPath)
 					
 						## Append folder to tree
 						nodeData = WpElementData()
-						nodeData.setCurrentDirectory(currentElementData.getCurrentDirectory())
+                                                nodeData.setCurrentDirectory(newFolderPath)
 						nodeData.setCurrentFile(newFolderPath)
 					
 						if currentElementData.getCurrentFilename() != None:
