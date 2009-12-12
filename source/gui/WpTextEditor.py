@@ -49,8 +49,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
             """
             ## Load configurations
             self.configobj = WpConfigSystem()
-            
-
+     
             ## Load settings from cache
             self.editorFontFace         = self.configobj.settings['editor-fontface']
             self.editorFontSize         = int(self.configobj.settings['editor-fontsize'])
@@ -468,8 +467,14 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		## print "Key #", event.GetUniChar(), " CmdDown is ", event.CmdDown()
 		key = event.GetUniChar()
 		cmd = event.CmdDown()
-		
+                print key
 		if( cmd == True ):
+                        if( key == 98 ):
+                            kw = keyword.kwlist[:]
+                            kw.sort()
+                            self.AutoCompSetIgnoreCase(False)
+                            self.AutoCompShow(0, " ".join(kw))
+
 			##
 			# Saving current file
 			##
