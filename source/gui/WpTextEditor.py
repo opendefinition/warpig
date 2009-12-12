@@ -467,7 +467,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		## print "Key #", event.GetUniChar(), " CmdDown is ", event.CmdDown()
 		key = event.GetUniChar()
 		cmd = event.CmdDown()
-                print key
+                
 		if( cmd == True ):
                         if( key == 98 ):
                             kw = keyword.kwlist[:]
