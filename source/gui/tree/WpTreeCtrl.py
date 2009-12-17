@@ -173,15 +173,19 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		newMenu = wx.Menu()
 		newFile = wx.MenuItem(newMenu, wx.ID_ANY,"New file")
 		newFolder = wx.MenuItem(newMenu, wx.ID_ANY,"New folder")
+
 		newMenu.AppendItem(newFile)
 		newMenu.AppendItem(newFolder)
-		
+                newMenu.AppendSeparator()
+
 		delete = wx.MenuItem(mainMenu, wx.ID_ANY,"Delete")
 		refreshTree = wx.MenuItem(mainMenu, wx.ID_ANY,"Refresh tree")
-		
+                renameItem = wx.MenuItem(newMenu, wx.ID_ANY, "Rename")
+
 		mainMenu.AppendMenu(wx.ID_ANY, 'New', newMenu)
 		mainMenu.AppendItem(delete)
 		mainMenu.AppendSeparator()
+                mainMenu.AppendItem(renameItem)
 		mainMenu.AppendItem(refreshTree)
 		
 		## Binding menu elements
@@ -189,10 +193,21 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		self.Bind(wx.EVT_MENU, self._OnPopupNewFolder, id=newFolder.GetId())
                 self.Bind(wx.EVT_MENU, self._OnPopupDelete, id=delete.GetId())
                 self.Bind(wx.EVT_MENU, self._OnPopupRefreshTree, id=refreshTree.GetId())
+                self.Bind(wx.EVT_MENU, self._OnPopupRenameItem, id=renameItem.GetId())
 		
 		self.PopupMenu(mainMenu)
 		mainMenu.Destroy()
-		
+
+        def _OnPopupRenameItem(self, event):
+                itemid = self.GetSelection()
+
+                dialog = wx.TextEntryDialog(self, ('Current name: ' + self.GetItemText(itemid)), 'Rename', self.GetItemText(itemid))
+                
+                if dialog.ShowModal() == wx.ID_OK:
+                    data = self.GetPyData(itemid)
+
+                    WpFileSystem.Rename(data, dialog.GetValue())
+
 	def _OnPopupNewFile(self, event):
 		"""
 		Popup event handler for creating new files by rightclicking 

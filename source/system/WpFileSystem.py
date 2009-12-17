@@ -1,3 +1,4 @@
+import os.path
 # -*- coding: utf-8 -*
 #---------------------------------------------------------------------------
 #
@@ -81,3 +82,19 @@ class WpFileSystem:
                 shutil.rmtree(path)
             else:
                 os.remove(path)
+
+        #--------------------------------------------------------------
+        # Rename file or directory
+        # @param string path
+        #--------------------------------------------------------------
+        @staticmethod
+        def Rename( data, newname ):
+            if data.getCurrentFilename() == None:
+                split = os.path.split(data.getCurrentDirectory())
+                new = os.path.join(split[0], newname)
+                orig = data.getCurrentDirectory()
+            else:
+                orig = data.getCurrentFile()
+                new = os.path.join(data.getCurrentDirectory(), newname)
+
+            os.rename(orig, new)
