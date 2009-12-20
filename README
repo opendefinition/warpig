@@ -11,6 +11,11 @@ License:	TBD.
 About
 A generic script editor written in Python
 ##-----------------------------------------------------------------------------------
+Prerequisites:
+	Python 2.6.x
+	WxPython with unicode support
+	PyYaml
+
 Usage:
 	Setup:	python warpig.py --setup
 	Reset:	python warpig.py --reset
