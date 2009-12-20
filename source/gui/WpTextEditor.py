@@ -12,9 +12,9 @@
 
 import keyword
 import os
-import re 
 import wx
 import wx.stc as stc
+from wx.lib.pubsub import Publisher as pub
 
 from system.WpFileSystem import WpFileSystem
 from system.WpConfigSystem import WpConfigSystem
@@ -25,52 +25,32 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
         def __init__( self, parent ):
 		self.parent = parent
 
-                ## Load configurations
-                self.configobj = WpConfigSystem()
+		## We always construct parent with wx.TE_MULTILINE
+		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
+
                 self.applySettings()
 
-		##
-		# We always construct parent with wx.TE_MULTILINE
-		##
-		wx.stc.StyledTextCtrl.__init__( self, parent, style=wx.TE_MULTILINE )
-		## Text margin
-		self.SetMarginType(0, wx.stc.STC_MARGIN_NUMBER )    # Line numbering
-		self.SetMarginWidth(0, 35)                          # Margin for line numbering
-		self.SetEdgeColour("#555753" )
-		self.SetEdgeColumn(self.editorTextMarginWidth)      # Text margin
-		self.SetEdgeMode(wx.stc.STC_EDGE_LINE)              # Text margin type
-
-		## Tab Setup
-		self.setTabAndIndents()
-		## Code folding
-                self.setCodeFolding()
-
-		## Fonts
-		font = wx.Font(
-                            self.editorFontSize,
-                            wx.DEFAULT,
-                            wx.NORMAL,
-                            wx.NORMAL,
-                            False,
-                            self.editorFontFace,
-                            wx.FONTENCODING_UTF8
-                        )
-
-		## We must tell StyleSetSpec to use this face and size otherwise it won't get applied
-		self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (self.editorFontFace, self.editorFontSize))
-
-		self.StyleSetFont( 0, font )
 		self.SetDefaultLexer()
 		self.SetFocus()
 
 		self.Bind( wx.EVT_KEY_DOWN, self._OnKeyDown )
 		self.Bind( wx.stc.EVT_STC_SAVEPOINTREACHED, self._OnSavePointReached )
-		self.Bind( wx.stc.EVT_STC_CHANGE, self._OnTextChange )
+		self.Bind( wx.stc.EVT_STC_CHARADDED, self._OnTextChange )
+
+                pub.subscribe(self.refreshSubscriber, 'editor.refresh')
+
+        def refreshSubscriber(self, message):
+            self.applySettings()
+            self.Refresh()
 
         def applySettings(self):
             """
             Apply editor settings
             """
+            ## Load configurations
+            self.configobj = WpConfigSystem()
+     
+            ## Load settings from cache
             self.editorFontFace         = self.configobj.settings['editor-fontface']
             self.editorFontSize         = int(self.configobj.settings['editor-fontsize'])
             self.editorTextMarginWidth  = int(self.configobj.settings['editor-textmargin'])
@@ -78,6 +58,34 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
             self.editorUseTab           = int(self.configobj.settings['editor-usetab'])
             self.editorCodeFold         = int(self.configobj.settings['editor-foldcode'])
             self.editorCodeFoldStyle    = int(self.configobj.settings['editor-foldcodestyle'])
+
+            ## Apply settings
+            self.font = wx.Font(
+                        self.editorFontSize,
+                        wx.DEFAULT,
+                        wx.NORMAL,
+                        wx.NORMAL,
+                        False,
+                        self.editorFontFace,
+                        wx.FONTENCODING_UTF8
+                    )
+            
+            ## Tab Setup
+            self.setTabAndIndents()
+            ## Code folding
+            self.setCodeFolding()
+
+            ## Text margin
+            self.SetMarginType(0, wx.stc.STC_MARGIN_NUMBER )    # Line numbering
+            self.SetMarginWidth(0, 35)                          # Margin for line numbering
+            self.SetEdgeColour("#555753" )
+            self.SetEdgeMode(wx.stc.STC_EDGE_LINE)              # Text margin type
+            self.SetEdgeColumn(self.editorTextMarginWidth)      # Text margin
+
+            ## We must tell StyleSetSpec to use this face and size otherwise it won't get applied
+            self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT,"face:%s,size:%d" % (self.editorFontFace, self.editorFontSize))
+
+            self.StyleSetFont( 0, self.font )
 
         def setTabAndIndents(self):
             """
@@ -433,16 +441,24 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	#---------------------------------------------------------------
 	# Add ' * ' to tab title if text is modified
 	#---------------------------------------------------------------
-	def _OnTextChange( self, event ):
+	def _OnTextChange(self, event):
                 currentIndex = self.parent.GetPageIndex(self.parent.GetCurrentPage())
-                self.parent.SetPageImage(currentIndex, 0)
+                title = self.parent.GetPageText(currentIndex)
+
+                if title[-2:] != ' *':
+                    newtitle = title + ' *'
+                    self.parent.SetPageText(currentIndex, newtitle)
     
 	#---------------------------------------------------------------
 	# Resetting title of tab
 	#---------------------------------------------------------------
-	def _OnSavePointReached( self, event ):
+	def _OnSavePointReached(self, event):
                 currentIndex = self.parent.GetPageIndex(self.parent.GetCurrentPage())
-                self.parent.SetPageImage(currentIndex, 1)
+                title = self.parent.GetPageText(currentIndex)
+
+                if title[-2:] == ' *':
+                    newtitle = title[0:-2]
+                    self.parent.SetPageText(currentIndex, newtitle)
 
 	#---------------------------------------------------------------
 	# Handle key events
@@ -451,8 +467,14 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		## print "Key #", event.GetUniChar(), " CmdDown is ", event.CmdDown()
 		key = event.GetUniChar()
 		cmd = event.CmdDown()
-		
+                
 		if( cmd == True ):
+                        if( key == 98 ):
+                            kw = keyword.kwlist[:]
+                            kw.sort()
+                            self.AutoCompSetIgnoreCase(False)
+                            self.AutoCompShow(0, " ".join(kw))
+
 			##
 			# Saving current file
 			##
@@ -464,14 +486,14 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 			# Add new page with editor to current notebook instance
 			##
 			if( key == 78 or key == 110 ):
-				self.parent.AddDefaultPage()
+				pub.sendMessage('notebook.addpage')
 				return
 				
 			##
 			# Open file
 			## 
 			if( key == 79 or key == 111 ):
-				self.Parent.Parent.Parent.Parent.OpenPage() # :)
+				pub.sendMessage('mainmenu.openfile')
 				return
 				
 			##

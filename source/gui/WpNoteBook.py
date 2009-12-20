@@ -10,115 +10,85 @@
 # License: Open Definiton General Lisence (ODGL). Available upon request.
 #---------------------------------------------------------------------------
 
+#from wx._misc import Get
 import os
 import wx
-import wx.lib.flatnotebook as fnb
+import wx.lib.agw.aui as aui
 
-from gui.WpTextEditor import WpTextEditor 
+from gui.WpTextEditor import WpTextEditor
+from wx.lib.pubsub import Publisher as pub
 
-class WpNoteBook( fnb.FlatNotebook ):
-	def __init__( self, parent ):
-		self.parent = parent
-		fnb.FlatNotebook.__init__( self, parent, wx.ID_ANY, style=wx.EXPAND )
-                self.Setup()
+class WpNoteBook(aui.AuiNotebook):
+    def __init__(self, parent):
+        self.parent = parent
+        aui.AuiNotebook.__init__(self, parent, wx.ID_ANY, style=wx.EXPAND | aui.AUI_NB_CLOSE_ON_ACTIVE_TAB)
 
-        def Setup(self):
-                ## Active tab color
-                self.SetActiveTabColour('#99CC00')
+        ## Theme support
+        arts = [
+                aui.AuiDefaultTabArt,
+                aui.AuiSimpleTabArt,
+                aui.VC71TabArt,
+                aui.FF2TabArt,
+                aui.VC8TabArt,
+                aui.ChromeTabArt
+            ]
 
-                ## Image list for this notebook
-                imagelist = wx.ImageList(16,16)
-		imagelist.Add(wx.Bitmap("./gui/icons/emblem-system.png", wx.BITMAP_TYPE_PNG))
-                imagelist.Add(wx.Bitmap("./gui/icons/text-x-generic.png", wx.BITMAP_TYPE_PNG))
+        art = arts[0]()
+        self.SetArtProvider(art)
 
-                self.SetImageList(imagelist)
+        ## Subscribe to add page event message
+        pub.subscribe(self.addPageSubscriber, 'notebook.addpage')
 
-	#---------------------------------------------------------------
-	# Add text editor to page
-	# @param string filepath <conditional>
-	# @return object texteditor
-	#---------------------------------------------------------------
-	def _AddTextEditor( self, filepath=None):
-		texteditor = WpTextEditor( self )
-		# Adding content
-		if filepath is not None:
-			texteditor.SetFilePath( filepath )
-			texteditor.SetDefaultLexer()
-	
-		return texteditor
-	
-	#---------------------------------------------------------------
-	# Add default page
-	# @param string filepath <conditional>
-	#---------------------------------------------------------------
-	def AddDefaultPage( self, filepath=None ):
-		title = ' : empty'
-		
-		##
-		# Testing if the file is already open
-		##
-		numpages = self.GetPageCount()
-		dontreload = False
+    ##--------------------------------------------------------------------------
+    ## Subscriber action, add default page
+    ##--------------------------------------------------------------------------
+    def addPageSubscriber(self, message):
+        self.AddDefaultPage(message.data)
 
-		for index in range( 0, numpages ):
-			pagepath = self.GetPage( index ).GetFilePath()
-			
-			if( pagepath is None ):
-				continue
-			elif( pagepath == filepath ):
-				dontreload = True
-				foundindex = index
-			
-		##
-		# Don't let the users open the same file multiple times
-		##
-		if( dontreload == False ):
-			if filepath is None:
-				filepath = None
-			else:
-				split = os.path.split( filepath )
-				filepath = filepath
-				title = split[ 1 ]
-				
-			##
-			# Keeps notebook from flickering when adding pages. See Thaw later in this function.
-			##
-			self.Freeze()
-			
-			##
-			# Make use of the very first page that is empty
-			##
-			
-			
-			### TODO: REWRITE THIS IF TEST
-			"""
-			if( numpages == 0 ):
-				self.AddPage( self._AddTextEditor( None ), title, True )
-			else:
-				if( self.GetPage( 0 ).GetFilePath() == None and len( self.GetPage( 0 ).GetText() ) == 0 ):
-					self.DeletePage( 0 )
-				
-				if( title == '< empty >' ):
-					filepath = None
-				
-				self.AddPage( self._AddTextEditor( filepath ), title, True )
-			
-			"""
-			if( numpages > 0 and self.GetPage( 0 ).GetFilePath() == None and len( self.GetPage( 0 ).GetText() ) == 0 and filepath != None):
-				title = os.path.split( filepath )[ 1 ]
-				self.SetPageText( 0, title )
-				self.GetPage( 0 ).SetFilePath( filepath )
-				print "We should not be in here right now"
-				# self.GetPage( 0 ).EmptyUndoBuffer()
-			else:
-				self.AddPage( self._AddTextEditor( filepath ), title, True, 1 )
-	
-			##
-			# Thawing
-			##
-			self.Thaw()
-		else:
-			##
-			# File is already opened, focus it
-			##
-			self.SetSelection( foundindex )
+    #---------------------------------------------------------------
+    # Add text editor to page
+    # @param string filepath <conditional>
+    # @return object texteditor
+    #---------------------------------------------------------------
+    def _AddTextEditor( self, filepath=None):
+        texteditor = WpTextEditor( self )
+        # Adding content
+        if filepath is not None:
+            texteditor.SetFilePath( filepath )
+            texteditor.SetDefaultLexer()
+
+        return texteditor
+
+    ##---------------------------------------------------------------
+    ## Add default page
+    ## @param string filepath <conditional>
+    ##---------------------------------------------------------------
+    def AddDefaultPage(self, file_path=None):
+        page_title = 'new'
+
+        page_count  = self.GetPageCount()
+        page_reload = True
+        page_index  = None
+
+        for index in range(0, page_count):
+            page_path = self.GetPage(index).GetFilePath()
+
+            if page_path == None: continue
+            elif page_path == file_path:
+                page_reload = False ## Page already exists don't reload page
+                page_index  = index
+
+        ## Prevent multiple opening of file
+        if page_reload == True:
+            if file_path != None:
+                splitted_path = os.path.split(file_path)
+                page_title = splitted_path[1]
+
+            self.Freeze() ## Prevent flickering
+            page_bmp = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_OTHER, wx.Size(16, 16))
+            self.AddPage(self._AddTextEditor(file_path), page_title, True, page_bmp)
+
+            self.Thaw() ## Get back to normal state
+            
+        else:
+            self.SetSelection(page_index)

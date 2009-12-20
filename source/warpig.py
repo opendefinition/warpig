@@ -14,7 +14,7 @@ import sqlite3
 import sys
 import wx
 
-from gui.WpMainFrame import WpMainFrame
+from gui.WpAuiMainFrame import WpAuiMainFrame
 from system.setup import RunSetup
 from system.WpConfigLoader import WpConfigLoader
 
@@ -33,7 +33,7 @@ class WpWarPig( wx.App ):
 			print "Warpig System Error: missing configuration database\nplease run 'warpig.py --setup'"
 
 		if configloaded:
-			frame = WpMainFrame( None )
+			frame = WpAuiMainFrame( None )
 			frame.Show()
 			self.SetTopWindow(frame)
 		

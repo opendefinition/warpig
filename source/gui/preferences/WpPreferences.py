@@ -13,38 +13,12 @@
 import wx
 
 from gui.preferences.WpPreferenceTree import WpPreferenceTree
+from gui.guid.guid import *
 
-class WpPreferences( wx.Dialog ):
-	def __init__( self ):
-		
-		wx.Dialog.__init__( self, None, wx.ID_ANY, 'WarPig Preferences', size=(600, 500) )
-		
-		self.Setup()
-		self.Center()
-		
-	def Setup( self ):
-		##
-		# Mainpanel to hold everything
-		##
-		sizeHeight = self.GetSize()[1]
-		sizeWidth = self.GetSize()[0]
+class WpPreferences( wx.Panel ):
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent, size=(500, 500))
 
-		self.mainpanel = wx.Panel( self, -1, size=( sizeHeight, sizeWidth ) )
-		self.panelsizer = wx.BoxSizer( wx.VERTICAL ) 
-		
-		##
-		# Preferencetree widget
-		##
-		self.preferencetree = WpPreferenceTree( self.mainpanel, -1 )
-		
-		##
-		# Mainsizer
-		self.mainsizer = wx.BoxSizer( wx.VERTICAL )
-		
-		##
-		# Sewing it all together
-		##
-		self.panelsizer.Add( self.preferencetree, 1, wx.EXPAND )
-		self.mainsizer.Add( self.panelsizer, 1, wx.EXPAND )
-		self.SetSizer( self.mainsizer, wx.EXPAND )
-		
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(WpPreferenceTree(self, CONST_PANE_PREFERENCE_TREE))
+        self.SetSizer(sizer)

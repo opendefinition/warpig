@@ -18,20 +18,32 @@ from system.WpFileSystem import WpFileSystem
 from gui.tree.WpProjectData import WpProjectData
 from gui.tree.WpElementData import WpElementData
 from system.WpProject import WpProject
+from gui.guid.guid import *
 
 from system.WpDatabaseAPI import WpDatabaseAPI
 from system.WpConfigSystem import WpConfigSystem
 
+# Interprocess communications
+from wx.lib.pubsub import Publisher as pub
+
 class WpTreeCtrl( wx.TreeCtrl ):
 	def __init__( self, parent ):
-		wx.TreeCtrl.__init__( self, parent, wx.ID_ANY, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
+		wx.TreeCtrl.__init__( self, parent, CONST_WIDGET_PROJECT_TREE, style=wx.ALL | wx.TR_DEFAULT_STYLE | wx.EXPAND | wx.TR_HIDE_ROOT )
                 self.configobj = WpConfigSystem()
+                self.project = None
+                pub.subscribe(self.populateSubscriber, 'projecttree.populate')
+
+        def populateSubscriber(self, message):
+            self.PopulateTree(message.data)
 		
 	def PopulateTree( self, projectobj ):
 		"""
 		Build and populate this instance of the projecttree
 		@param Object WpProject
 		"""
+
+                self.project = projectobj
+
                 ## Get configuration for this tree
                 self.excludeprefix = self.configobj.settings['projecttree-prefixexclude']
                 self.excludesuffix = self.configobj.settings['projecttree-suffixexclude']
@@ -59,7 +71,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		
 		## Setup project information
 		projectInformation = WpProjectData()
-		projectInformation.setProjectName(projectobj.GetTitle())
+		projectInformation.setProjectName(self.project.GetTitle())
 
                 treeroot = self.AddRoot(
                                     projectInformation.getProjectName(),
@@ -67,7 +79,10 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                     3,
                                     wx.TreeItemData(projectInformation)
 				)
-						
+
+                ## Set project tree pane text to project name
+                pub.sendMessage('mainframe.setpanetitle', {'pane': 'project', 'caption': projectInformation.getProjectName()})
+	
 		self.SetItemHasChildren(treeroot,True)
 		self.SetItemBold(treeroot)
 		self.SetItemBackgroundColour(treeroot, wx.Colour(162,181,205))
@@ -76,7 +91,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		ids = {root: treeroot}
 		
 		## Build projecttree by looping over current directory listing
-		for dir in projectobj.GetPaths():
+		for dir in self.project.GetPaths():
 			dlist = WpFileSystem.ListDirectory( dir )
 		
 			## Prepare basic information for node
@@ -130,17 +145,17 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                         2,
                                         wx.TreeItemData(fileInformation)
                                 )
-					
-		if not alreadyopened:
-			self.Parent.Parent.Parent.ResizeSash()
 		
 		self.SetupBindings()
+
+                ## Show the project tree
+                pub.sendMessage('mainframe.showpane', 'project')
 		
 	def SetupBindings( self ):
 		"""
 		Setup the various bindings for this instance of the projecttree
 		"""
-		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=self.GetId() )
+		self.Bind( wx.EVT_TREE_SEL_CHANGED, self._OnSelChanged, id=CONST_WIDGET_PROJECT_TREE )
 		self.Bind( wx.EVT_TREE_ITEM_MENU, self._OnTreeRightClick, id=wx.ID_ANY )
 		self.Bind( wx.EVT_TREE_ITEM_ACTIVATED, self._OnDoubleClick, id=wx.ID_ANY )
 		
@@ -150,7 +165,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
 	
 	def _OnTreeRightClick( self, event ):
 		"""
-		Popup event handler for contect menu on right click
+		Popup event handler for context menu on right click
 		inside the projecttree.
 		"""
 		mainMenu = wx.Menu()
@@ -158,24 +173,41 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		newMenu = wx.Menu()
 		newFile = wx.MenuItem(newMenu, wx.ID_ANY,"New file")
 		newFolder = wx.MenuItem(newMenu, wx.ID_ANY,"New folder")
+
 		newMenu.AppendItem(newFile)
 		newMenu.AppendItem(newFolder)
-		
+                newMenu.AppendSeparator()
+
 		delete = wx.MenuItem(mainMenu, wx.ID_ANY,"Delete")
 		refreshTree = wx.MenuItem(mainMenu, wx.ID_ANY,"Refresh tree")
-		
+                renameItem = wx.MenuItem(newMenu, wx.ID_ANY, "Rename")
+
 		mainMenu.AppendMenu(wx.ID_ANY, 'New', newMenu)
 		mainMenu.AppendItem(delete)
 		mainMenu.AppendSeparator()
+                mainMenu.AppendItem(renameItem)
 		mainMenu.AppendItem(refreshTree)
 		
 		## Binding menu elements
 		self.Bind(wx.EVT_MENU, self._OnPopupNewFile, id=newFile.GetId())
-		self.Bind(wx.EVT_MENU, self._OnPopupNewFolder,id=newFolder.GetId())
+		self.Bind(wx.EVT_MENU, self._OnPopupNewFolder, id=newFolder.GetId())
+                self.Bind(wx.EVT_MENU, self._OnPopupDelete, id=delete.GetId())
+                self.Bind(wx.EVT_MENU, self._OnPopupRefreshTree, id=refreshTree.GetId())
+                self.Bind(wx.EVT_MENU, self._OnPopupRenameItem, id=renameItem.GetId())
 		
 		self.PopupMenu(mainMenu)
 		mainMenu.Destroy()
-		
+
+        def _OnPopupRenameItem(self, event):
+                itemid = self.GetSelection()
+
+                dialog = wx.TextEntryDialog(self, ('Current name: ' + self.GetItemText(itemid)), 'Rename', self.GetItemText(itemid))
+                
+                if dialog.ShowModal() == wx.ID_OK:
+                    data = self.GetPyData(itemid)
+
+                    WpFileSystem.Rename(data, dialog.GetValue())
+
 	def _OnPopupNewFile(self, event):
 		"""
 		Popup event handler for creating new files by rightclicking 
@@ -216,8 +248,12 @@ class WpTreeCtrl( wx.TreeCtrl ):
 								)
 								
 					self.EnsureVisible(newFileItem)
+                                        self.Unselect()
+                                        self.SelectItem(newFileItem)
 				else:
-					print "Debug message: File already exist!"
+                                        dialog = wx.MessageDialog(None, 'File already exists', 'Warning', wx.OK | wx.ICON_QUESTION)
+                                        if dialog.ShowModal() == wx.ID_OK:
+                                                dialog.Destroy()
 		
 	def _OnPopupNewFolder(self, event):
 		"""
@@ -236,14 +272,14 @@ class WpTreeCtrl( wx.TreeCtrl ):
 				if dialog.ShowModal() == wx.ID_OK:
 					folderName = dialog.GetValue()
 					newFolderPath = os.path.join(currentElementData.getCurrentDirectory(), folderName)
-			
+                             
 					## Does this folder already exist?
 					if os.path.isdir(newFolderPath) == False:
 						os.mkdir(newFolderPath)
 					
 						## Append folder to tree
 						nodeData = WpElementData()
-						nodeData.setCurrentDirectory(currentElementData.getCurrentDirectory())
+                                                nodeData.setCurrentDirectory(newFolderPath)
 						nodeData.setCurrentFile(newFolderPath)
 					
 						if currentElementData.getCurrentFilename() != None:
@@ -257,10 +293,40 @@ class WpTreeCtrl( wx.TreeCtrl ):
 									wx.TreeItemData(nodeData)
 								)
 						self.EnsureVisible(newItem)
+                                                self.Unselect()
+                                                self.SelectItem(newItem)
 					else:
-						print "Debug message: Folder already exist!"
+						dialog = wx.MessageDialog(None, 'Folder already exists', 'Warning', wx.OK | wx.ICON_QUESTION)
+                                                if dialog.ShowModal() == wx.ID_OK:
+                                                    dialog.Destroy()
 			
-	def _OnSelChanged( self, event ):
+	def _OnPopupDelete(self, event):
+            """
+            Delete selected file or folder
+            """
+            selection = self.GetSelections()
+            
+            dialog = wx.MessageDialog(None, 'Are you sure?', 'Delete', wx.YES_NO | wx.NO_DEFAULT | wx.ICON_ERROR)
+            result = dialog.ShowModal()
+
+            if result == wx.ID_YES:
+                deletion_list = []
+
+                for item in selection:
+                    itemdata = self.GetPyData(item)
+                    deletion_list.append(itemdata.getCurrentFile())
+                    self.Delete(item)
+
+                for item in deletion_list:
+                    WpFileSystem.DeleteFromDisk(item)
+
+        def _OnPopupRefreshTree(self, event):
+            """
+            Refresh/reload the project tree
+            """
+            self.PopulateTree(self.project)
+
+        def _OnSelChanged(self, event):
 		"""
 		On selection change event handler. Occurs when we have clicked on
 		a node inside the treecontroller.
@@ -272,18 +338,18 @@ class WpTreeCtrl( wx.TreeCtrl ):
 		self.Expand(node)
 		
 	def _OnDoubleClick(self,event):
-		"""
-		On double click event handler.
-		
-		Note: This function will open a text file in the editor, if the tests below
-		passes. 
-		"""
-		nodedata = self.GetPyData(event.GetItem())
-		
-		## Can we open the file in our editor?
-		if nodedata.__class__.__name__ == 'WpElementData':
-			if nodedata.getCurrentFile() != None:
-				## Is this a hidden folder? If so ,skip
-				if os.path.isdir(nodedata.getCurrentFile()) == False:
-					## Test passed, open file
-					self.Parent.rightpanel.notebook.AddDefaultPage(nodedata.getCurrentFile())
+            """
+            On double click event handler.
+
+            Note: This function will open a text file in the editor, if the tests below
+            passes.
+            """
+            nodedata = self.GetPyData(event.GetItem())
+
+            ## Can we open the file in our editor?
+            if nodedata.__class__.__name__ == 'WpElementData':
+                if nodedata.getCurrentFile() != None:
+                    ## Is this a hidden folder? If so ,skip
+                    if os.path.isdir(nodedata.getCurrentFile()) == False:
+                        ## Test passed, open file
+                        pub.sendMessage('notebook.addpage', nodedata.getCurrentFile())

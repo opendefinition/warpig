@@ -4,3 +4,5 @@
 *.wpf
 # Swap files no no
 *.swp
+# Db
+*.db
