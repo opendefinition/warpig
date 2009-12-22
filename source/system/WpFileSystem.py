@@ -83,6 +83,8 @@ class WpFileSystem:
             else:
                 os.remove(path)
 
+            return True
+
         #--------------------------------------------------------------
         # Rename file or directory
         # @param string path

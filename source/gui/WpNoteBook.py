@@ -38,12 +38,22 @@ class WpNoteBook(aui.AuiNotebook):
 
         ## Subscribe to add page event message
         pub.subscribe(self.addPageSubscriber, 'notebook.addpage')
+        pub.subscribe(self.deletePageWithFileSubscriber , 'notebook.deletepagewithfile')
 
     ##--------------------------------------------------------------------------
     ## Subscriber action, add default page
     ##--------------------------------------------------------------------------
     def addPageSubscriber(self, message):
         self.AddDefaultPage(message.data)
+
+    def deletePageWithFileSubscriber(self, message):
+        pagecount = self.GetPageCount()
+
+        for i in range(0, pagecount):
+            page = self.GetPage(i)
+            if message.data == page.GetFilePath():
+                self.DeletePage(i)
+                break
 
     #---------------------------------------------------------------
     # Add text editor to page

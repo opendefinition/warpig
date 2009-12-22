@@ -318,7 +318,11 @@ class WpTreeCtrl( wx.TreeCtrl ):
                     self.Delete(item)
 
                 for item in deletion_list:
-                    WpFileSystem.DeleteFromDisk(item)
+                    status = WpFileSystem.DeleteFromDisk(item)
+
+                    ## Close associated tab if file is opened
+                    if status == True:
+                        pub.sendMessage('notebook.deletepagewithfile', item)
 
         def _OnPopupRefreshTree(self, event):
             """
