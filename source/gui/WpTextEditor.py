@@ -516,7 +516,10 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 						return
 					
 					dialog.Destroy()
-				
+
+                                ## Deregister tab
+                                self.parent.deRegisterTab(self.GetFilePath())
+        
 				##
 				# Continue closing
 				##
@@ -533,11 +536,11 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				else:
 					selection = selected-1
 				
-				self.Parent.DeletePage( selected )		# Delete unwanted tab	
+				self.Parent.DeletePage( selected )      # Delete unwanted tab
 				self.Parent.SetSelection( selection )	# Set focus to neighbour tab
 				
 				
-				return									# Force return or else it'll segfault
+				return # Force return or else it'll segfault
 			
 			##
 			# Closing this application

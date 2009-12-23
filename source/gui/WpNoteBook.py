@@ -64,11 +64,9 @@ class WpNoteBook(aui.AuiNotebook):
 
     def saveTabStateSubscriber(self, message):
         if message.data == True:
-            pagecount = self.GetPageCount()
-        
-            for index in range(0, pagecount):
-                page = self.GetPage(index)
-                # print page.getCurrentFilename()
+            for key in self.openedtabs:
+                for value in self.openedtabs[key]:
+                    print str(key) + "::" + value
 
     #---------------------------------------------------------------
     # Add text editor to page
@@ -104,12 +102,13 @@ class WpNoteBook(aui.AuiNotebook):
     # @param integer prjid
     # @param string filepath
     #---------------------------------------------------------------
-    def deRegisterTab(self, prjid, filepath):
+    def deRegisterTab(self, filepath):
         if filepath != None:
-            if prjid == None:
-                self.openedtabs['None'].remove(str(filepath))
-            else:
-                self.openedtabs[prjid].remove(str(filepath))
+            for index in self.openedtabs:
+                try:
+                    self.openedtabs[index].remove(str(filepath))
+                except:
+                    continue
 
     ##---------------------------------------------------------------
     ## Add default page
