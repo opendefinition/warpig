@@ -131,6 +131,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                 fileInformation = WpElementData()
                                 fileInformation.setCurrentDirectory(dirpath)
                                 fileInformation.setCurrentFilename(filename)
+                                fileInformation.setProjectId(self.project.GetId())
                                 fileInformation.setCurrentFile(
                                                         os.path.join(
                                                         fileInformation.getCurrentDirectory(),
@@ -145,7 +146,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
                                         2,
                                         wx.TreeItemData(fileInformation)
                                 )
-		
+	
 		self.SetupBindings()
 
                 ## Show the project tree
