@@ -101,6 +101,9 @@ class WpOpenProject( wx.Dialog ):
             if projectid != None:
                 db = WpDatabaseAPI()
                 project = db.GetProject(projectid)
+               
+                # Open tab
+                pub.sendMessage('notebook.opensavedtabs', projectid)
 
                 # Populate the tree
                 pub.sendMessage('projecttree.populate', project)

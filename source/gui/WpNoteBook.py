@@ -47,6 +47,7 @@ class WpNoteBook(aui.AuiNotebook):
         pub.subscribe(self.addPageSubscriber, 'notebook.addpage')
         pub.subscribe(self.deletePageWithFileSubscriber , 'notebook.deletepagewithfile')
         pub.subscribe(self.saveTabStateSubscriber , 'notebook.savetabstate')
+        pub.subscribe(self.openSavedTabsSubscriber, 'notebook.opensavedtabs')
 
     ##--------------------------------------------------------------------------
     ## Subscriber action, add default page
@@ -74,6 +75,10 @@ class WpNoteBook(aui.AuiNotebook):
             for key in self.openedtabs:
                 for value in self.openedtabs[key]:
                     self.db.RegisterOpenedTab(key, value)
+
+    def openSavedTabsSubscriber(self, message):
+        id = message.data
+        self.openTabs(id)
 
     #---------------------------------------------------------------
     # Add text editor to page
