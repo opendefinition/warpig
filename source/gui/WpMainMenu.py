@@ -170,20 +170,7 @@ class WpMainMenu(wx.MenuBar):
     ## Display on exit dialog
     ##--------------------------------------------------------------------------
     def __onExit(self, event):
-        dialog = wx.MessageDialog(
-                            None,
-                            'Are you sure to want to quit?',
-                            'Question',
-                            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION
-                        )
-
-        status = dialog.ShowModal()
-
-        if( status == wx.ID_YES ):
-            dialog.Destroy()
-            self.parentFrame.Close()
-        else:
-            dialog.Destroy()
+        self.parentFrame.Close()
 
     ##--------------------------------------------------------------------------
     ## Display the preference menu

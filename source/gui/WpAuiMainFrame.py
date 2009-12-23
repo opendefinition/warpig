@@ -27,6 +27,30 @@ class WpAuiMainFrame(wx.Frame):
         pub.subscribe(self.__showPaneSubscriber, 'mainframe.showpane')
         pub.subscribe(self.__setPaneCaption, 'mainframe.setpanetitle')
 
+        self.Bind(wx.EVT_CLOSE, self.onCloseApplication)
+
+    def onCloseApplication(self, event):
+        self.closeApplication()
+
+    def closeApplication(self):
+        dialog = wx.MessageDialog(
+                                None,
+                                'Are you sure you want to quit?',
+                                'Question',
+                                 wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION
+                            )
+
+        status = dialog.ShowModal()
+
+        if status == wx.ID_YES:
+            # de-initialize the frame manager
+            self.__manager.UnInit()
+
+            # delete the frame
+            self.Destroy()
+        else:
+            dialog.Destroy()
+
     def __setup(self):
         ## Menubar
 	self.SetMenuBar(WpMainMenu(self))
@@ -83,12 +107,6 @@ class WpAuiMainFrame(wx.Frame):
 
         self.__manager.Update()
         self.notebook.AddDefaultPage()
-
-    def OnClose(self, event):
-        # deinitialize the frame manager
-        self.__manger.UnInit()
-        # delete the frame
-        self.Destroy()
 
     def __showPaneSubscriber(self, message):
         self.__manager.GetPane(message.data).Show()
