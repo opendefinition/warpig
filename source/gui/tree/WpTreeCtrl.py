@@ -357,4 +357,9 @@ class WpTreeCtrl( wx.TreeCtrl ):
                     ## Is this a hidden folder? If so ,skip
                     if os.path.isdir(nodedata.getCurrentFile()) == False:
                         ## Test passed, open file
-                        pub.sendMessage('notebook.addpage', nodedata.getCurrentFile())
+                        data = {
+                                 'file': nodedata.getCurrentFile(),
+                                 'prjid': nodedata.getProjectId()
+                                }
+
+                        pub.sendMessage('notebook.addpage', data)

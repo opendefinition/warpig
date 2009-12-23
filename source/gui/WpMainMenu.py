@@ -201,7 +201,12 @@ class WpMainMenu(wx.MenuBar):
     ## Add a new page to notebook
     ##--------------------------------------------------------------------------
     def __onNewFile(self, event):
-        pub.sendMessage('notebook.addpage')
+        data = {
+                'file': None,
+                'prjid': None
+                }
+
+        pub.sendMessage('notebook.addpage', data)
 
     ##--------------------------------------------------------------------------
     ## Disply open file dialog
@@ -226,7 +231,12 @@ class WpMainMenu(wx.MenuBar):
         dialog = wx.FileDialog ( None, style = wx.OPEN )
 
         if dialog.ShowModal() == wx.ID_OK:
-            pub.sendMessage('notebook.addpage', dialog.GetPath())
+            data = {
+                    'file': dialog.GetPath(),
+                    'prjid': None
+                }
+                
+            pub.sendMessage('notebook.addpage', data)
 
         dialog.Destroy()
         

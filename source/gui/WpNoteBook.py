@@ -36,6 +36,8 @@ class WpNoteBook(aui.AuiNotebook):
         art = arts[0]()
         self.SetArtProvider(art)
 
+        self.openedtabs = { 'None': [] }
+
         ## Subscribe to add page event message
         pub.subscribe(self.addPageSubscriber, 'notebook.addpage')
         pub.subscribe(self.deletePageWithFileSubscriber , 'notebook.deletepagewithfile')
@@ -45,7 +47,11 @@ class WpNoteBook(aui.AuiNotebook):
     ## Subscriber action, add default page
     ##--------------------------------------------------------------------------
     def addPageSubscriber(self, message):
-        self.AddDefaultPage(message.data)
+        data = message.data
+        filepath = data['file']
+        prjid = data['prjid']
+
+        self.AddDefaultPage(filepath, prjid)
 
     def deletePageWithFileSubscriber(self, message):
         pagecount = self.GetPageCount()
@@ -77,12 +83,40 @@ class WpNoteBook(aui.AuiNotebook):
             texteditor.SetDefaultLexer()
 
         return texteditor
+    #---------------------------------------------------------------
+    # Register opened tab
+    # @param integer prjid
+    # @param string filepath
+    #---------------------------------------------------------------
+    def registerTab(self, prjid, filepath):
+        if filepath != None:
+            if prjid == None:
+                self.openedtabs['None'].append(filepath)
+            else:
+                try:
+                    self.openedtabs[prjid].append(filepath)
+                except KeyError:
+                    self.openedtabs[prjid] = []
+                    self.openedtabs[prjid].append(filepath)
+
+    #---------------------------------------------------------------
+    # Deregister opened tab
+    # @param integer prjid
+    # @param string filepath
+    #---------------------------------------------------------------
+    def deRegisterTab(self, prjid, filepath):
+        if filepath != None:
+            if prjid == None:
+                self.openedtabs['None'].remove(str(filepath))
+            else:
+                self.openedtabs[prjid].remove(str(filepath))
 
     ##---------------------------------------------------------------
     ## Add default page
     ## @param string filepath <conditional>
     ##---------------------------------------------------------------
-    def AddDefaultPage(self, file_path=None):
+    def AddDefaultPage(self, file_path=None, file_prj_id=None):
+        self.registerTab(file_prj_id, file_path)
         page_title = 'new'
 
         page_count  = self.GetPageCount()
