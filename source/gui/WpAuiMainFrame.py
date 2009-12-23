@@ -109,7 +109,9 @@ class WpAuiMainFrame(wx.Frame):
                                 .MinimizeButton(True))
 
         self.__manager.Update()
-        self.notebook.AddDefaultPage()
+
+        if self.notebook.openTabs() == 0:
+            self.notebook.AddDefaultPage()
 
     def __showPaneSubscriber(self, message):
         self.__manager.GetPane(message.data).Show()

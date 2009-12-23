@@ -39,6 +39,10 @@ class WpNoteBook(aui.AuiNotebook):
 
         self.openedtabs = { 'None': [] }
 
+        ## Database
+        self.db = WpDatabaseAPI()
+        
+
         ## Subscribe to add page event message
         pub.subscribe(self.addPageSubscriber, 'notebook.addpage')
         pub.subscribe(self.deletePageWithFileSubscriber , 'notebook.deletepagewithfile')
@@ -64,13 +68,12 @@ class WpNoteBook(aui.AuiNotebook):
                 break
 
     def saveTabStateSubscriber(self, message):
-        db = WpDatabaseAPI()
-        db.DeleteRegisteredOpenedTabs()
+        self.db.DeleteRegisteredOpenedTabs()
 
         if message.data == True:
             for key in self.openedtabs:
                 for value in self.openedtabs[key]:
-                    db.RegisterOpenedTab(key, value)
+                    self.db.RegisterOpenedTab(key, value)
 
     #---------------------------------------------------------------
     # Add text editor to page
@@ -85,6 +88,7 @@ class WpNoteBook(aui.AuiNotebook):
             texteditor.SetDefaultLexer()
 
         return texteditor
+
     #---------------------------------------------------------------
     # Register opened tab
     # @param integer prjid
@@ -148,3 +152,14 @@ class WpNoteBook(aui.AuiNotebook):
             
         else:
             self.SetSelection(page_index)
+
+    def openTabs(self, project='None'):
+        ## Get tabs to be opened
+        tabs = self.db.GetRegisteredTabs(project)
+        totaltabs = len(tabs)
+        
+        if tabs != None:
+            for file in tabs:
+                self.AddDefaultPage(file, None)
+
+        return totaltabs

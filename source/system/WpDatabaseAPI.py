@@ -124,6 +124,19 @@ class WpDatabaseAPI( WpDatabase ):
             insertionQuery = "INSERT INTO openedtabs(prjid, file) VALUES('%s', '%s')" %(projectid, filepath)
             self.Insert(insertionQuery)
 
+        def GetRegisteredTabs(self, key):
+            selectionQuery = "SELECT file FROM openedtabs WHERE prjid='%s'" % (key)
+            result = self.Select(selectionQuery)
+
+            list = []
+            for item in result:
+                list.append(item[0])
+
+            return list
+
+        
+
+
 	##---------------------------------------------------------------
 	## System Specific API Functions
 	##---------------------------------------------------------------
