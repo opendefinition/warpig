@@ -190,11 +190,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                 self.BraceBadLight(braceAtCaret)
             else:
                 self.BraceHighlight(braceAtCaret, braceOpposite)
-                #pt = self.PointFromPosition(braceOpposite)
-                #self.Refresh(True, wxRect(pt.x, pt.y, 5,5))
-                #print pt
-                #self.Refresh(False)
-
 
         def OnMarginClick(self, evt):
             # fold and unfold as needed
@@ -537,8 +532,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 					selection = selected-1
 				
 				self.Parent.DeletePage( selected )      # Delete unwanted tab
-				self.Parent.SetSelection( selection )	# Set focus to neighbour tab
-				
 				
 				return # Force return or else it'll segfault
 			

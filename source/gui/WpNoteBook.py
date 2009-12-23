@@ -110,8 +110,6 @@ class WpNoteBook(aui.AuiNotebook):
                     self.openedtabs[prjid] = []
                     self.openedtabs[prjid].append(filepath)
 
-        print self.openedtabs
-
     #---------------------------------------------------------------
     # Deregister opened tab
     # @param integer prjid
@@ -161,13 +159,14 @@ class WpNoteBook(aui.AuiNotebook):
             self.SetSelection(page_index)
 
     def openTabs(self, project='None'):
-        print "Project is : " + str(project)
         ## Get tabs to be opened
         tabs = self.db.GetRegisteredTabs(project)
         totaltabs = len(tabs)
-        
+
+        self.Freeze()
         if tabs != None:
             for file in tabs:
                 self.AddDefaultPage(file, project)
+        self.Thaw()
 
         return totaltabs
