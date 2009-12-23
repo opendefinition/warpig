@@ -108,7 +108,6 @@ class WpOpenProject( wx.Dialog ):
                 # Populate the tree
                 pub.sendMessage('projecttree.populate', project)
 
-                # self._treectrl.treectrl.PopulateTree(project)
                 self.Destroy()
 
         def onCancel(self, event):
