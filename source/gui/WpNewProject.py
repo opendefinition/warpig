@@ -206,7 +206,8 @@ class WpNewProject( wx.Dialog ):
             project.AddPath(self.filelist.GetItem( index, 0 ).GetText())
 
         # Saving this project
-        db.AddProject(project)
+        projectId = db.AddProject(project)
+        project.SetId(projectId)
 
         # Populate projecttree
         pub.sendMessage('projecttree.populate', project)

@@ -27,6 +27,12 @@ CREATE TABLE projectincludes(
     PRIMARY KEY ("id")
 );
 
+;-- Opened tabs
+CREATE TABLE openedtabs(
+    "prjid" TEXT,
+    "file" Text
+);
+
 ;-- DEFAULT EDITOR VALUES
 INSERT INTO systemregistry(key,value,module) VALUES ('fontface','Verdana','editor');
 INSERT INTO systemregistry(key,value,module) VALUES ('fontsize','12','editor');

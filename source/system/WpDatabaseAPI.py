@@ -68,7 +68,7 @@ class WpDatabaseAPI( WpDatabase ):
                 pathInsert = "INSERT INTO projectincludes('projectid','path') VALUES(%i,'%s');" % (projectId, path)
                 self.Insert(pathInsert)
 
-            return True
+            return projectId
 
         def GetProjectList(self):
             """
