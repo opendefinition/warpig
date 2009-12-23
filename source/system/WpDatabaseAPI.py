@@ -116,6 +116,14 @@ class WpDatabaseAPI( WpDatabase ):
             self.Delete(deleteProject)
             self.Delete(deleteIncludes)
 
+        def DeleteRegisteredOpenedTabs(self):
+            deleteQuery = "DELETE FROM openedtabs;"
+            self.Delete(deleteQuery)
+
+        def RegisterOpenedTab(self, projectid, filepath):
+            insertionQuery = "INSERT INTO openedtabs(prjid, file) VALUES('%s', '%s')" %(projectid, filepath)
+            self.Insert(insertionQuery)
+
 	##---------------------------------------------------------------
 	## System Specific API Functions
 	##---------------------------------------------------------------

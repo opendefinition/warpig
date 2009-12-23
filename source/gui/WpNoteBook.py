@@ -17,6 +17,7 @@ import wx.lib.agw.aui as aui
 
 from gui.WpTextEditor import WpTextEditor
 from wx.lib.pubsub import Publisher as pub
+from system.WpDatabaseAPI import WpDatabaseAPI
 
 class WpNoteBook(aui.AuiNotebook):
     def __init__(self, parent):
@@ -63,10 +64,13 @@ class WpNoteBook(aui.AuiNotebook):
                 break
 
     def saveTabStateSubscriber(self, message):
+        db = WpDatabaseAPI()
+        db.DeleteRegisteredOpenedTabs()
+
         if message.data == True:
             for key in self.openedtabs:
                 for value in self.openedtabs[key]:
-                    print str(key) + "::" + value
+                    db.RegisterOpenedTab(key, value)
 
     #---------------------------------------------------------------
     # Add text editor to page
