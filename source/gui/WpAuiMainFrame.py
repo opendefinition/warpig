@@ -43,10 +43,13 @@ class WpAuiMainFrame(wx.Frame):
         status = dialog.ShowModal()
 
         if status == wx.ID_YES:
-            # de-initialize the frame manager
+            ## Save notebook state (opened tabs)
+            pub.sendMessage('notebook.savetabstate', True)
+
+            ## De-initialize the frame manager
             self.__manager.UnInit()
 
-            # delete the frame
+            ## Delete the frame
             self.Destroy()
         else:
             dialog.Destroy()

@@ -15,5 +15,6 @@ mainframe.showpane          # When a request to show a pane has been sent
 mainmenu.openfile           # When a page is to be opened in notebook
 notebook.addpage            # When a page is to be added to the notebook
 notebook.deletepagewithfile # When a page is to be deleted
+notebook.savetabstate       # When application is closing, save tab state
 projecttree.populate        # When projecttree is to be populated
 

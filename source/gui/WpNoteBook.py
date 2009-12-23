@@ -39,6 +39,7 @@ class WpNoteBook(aui.AuiNotebook):
         ## Subscribe to add page event message
         pub.subscribe(self.addPageSubscriber, 'notebook.addpage')
         pub.subscribe(self.deletePageWithFileSubscriber , 'notebook.deletepagewithfile')
+        pub.subscribe(self.saveTabStateSubscriber , 'notebook.savetabstate')
 
     ##--------------------------------------------------------------------------
     ## Subscriber action, add default page
@@ -54,6 +55,14 @@ class WpNoteBook(aui.AuiNotebook):
             if message.data == page.GetFilePath():
                 self.DeletePage(i)
                 break
+
+    def saveTabStateSubscriber(self, message):
+        if message.data == True:
+            pagecount = self.GetPageCount()
+        
+            for index in range(0, pagecount):
+                page = self.GetPage(index)
+                # print page.getCurrentFilename()
 
     #---------------------------------------------------------------
     # Add text editor to page
