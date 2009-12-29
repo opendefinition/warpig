@@ -54,8 +54,13 @@ class WpNoteBook(aui.AuiNotebook):
     ##--------------------------------------------------------------------------
     def addPageSubscriber(self, message):
         data = message.data
-        filepath = data['file']
-        prjid = data['prjid']
+
+        try:
+            filepath = data['file']
+            prjid = data['prjid']
+        except TypeError:
+            filepath = None
+            prjid = None
 
         self.AddDefaultPage(filepath, prjid)
 

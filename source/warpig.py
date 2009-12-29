@@ -17,6 +17,7 @@ import wx
 from gui.WpAuiMainFrame import WpAuiMainFrame
 from system.setup import RunSetup
 from system.WpConfigLoader import WpConfigLoader
+from gui.Keybindings import Keybindings
 
 class WpWarPig( wx.App ):
 	"""
@@ -33,6 +34,10 @@ class WpWarPig( wx.App ):
 			print "Warpig System Error: missing configuration database\nplease run 'warpig.py --setup'"
 
 		if configloaded:
+                        ## Load keybindings
+                        keybinding = Keybindings(self)
+                        keybinding.init()
+
 			frame = WpAuiMainFrame( None )
 			frame.Show()
 			self.SetTopWindow(frame)

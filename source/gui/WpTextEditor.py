@@ -478,20 +478,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				return
 				
 			##
-			# Add new page with editor to current notebook instance
-			##
-			if( key == 78 or key == 110 ):
-				pub.sendMessage('notebook.addpage')
-				return
-				
-			##
-			# Open file
-			## 
-			if( key == 79 or key == 111 ):
-				pub.sendMessage('mainmenu.openfile')
-				return
-				
-			##
 			# Close current tab where this instance of the editor resides
 			##
 			if( key == 87 or key == 119 ):
@@ -534,13 +520,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 				self.Parent.DeletePage( selected )      # Delete unwanted tab
 				
 				return # Force return or else it'll segfault
-			
-			##
-			# Closing this application
-			##
-			if( key == 81 or key == 113 ):
-				print "We are trying to close this application"
-				self.Close()
 			
 		event.Skip()
 		
