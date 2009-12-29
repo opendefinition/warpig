@@ -54,7 +54,7 @@ class Keybindings:
 
         # Close current tab where this instance of the editor resides
         elif(keycode == 87 or keycode == 119):
-            self.notifySubscribers('editor.closetab')
+            self.notifySubscribers('notebook.closetab')
 
     ##--------------------------------------------------------------------------
     ## Notify subscriber widgets that they are inwoked

@@ -33,13 +33,11 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
             self.SetDefaultLexer()
             self.SetFocus()
 
-            self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown)
             self.Bind(wx.stc.EVT_STC_SAVEPOINTREACHED, self._OnSavePointReached)
             self.Bind(wx.stc.EVT_STC_CHARADDED, self._OnTextChange)
 
             pub.subscribe(self.refreshSubscriber, 'editor.refresh')
             pub.subscribe(self.saveFileSubscriber, 'editor.savefile')
-            pub.subscribe(self.closeCurrentTabSubscriber, 'editor.closetab')
 
         def refreshSubscriber(self, message):
             self.applySettings()
@@ -47,45 +45,6 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 
         def saveFileSubscriber(self, message):
             self.SaveFile()
-
-        def closeCurrentTabSubscriber(self, message):
-            print "here we are again"
-            """
-            ## If current editor is modified yield warning upon close
-            if(self.GetModify() == True):
-                dialog = wx.MessageDialog( None,
-                                                'Are you sure to want to close this tab?',
-                                                'Question',
-                                                wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION
-                                        )
-
-                status = dialog.ShowModal()
-
-                if( status != wx.ID_YES ):
-                        return
-
-                dialog.Destroy()
-
-            ## Deregister tab
-            self.parent.deRegisterTab(self.GetFilePath())
-
-            ## Continue closing
-            pagecount = self.Parent.GetPageCount()
-
-            selected = self.Parent.GetSelection() # Get which tab that is in focus
-
-            ## Making sure we add a new page if we're deleting the last page
-            if(pagecount == 1):
-                self.Parent.AddDefaultPage()
-                selection = 0
-            else:
-                selection = selected-1
-            print selected
-            self.Parent.DeletePage(selected) # Delete unwanted tab
-
-            return
-
-            """
 
         def applySettings(self):
             """
@@ -502,6 +461,7 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 	#---------------------------------------------------------------
 	# Handle key events
 	#---------------------------------------------------------------
+        """
 	def _OnKeyDown( self, event ):
 		## print "Key #", event.GetUniChar(), " CmdDown is ", event.CmdDown()
 		key = event.GetUniChar()
@@ -515,7 +475,8 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
                             self.AutoCompShow(0, " ".join(kw))	
 			
 		event.Skip()
-		
+	"""
+        
 	#---------------------------------------------------------------
 	# Handling saving of file
 	#---------------------------------------------------------------

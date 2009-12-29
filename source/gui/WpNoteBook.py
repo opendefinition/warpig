@@ -48,6 +48,7 @@ class WpNoteBook(aui.AuiNotebook):
         pub.subscribe(self.deletePageWithFileSubscriber , 'notebook.deletepagewithfile')
         pub.subscribe(self.saveTabStateSubscriber , 'notebook.savetabstate')
         pub.subscribe(self.openSavedTabsSubscriber, 'notebook.opensavedtabs')
+        pub.subscribe(self.closeTabSubscriber, 'notebook.closetab')
 
     ##--------------------------------------------------------------------------
     ## Subscriber action, add default page
@@ -84,6 +85,44 @@ class WpNoteBook(aui.AuiNotebook):
     def openSavedTabsSubscriber(self, message):
         id = message.data
         self.openTabs(id)
+
+    def closeTabSubscriber(self, message):
+        editorfocus = self.FindFocus()
+
+        ## If current editor is modified yield warning upon close
+        if(editorfocus.GetModify() == True):
+            dialog = wx.MessageDialog( None,
+                                            'Are you sure to want to close this tab?',
+                                            'Question',
+                                            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION
+                                    )
+
+            status = dialog.ShowModal()
+
+            if status != wx.ID_YES:
+                return
+
+            dialog.Destroy()
+
+        ## Deregister tab
+        self.deRegisterTab(editorfocus.GetFilePath())
+
+        ## Continue closing
+        pagecount = self.GetPageCount()
+
+        selected = self.GetSelection() # Get which tab that is in focus
+
+        ## Making sure we add a new page if we're deleting the last page
+        if(pagecount == 1):
+            self.AddDefaultPage()
+            selection = 0
+        else:
+            selection = selected-1
+        
+        self.DeletePage(selected) # Delete unwanted tab
+
+        return
+        
 
     #---------------------------------------------------------------
     # Add text editor to page
