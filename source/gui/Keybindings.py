@@ -28,9 +28,9 @@ class Keybindings:
 
         if commandKey == True:
             self.HandleCommandKeyCombination(pressedKey)
-            event.Skip(True)
-        else:
             event.Skip(False)
+        else:
+            event.Skip(True)
 
         return
 
@@ -40,26 +40,21 @@ class Keybindings:
     ## @param integer keycode
     ##--------------------------------------------------------------------------
     def HandleCommandKeyCombination(self, keycode):
-
-        ## Exit this application
-        ## NOTE: This might possibly be deleted
-        if keycode == 83 or keycode == 113:
-            self.parent.Close()
-
         ## Add new page with editor to current notebook instance
-        elif keycode == 78 or keycode == 110:
+        if keycode == 78 or keycode == 110:
             self.notifySubscribers('notebook.addpage')
             
         ## Open file
-        if keycode == 79 or keycode == 111:
+        elif keycode == 79 or keycode == 111:
             self.notifySubscribers('mainmenu.openfile')
 
-    ##--------------------------------------------------------------------------
-    ## Handle regular keycodes
-    ## @param ineger keycode
-    ##--------------------------------------------------------------------------
-    def HandleRegularKey(self, keycode):
-        print "Regular key"
+        # Saving current file
+        elif(keycode == 83 or keycode == 115):
+            self.notifySubscribers('editor.savefile')
+
+        # Close current tab where this instance of the editor resides
+        elif(keycode == 87 or keycode == 119):
+            self.notifySubscribers('editor.closetab')
 
     ##--------------------------------------------------------------------------
     ## Notify subscriber widgets that they are inwoked

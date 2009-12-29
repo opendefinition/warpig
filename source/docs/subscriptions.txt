@@ -10,6 +10,8 @@ All messages follows this format:
 ==Current available messages==
 
 Message:                    Description
+editor.refresh              # Refresh the editor
+editor.savefile             # Save current file
 mainframe.setpanecaption    # When a request for pane caption has been sent
 mainframe.showpane          # When a request to show a pane has been sent
 mainmenu.openfile           # When a page is to be opened in notebook
