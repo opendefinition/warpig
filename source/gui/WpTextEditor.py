@@ -37,14 +37,10 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
             self.Bind(wx.stc.EVT_STC_CHARADDED, self._OnTextChange)
 
             pub.subscribe(self.refreshSubscriber, 'editor.refresh')
-            pub.subscribe(self.saveFileSubscriber, 'editor.savefile')
 
         def refreshSubscriber(self, message):
             self.applySettings()
             self.Refresh()
-
-        def saveFileSubscriber(self, message):
-            self.SaveFile()
 
         def applySettings(self):
             """

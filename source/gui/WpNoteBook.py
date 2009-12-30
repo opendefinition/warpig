@@ -10,7 +10,6 @@
 # License: Open Definiton General Lisence (ODGL). Available upon request.
 #---------------------------------------------------------------------------
 
-#from wx._misc import Get
 import os
 import wx
 import wx.lib.agw.aui as aui
@@ -49,6 +48,7 @@ class WpNoteBook(aui.AuiNotebook):
         pub.subscribe(self.saveTabStateSubscriber , 'notebook.savetabstate')
         pub.subscribe(self.openSavedTabsSubscriber, 'notebook.opensavedtabs')
         pub.subscribe(self.closeTabSubscriber, 'notebook.closetab')
+        pub.subscribe(self.saveFileSubscriber, 'notebook.savefile')
 
     ##--------------------------------------------------------------------------
     ## Subscriber action, add default page
@@ -123,6 +123,12 @@ class WpNoteBook(aui.AuiNotebook):
             self.Thaw()
 
         return
+
+    def saveFileSubscriber(self, message):
+        editor = self.FindFocus()
+
+        if editor.__class__.__name__ == 'WpTextEditor':
+            editor.SaveFile()
         
 
     #---------------------------------------------------------------

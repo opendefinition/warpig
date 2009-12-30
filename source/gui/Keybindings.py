@@ -50,7 +50,7 @@ class Keybindings:
 
         # Saving current file
         elif(keycode == 83 or keycode == 115):
-            self.notifySubscribers('editor.savefile')
+            self.notifySubscribers('notebook.savefile')
 
         # Close current tab where this instance of the editor resides
         elif(keycode == 87 or keycode == 119):
