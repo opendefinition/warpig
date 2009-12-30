@@ -492,12 +492,8 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
 		
 		WpFileSystem.SaveToFile( self.GetTextUTF8(), path )
 		
-		##
-		# Setting savepoint upon save
-		##
+		## Setting savepoint upon save
 		self.SetSavePoint()
 		
-		##
-		# Make sure the editor got the filepath set (and that it's not re-read
-		##
-		self.SetFilePathNoRead( path )
+		## Make sure the editor got the filepath set
+		self.SetFilePathNoRead(path)

@@ -34,7 +34,6 @@ class Keybindings:
 
         return
 
-
     ##--------------------------------------------------------------------------
     ## Handle commandkey+keycode combinations
     ## @param integer keycode
