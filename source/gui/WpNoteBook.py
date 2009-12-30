@@ -89,37 +89,38 @@ class WpNoteBook(aui.AuiNotebook):
     def closeTabSubscriber(self, message):
         editorfocus = self.FindFocus()
 
-        ## If current editor is modified yield warning upon close
-        if(editorfocus.GetModify() == True):
-            dialog = wx.MessageDialog( None,
-                                            'Are you sure to want to close this tab?',
-                                            'Question',
-                                            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION
-                                    )
+        if editorfocus.__class__.__name__ == 'WpTextEditor':
+            ## If current editor is modified yield warning upon close
+            if(editorfocus.GetModify() == True):
+                dialog = wx.MessageDialog( None,
+                                                'Are you sure to want to close this tab?',
+                                                'Question',
+                                                wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION
+                                        )
 
-            status = dialog.ShowModal()
+                status = dialog.ShowModal()
 
-            if status != wx.ID_YES:
-                return
+                if status != wx.ID_YES:
+                    return
 
-            dialog.Destroy()
+                dialog.Destroy()
 
-        ## Deregister tab
-        self.deRegisterTab(editorfocus.GetFilePath())
+            ## Deregister tab
+            self.deRegisterTab(editorfocus.GetFilePath())
 
-        ## Continue closing
-        pagecount = self.GetPageCount()
+            ## Continue closing
+            pagecount = self.GetPageCount()
 
-        selected = self.GetSelection() # Get which tab that is in focus
+            selected = self.GetSelection() # Get which tab that is in focus
 
-        ## Making sure we add a new page if we're deleting the last page
-        if(pagecount == 1):
-            self.AddDefaultPage()
-            selection = 0
-        else:
-            selection = selected-1
-        
-        self.DeletePage(selected) # Delete unwanted tab
+            self.Freeze()
+
+            ## Making sure we add a new page if we're deleting the last page
+            if(pagecount == 1):
+                self.AddDefaultPage()
+
+            self.DeletePage(selected) # Delete unwanted tab
+            self.Thaw()
 
         return
         
