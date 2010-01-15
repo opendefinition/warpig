@@ -11,19 +11,19 @@
 #---------------------------------------------------------------------------
 
 class WpProjectData:
-	def __init__(self):
-		self.__project_name = None
-		
-	def getProjectName(self):
-		"""
-		Get projectname
-		@return String Projectname
-		"""
-		return self.__project_name
-		
-	def setProjectName(self, projectname):
-		"""
-		Set projectname
-		@param String projectname
-		"""
-		self.__project_name = projectname
+    def __init__(self):
+        self.__project_name = None
+
+    def getProjectName(self):
+        """
+        Get projectname
+        @return String Projectname
+        """
+        return self.__project_name
+
+    def setProjectName(self, projectname):
+        """
+        Set projectname
+        @param String projectname
+        """
+        self.__project_name = projectname
