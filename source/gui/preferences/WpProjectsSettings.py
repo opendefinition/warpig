@@ -17,10 +17,10 @@ from system.WpConfigSystem import WpConfigSystem
 
 class WpProjectsSettings(wx.Panel):
     def __init__( self, parent, *args, **kwargs ):
-	wx.Panel.__init__( self, parent, *args, **kwargs )
-	self.configobj = WpConfigSystem()
-	self.Setup()
-	None
+        wx.Panel.__init__( self, parent, *args, **kwargs )
+        self.configobj = WpConfigSystem()
+        self.Setup()
+        None
 
     def Setup( self ):
         self.mainSizer = wx.FlexGridSizer(rows=2, cols=1, vgap=5, hgap=5)
