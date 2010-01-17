@@ -20,9 +20,9 @@ class WpAuiMainFrame(wx.Frame):
 
         self.__setup()
 
-	self.Centre()
-	self.Maximize()
-	self.Show( True )
+        self.Centre()
+        self.Maximize()
+        self.Show( True )
 
         pub.subscribe(self.__showPaneSubscriber, 'mainframe.showpane')
         pub.subscribe(self.__setPaneCaption, 'mainframe.setpanetitle')
@@ -56,7 +56,7 @@ class WpAuiMainFrame(wx.Frame):
 
     def __setup(self):
         ## Menubar
-	self.SetMenuBar(WpMainMenu(self))
+        self.SetMenuBar(WpMainMenu(self))
 
         mainbuttonpanel = MainButtonPanel(self)
 
