@@ -29,7 +29,7 @@ class WpOpenProject( wx.Dialog ):
         self.Setup()
 
     def Setup(self):
-        mainsizer = wx.FlexGridSizer(2,1, vgap=5, hgap=5)
+        mainsizer = wx.FlexGridSizer(2, 1, vgap=5, hgap=5)
         mainsizer.AddMany(
             [
                 (self.ProjectList(), 1, wx.EXPAND | wx.ALL, 5),

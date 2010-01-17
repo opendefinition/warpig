@@ -83,9 +83,9 @@ class WpTreeCtrl( wx.TreeCtrl ):
         ## Set project tree pane text to project name
         pub.sendMessage('mainframe.setpanetitle', {'pane': 'project', 'caption': projectInformation.getProjectName()})
 
-        self.SetItemHasChildren(treeroot,True)
+        self.SetItemHasChildren(treeroot, True)
         self.SetItemBold(treeroot)
-        self.SetItemBackgroundColour(treeroot, wx.Colour(162,181,205))
+        self.SetItemBackgroundColour(treeroot, wx.Colour(162, 181, 205))
 
         root = treeroot
         ids = {root: treeroot}
@@ -268,7 +268,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
             currentElementData = self.GetPyData(selected)
 
             if currentElementData.__class__.__name__ != 'WpProjectData':
-                dialog = wx.TextEntryDialog(self,'', 'Foldername', '')
+                dialog = wx.TextEntryDialog(self, '', 'Foldername', '')
 
                 if dialog.ShowModal() == wx.ID_OK:
                     folderName = dialog.GetValue()
@@ -342,7 +342,7 @@ class WpTreeCtrl( wx.TreeCtrl ):
         node = event.GetItem()
         self.Expand(node)
 
-    def _OnDoubleClick(self,event):
+    def _OnDoubleClick(self, event):
         """
         On double click event handler.
 

@@ -32,11 +32,11 @@ class WpProjectsSettings(wx.Panel):
 
         ## Prefix
         prefixlabel = wx.StaticText(self, wx.ID_ANY, "Prefix")
-        self.prefixBox = wx.TextCtrl(self, wx.ID_ANY, style=wx.TE_MULTILINE, size=(300,50))
+        self.prefixBox = wx.TextCtrl(self, wx.ID_ANY, style=wx.TE_MULTILINE, size=(300, 50))
 
         ## Suffix
         suffixlabel = wx.StaticText(self, wx.ID_ANY, "Suffix")
-        self.suffixBox = wx.TextCtrl(self, wx.ID_ANY, style=wx.TE_MULTILINE, size=(300,50))
+        self.suffixBox = wx.TextCtrl(self, wx.ID_ANY, style=wx.TE_MULTILINE, size=(300, 50))
 
         ## Populating data
         self.suffixBox.SetValue(self.configobj.settings['projecttree-suffixexclude'])

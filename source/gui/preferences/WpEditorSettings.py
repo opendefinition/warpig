@@ -71,11 +71,11 @@ class WpEditorSettings( wx.Panel ):
         sizer.Add( inputsizer )
         sizer.Add( checkboxsizer )
 
-        self.Bind(wx.EVT_CHECKBOX, self.onUseTabChecked,id=self.checkbox.GetId())
+        self.Bind(wx.EVT_CHECKBOX, self.onUseTabChecked, id=self.checkbox.GetId())
 
         return sizer
 
-    def onUseTabChecked(self,event):
+    def onUseTabChecked(self, event):
         if self.tabsizeinput.IsEnabled() == True:
             self.tabsizeinput.Disable()
         else:
@@ -133,7 +133,7 @@ class WpEditorSettings( wx.Panel ):
         fontSizer =  wx.FlexGridSizer(rows=2, cols=2, vgap=0, hgap=0)
 
         ## Font size selector
-        fontSizes = ['9','10','11','12', '13','14','15','16','17','18','19','20']
+        fontSizes = ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
         fontSizeLabel = wx.StaticText( self, wx.ID_ANY, 'Font size' )
         self.fontSizeSelect = wx.Choice( self, -1, (100, 50), choices=fontSizes )
 

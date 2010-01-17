@@ -5,7 +5,7 @@ from gui.preferences.WpProjectsSettings import WpProjectsSettings
 
 class WpPreferenceTree(wx.Treebook):
     def __init__(self, parent, id ):
-        wx.Treebook.__init__(self, parent, id, style=wx.BK_DEFAULT|wx.EXPAND, size=(500,480) )
+        wx.Treebook.__init__(self, parent, id, style=wx.BK_DEFAULT|wx.EXPAND, size=(500, 480))
         self.Setup()
 
     def Setup( self ):

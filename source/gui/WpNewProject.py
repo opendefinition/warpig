@@ -34,7 +34,7 @@ class WpNewProject( wx.Dialog ):
         ##
         # Main Panel
         ##
-        mainpanel = wx.Panel(self, -1, size=(500,300), style=wx.EXPAND )
+        mainpanel = wx.Panel(self, -1, size=(500, 300), style=wx.EXPAND)
         mainsizer = wx.BoxSizer( wx.VERTICAL )
         panelsizer = wx.FlexGridSizer( 3, 1, 0, 0 )
 
