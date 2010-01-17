@@ -29,9 +29,9 @@ class WpMainMenu(wx.MenuBar):
         self.parentFrame = parentFrame
         self.Append(self.__setupFileMenu(), '&File')
         self.Append(self.__setupEditMenu(), '&Edit')
-	self.Append(self.__setupViewMenu(), '&View')
-	self.Append(self.__setupPigletMenu(), '&Piglets')
-	self.Append(self.__setupHelpMenu(), '&Help')
+        self.Append(self.__setupViewMenu(), '&View')
+        self.Append(self.__setupPigletMenu(), '&Piglets')
+        self.Append(self.__setupHelpMenu(), '&Help')
 
         pub.subscribe(self.openFileSubscriber, 'mainmenu.openfile')
 
@@ -44,11 +44,11 @@ class WpMainMenu(wx.MenuBar):
 
         openProject = wx.MenuItem(fileMenu, CONST_MENU_PROJECT_OPEN, '&Open Project', 'Open project')
         newProject  = wx.MenuItem(fileMenu, CONST_MENU_PROJECT_NEW, '&New Project', 'Create new project')
-	saveFileAs  = wx.MenuItem(fileMenu, CONST_MENU_FILE_SAVE_AS, '&Save File As', 'Save current file as...')
+        saveFileAs  = wx.MenuItem(fileMenu, CONST_MENU_FILE_SAVE_AS, '&Save File As', 'Save current file as...')
         openFile    = wx.MenuItem(fileMenu, CONST_MENU_FILE_OPEN, '&Open File', 'Open file')
         saveFile    = wx.MenuItem(fileMenu, CONST_MENU_FILE_SAVE, '&Save File', 'Save current file')
         newFile     = wx.MenuItem(fileMenu, CONST_MENU_FILE_NEW, '&New File', 'Create empty document')
-	exit        = wx.MenuItem(fileMenu, CONST_MENU_EXIT, '&Exit', 'Exit')
+        exit        = wx.MenuItem(fileMenu, CONST_MENU_EXIT, '&Exit', 'Exit')
 
         fileMenu.AppendItem(newProject)
         fileMenu.AppendItem(openProject)
@@ -80,9 +80,9 @@ class WpMainMenu(wx.MenuBar):
         editMenu = wx.Menu()
         preferences = wx.MenuItem(editMenu, CONST_MENU_PREFERENCES, '&Preferences', 'Edit application preferences')
         self.parentFrame.Bind(wx.EVT_MENU, self.__onPreferences, id=CONST_MENU_PREFERENCES)
-	editMenu.AppendSeparator()
+        editMenu.AppendSeparator()
         editMenu.AppendItem(preferences)
-        
+
         return editMenu
 
     def __setupViewMenu(self):
@@ -185,10 +185,10 @@ class WpMainMenu(wx.MenuBar):
     ## Display new project dialog window
     ##--------------------------------------------------------------------------
     def __onNewProject(self, event):
-  	window = WpNewProject(self)
+        window = WpNewProject(self)
         window.Center()
-	window.ShowModal()
-	window.Destroy()
+        window.ShowModal()
+        window.Destroy()
 
     ##--------------------------------------------------------------------------
     ## Disply open project dialog

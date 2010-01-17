@@ -107,10 +107,10 @@ class WpNewProject( wx.Dialog ):
         ##
         panelsizer.AddMany(
                 [
-                        ( prjnamesizer, 1, wx.EXPAND ),
-                        #( prjdescsizer, 1, wx.EXPAND ),
-                        ( prjfilesizer, 1, wx.EXPAND ),
-                        ( buttonsizer, 1, wx.EXPAND )
+                    ( prjnamesizer, 1, wx.EXPAND ),
+                    #( prjdescsizer, 1, wx.EXPAND ),
+                    ( prjfilesizer, 1, wx.EXPAND ),
+                    ( buttonsizer, 1, wx.EXPAND )
                 ]
         )
 
@@ -144,11 +144,11 @@ class WpNewProject( wx.Dialog ):
         opsysname = os.name
 
         if opsysname == 'nt':
-                basepath = 'C:\\'
+            basepath = 'C:\\'
         elif opsysname == 'posix':
-                basepath = '/'
+            basepath = '/'
         elif opsysname == 'mac':
-                basepath = '/Users'
+            basepath = '/Users'
 
         dialog = wx.lib.agw.multidirdialog.MultiDirDialog( None, 'New Project', 'Associate folders', defaultPath=basepath )
         dialog.Center()
@@ -157,14 +157,14 @@ class WpNewProject( wx.Dialog ):
 
             count = self.filelist.GetItemCount()+1
             for path in paths:
-                    # If on Mac, remove "Macintosh HD"
-                    macfilter = re.compile( "Macintosh HD" )
+                # If on Mac, remove "Macintosh HD"
+                macfilter = re.compile( "Macintosh HD" )
 
-                    if( macfilter.search( path ) != None ):
-                            path = path[12:len(path)]
+                if( macfilter.search( path ) != None ):
+                    path = path[12:len(path)]
 
-                    self.filelist.InsertStringItem( count, path )
-                    count += 1
+                self.filelist.InsertStringItem( count, path )
+                count += 1
 
         dialog.Destroy()
 
@@ -180,7 +180,7 @@ class WpNewProject( wx.Dialog ):
         tmp.reverse()
 
         for thingy in tmp:
-                self.filelist.DeleteItem( thingy )
+            self.filelist.DeleteItem( thingy )
 
     #---------------------------------------------------------------
     # Cancel inside project dialog
