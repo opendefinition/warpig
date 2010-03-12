@@ -91,6 +91,7 @@ class WpAuiMainFrame(wx.Frame):
                             wx.aui.AuiPaneInfo()
                                 .Name("project")
                                 .Caption("Project tree")
+                                .CloseButton(False)
                                 .Right()
                                 .Hide()
                                 .BottomDockable(False)
