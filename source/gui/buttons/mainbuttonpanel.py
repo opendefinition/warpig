@@ -9,8 +9,8 @@ class MainButtonPanel(aui.AuiToolBar):
 
     def __setup(self):
 
-        self.AddSimpleTool(CONST_WIDGET_BUTTON_NEW, "New", wx.Bitmap("./gui/icons/document-new.png"))
+        self.AddSimpleTool(CONST_WIDGET_BUTTON_NEW, "New", wx.Bitmap("./gui/icons/page.png"))
         self.AddSimpleTool(CONST_WIDGET_BUTTON_OPEN, "Open", wx.Bitmap("./gui/icons/folder.png"))
-        self.AddSimpleTool(CONST_WIDGET_BUTTON_SAVE, "Save", wx.Bitmap("./gui/icons/media-floppy.png"))
+        self.AddSimpleTool(CONST_WIDGET_BUTTON_SAVE, "Save", wx.Bitmap("./gui/icons/save.png"))
 
         self.Realize()
