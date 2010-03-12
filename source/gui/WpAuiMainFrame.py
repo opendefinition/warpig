@@ -69,9 +69,10 @@ class WpAuiMainFrame(wx.Frame):
         self.__manager.AddPane(
                 mainbuttonpanel,
                 wx.aui.AuiPaneInfo()
-                    .CaptionVisible(False)
-                    .Top()
-                    .Gripper(False)
+                            .CaptionVisible(False)
+                            .Top()
+                            .Gripper(False)
+                            .ToolbarPane()
                         )
 
         self.__manager.AddPane(
