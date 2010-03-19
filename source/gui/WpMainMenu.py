@@ -30,7 +30,7 @@ class WpMainMenu(wx.MenuBar):
         self.Append(self.__setupFileMenu(), '&File')
         self.Append(self.__setupEditMenu(), '&Edit')
         self.Append(self.__setupViewMenu(), '&View')
-        self.Append(self.__setupPigletMenu(), '&Piglets')
+        #self.Append(self.__setupPigletMenu(), '&Piglets')
         self.Append(self.__setupHelpMenu(), '&Help')
 
         pub.subscribe(self.openFileSubscriber, 'mainmenu.openfile')
