@@ -1,3 +1,4 @@
+import wx.aui
 # -*- coding: utf-8 -*
 #---------------------------------------------------------------------------
 #
@@ -49,6 +50,15 @@ class WpNoteBook(aui.AuiNotebook):
         pub.subscribe(self.openSavedTabsSubscriber, 'notebook.opensavedtabs')
         pub.subscribe(self.closeTabSubscriber, 'notebook.closetab')
         pub.subscribe(self.saveFileSubscriber, 'notebook.savefile')
+
+        ## Listening for manual closing of current tab
+        self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.onCloseTab, id=self.GetId())
+
+    def onCloseTab(self, event):
+        element = self.GetCurrentPage()
+        
+        ## Deregister tab
+        self.deRegisterTab(element.GetFilePath())
 
     ##--------------------------------------------------------------------------
     ## Subscriber action, add default page
