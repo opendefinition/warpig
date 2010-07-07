@@ -14,7 +14,6 @@ import os.path
 import os
 import re
 import shutil
-import yaml
 
 class WpFileSystem:
     #---------------------------------------------------------------

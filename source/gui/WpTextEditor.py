@@ -455,6 +455,10 @@ class WpTextEditor( wx.stc.StyledTextCtrl ):
     #---------------------------------------------------------------
     # Handle key events
     #---------------------------------------------------------------
+
+	def _OnKeyDown( self, event ):
+		print "This is bollocks"
+
     """
     def _OnKeyDown( self, event ):
             ## print "Key #", event.GetUniChar(), " CmdDown is ", event.CmdDown()
