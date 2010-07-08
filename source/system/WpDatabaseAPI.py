@@ -15,127 +15,140 @@ from system.WpDatabase import WpDatabase
 from system.WpProject import WpProject
 
 class WpDatabaseAPI( WpDatabase ):
-    def __init__( self ):
-        WpDatabase.__init__( self )
+	def __init__( self ):
+		WpDatabase.__init__( self )
 
-    ##---------------------------------------------------------------
-    ## System Register API Functions
-    ##---------------------------------------------------------------
-    def AddRegisterSetting( self, key, value, module ):
-        """
-        Add Register Setting
-        @param String key
-        @param String value
-        @param String module
-        @param Boolean status
-        """
-        ## TODO: Add validation to input parameters
-        query = "UPDATE systemregistry SET value='%s' WHERE module='%s' AND key='%s';" % ( value, module, key )
-        return self.Insert( query )
+	##---------------------------------------------------------------
+	## System Register API Functions
+	##---------------------------------------------------------------
+	def AddRegisterSetting( self, key, value, module ):
+		"""
+		Add Register Setting
+		@param String key
+		@param String value
+		@param String module
+		@param Boolean status
+		"""
+		## TODO: Add validation to input parameters
+		query = "UPDATE systemregistry SET value='%s' WHERE module='%s' AND key='%s';" % ( value, module, key )
+		return self.Insert( query )
 
-    def GetRegisterSetting( self, key, module ):
-        """
-        Obtain register setting identified by key
-        """
-        query = "SELECT key, value, module FROM systemregistry WHERE key='%s' AND module='%s';" % ( key, module )
-        result = self.Select( query )
+	def GetRegisterSetting( self, key, module ):
+		"""
+		Obtain register setting identified by key
+		"""
+		query = "SELECT key, value, module FROM systemregistry WHERE key='%s' AND module='%s';" % ( key, module )
+		result = self.Select( query )
 
-        return result
+		return result
 
-    def LoadRegistry(self):
-        """
-        Obtain All Settings In Registry
-        """
-        query = "SELECT key,value,module FROM systemregistry;"
-        result = self.Select( query )
+	def LoadRegistry(self):
+		"""
+		Obtain All Settings In Registry
+		"""
+		query = "SELECT key,value,module FROM systemregistry;"
+		result = self.Select( query )
 
-        return result
+		return result
 
-    ##---------------------------------------------------------------
-    ## Project API Functions
-    ##---------------------------------------------------------------
+	##---------------------------------------------------------------
+	## Project API Functions
+	##---------------------------------------------------------------
 
-    def AddProject(self, project):
-        """
-        Add project into persistent storage
-        Input project instance of WpProject.
-        """
-        ## TODO: Add better checks here
-        projectInsert = "INSERT INTO projects('title','description') VALUES('%s', '%s');" % (project.GetTitle(), project.GetDescription())
-        projectId = self.Insert(projectInsert)
+	def AddProject(self, project):
+		"""
+		Add project into persistent storage
+		Input project instance of WpProject.
+		"""
+		## TODO: Add better checks here
+		projectInsert = "INSERT INTO projects('title','description') VALUES('%s', '%s');" % (project.GetTitle(), project.GetDescription())
+		projectId = self.Insert(projectInsert)
 
-        for path in project.GetPaths():
-            pathInsert = "INSERT INTO projectincludes('projectid','path') VALUES(%i,'%s');" % (projectId, path)
-            self.Insert(pathInsert)
+		for path in project.GetPaths():
+			pathInsert = "INSERT INTO projectincludes('projectid','path') VALUES(%i,'%s');" % (projectId, path)
+			self.Insert(pathInsert)
 
-        return projectId
+		return projectId
 
-    def GetProjectList(self):
-        """
-        Get a list of projects containing their title and id
-        """
-        query = "SELECT id, title, description FROM projects ORDER BY title;"
+	def GetProjectList(self):
+		"""
+		Get a list of projects containing their title and id
+		"""
+		query = "SELECT id, title, description FROM projects ORDER BY title;"
 
-        structure = []
-        for entry in self.Select(query):
-            info = {
-                        'id': entry[0],
-                        'title': entry[1],
-                        'description': entry[2]
-                    }
+		structure = []
+		for entry in self.Select(query):
+			info = {
+						'id': entry[0],
+						'title': entry[1],
+						'description': entry[2]
+					}
 
-            structure.append(info)
+			structure.append(info)
 
-        return structure
+		return structure
 
-    def GetProject(self, projectid):
-        project = WpProject()
+	def GetProject(self, projectid):
+		project = WpProject()
 
-        projectquery = "SElECT * FROM projects WHERE id=%i" % (int(projectid))
-        projectinfo = self.Select(projectquery)
+		projectquery = "SElECT * FROM projects WHERE id=%i" % (int(projectid))
+		projectinfo = self.Select(projectquery)
 
-        for info in projectinfo:
-            project.SetId(info[0])
-            project.SetTitle(info[1])
-            project.SetDescription(info[2])
-            project.SetDateCreated(info[3])
+		for info in projectinfo:
+			project.SetId(info[0])
+			project.SetTitle(info[1])
+			project.SetDescription(info[2])
+			project.SetDateCreated(info[3])
 
 
-        includesquery = "SELECT path FROM projectincludes WHERE projectid=%i" % (int(projectid))
-        includes = self.Select(includesquery)
+		includesquery = "SELECT path FROM projectincludes WHERE projectid=%i" % (int(projectid))
+		includes = self.Select(includesquery)
 
-        for include in includes:
-            project.AddPath(include[0])
+		for include in includes:
+			project.AddPath(include[0])
 
-        return project
+		return project
 
-    def DeleteProject(self, id):
-        deleteProject = "DELETE FROM projects WHERE id=%i;" % (id)
-        deleteIncludes = "DELETE FROM projectincludes WHERE projectid=%i;" % (id)
+	def GetProjectsLog(self):
+		selectionQuery = "SELECT prj.id, prj.title FROM projectlog plog LEFT OUTER JOIN projects prj ON plog.id=prj.id WHERE prj.id NOT NULL ORDER BY plog.date DESC LIMIT 10;"
+		result = self.Select( selectionQuery )
 
-        self.Delete(deleteProject)
-        self.Delete(deleteIncludes)
+		if len( result ) == 0:
+			result = []
 
-    def DeleteRegisteredOpenedTabs(self):
-        deleteQuery = "DELETE FROM openedtabs;"
-        self.Delete(deleteQuery)
+		return result
 
-    def RegisterOpenedTab(self, projectid, filepath):
-        insertionQuery = "INSERT INTO openedtabs(prjid, file) VALUES('%s', '%s')" %(projectid, filepath)
-        self.Insert(insertionQuery)
+	def DeleteProject(self, id):
+		deleteProject = "DELETE FROM projects WHERE id=%i;" % (id)
+		deleteIncludes = "DELETE FROM projectincludes WHERE projectid=%i;" % (id)
 
-    def GetRegisteredTabs(self, key):
-        selectionQuery = "SELECT file FROM openedtabs WHERE prjid='%s'" % (key)
-        result = self.Select(selectionQuery)
+		self.Delete(deleteProject)
+		self.Delete(deleteIncludes)
 
-        list = []
-        for item in result:
-            list.append(item[0])
+	def DeleteRegisteredOpenedTabs(self):
+		deleteQuery = "DELETE FROM openedtabs;"
+		self.Delete(deleteQuery)
 
-        return list
+	def RegisterOpenedTab(self, projectid, filepath):
+		insertionQuery = "INSERT INTO openedtabs(prjid, file) VALUES('%s', '%s')" %(projectid, filepath)
+		self.Insert(insertionQuery)
 
-    ##---------------------------------------------------------------
-    ## System Specific API Functions
-    ##---------------------------------------------------------------
-    def RunScript( self, path ):
-        self.RunSqlScript( path )
+	def GetRegisteredTabs(self, key):
+		selectionQuery = "SELECT file FROM openedtabs WHERE prjid='%s'" % (key)
+		result = self.Select(selectionQuery)
+
+		list = []
+		for item in result:
+			list.append(item[0])
+
+		return list
+
+	def AddRecentProjectLogEntry(self, projectId):
+		insertionQuery = "INSERT OR REPLACE INTO projectlog (id) VALUES(%s)" % ( projectId )
+		self.Insert( insertionQuery )
+
+	##---------------------------------------------------------------
+	## System Specific API Functions
+	##---------------------------------------------------------------
+	def RunScript( self, path ):
+		self.RunSqlScript( path )

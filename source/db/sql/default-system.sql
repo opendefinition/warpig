@@ -33,6 +33,12 @@ CREATE TABLE openedtabs(
     "file" Text
 );
 
+;-- Project log
+CREATE TABLE projectlog (
+	"id" INTEGER NOT NULL PRIMARY KEY,
+	"date" DATETIME DEFAULT current_timestamp
+);
+
 ;-- DEFAULT EDITOR VALUES
 INSERT INTO systemregistry(key,value,module) VALUES ('fontface','Verdana','editor');
 INSERT INTO systemregistry(key,value,module) VALUES ('fontsize','12','editor');
