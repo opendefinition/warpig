@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*
 #---------------------------------------------------------------------------
 #
-# Class: WpWarPig
-# Desc: This application
+# Open Definition Warpig Coding Environment Loader.
 #
 #---------------------------------------------------------------------------
 # Owner: Open Definition.
@@ -10,44 +9,17 @@
 # License: Open Definiton General Lisence (ODGL). Available upon request.
 #---------------------------------------------------------------------------
 
-import sqlite3
+print "Open Definition Warpig Coding Environment"
+print "Copyright 2009-2011, all rights reserved"
+
 import sys
-import wx
-
-from gui.WpAuiMainFrame import WpAuiMainFrame
-from system.setup import RunSetup
-from system.WpConfigLoader import WpConfigLoader
-from gui.Keybindings import Keybindings
-
-class WpWarPig( wx.App ):
-    """
-    Main class for creating frame
-    """
-
-    def OnInit(self):
-        configloaded = False
-        try:
-            configuration = WpConfigLoader()
-            configuration.LoadConfig()
-            configloaded = True
-        except sqlite3.OperationalError:
-            print "Warpig System Error: missing configuration database\nplease run 'warpig.py --setup'"
-
-        if configloaded:
-            ## Load keybindings
-            keybinding = Keybindings(self)
-            keybinding.init()
-
-            frame = WpAuiMainFrame( None )
-            frame.Show()
-            self.SetTopWindow(frame)
-
-        return True
+from system.WpWarpig import WpWarPig
 
 def main(argv):
     """
     Warpig booter
     """
+
     if len( argv ) > 1:
         if argv[1] == '--update':
             # Update engine
